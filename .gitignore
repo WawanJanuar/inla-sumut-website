@@ -14,5 +14,5 @@ Thumbs.db
 # Figma export (large SVG, not needed in repo)
 *.svg
 
-# Source images (tracked separately or kept local)
-SRC/
+# Raw/unoptimized source files (keep original exports local only)
+# SRC/ images are committed in optimized form
