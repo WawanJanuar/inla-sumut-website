@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activities — INLA SUMUT</title>
+  <meta name="description" content="Dokumentasi kegiatan INLA SUMUT — berbagai program alam, seni, budaya, dan komunitas yang telah kami jalankan.">
+
+  <!-- Bootstrap 5.3.8 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../CSS/animations.css">
+
+  <style>
+    /* ── Filter Buttons ── */
+    .filter-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .filter-btn {
+      background: rgba(255,255,255,0.75);
+      border: 1.5px solid rgba(107,170,117,0.2);
+      color: var(--text-muted);
+      padding: 9px 22px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.28s ease;
+      backdrop-filter: blur(8px);
+    }
+    .filter-btn:hover {
+      background: rgba(107,170,117,0.12);
+      border-color: var(--green-primary);
+      color: var(--green-accent);
+    }
+    .filter-btn.active {
+      background: var(--green-primary);
+      border-color: var(--green-primary);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(107,170,117,0.35);
+    }
+
+    /* ── Activity Cards ── */
+    .activity-card {
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.92);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+      transition: all 0.4s ease;
+      height: 100%;
+    }
+    .activity-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.12);
+    }
+    .activity-card-img {
+      width: 100%; height: 220px;
+      object-fit: cover;
+      transition: transform 0.55s ease;
+    }
+    .activity-card:hover .activity-card-img { transform: scale(1.06); }
+    .activity-card-body { padding: 22px 24px 26px; }
+    .activity-card-tag {
+      display: inline-block;
+      background: rgba(107,170,117,0.12);
+      color: var(--green-accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .activity-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    .activity-card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .activity-card-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .activity-card-img-wrap { overflow: hidden; position: relative; }
+    .activity-card-img-wrap::after {
+      content: '↗';
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(6px);
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .activity-card:hover .activity-card-img-wrap::after { opacity: 1; }
+
+    /* ── CTA box (light theme) ── */
+    .light-cta-box {
+      background: linear-gradient(135deg, #f0faf3 0%, #e4f4e8 100%);
+      border: 1.5px solid #c6e8cc;
+    }
+    .light-cta-box h2 { color: var(--text-dark); }
+    .light-cta-box .section-desc { color: var(--text-muted); }
+
+    /* ── Responsive ── */
+
+    /* Tablet (≤ 991px) */
+    @media (max-width: 991.98px) {
+      .filter-wrap { gap: 8px; margin-bottom: 8px; }
+      .filter-btn  { padding: 8px 18px; font-size: 0.86rem; }
+      .activity-card-img { height: 200px; }
+    }
+
+    /* Small Tablet / Large Phone (≤ 767px) */
+    @media (max-width: 767.98px) {
+      .filter-btn  { padding: 8px 16px; font-size: 0.84rem; }
+      .activity-card-img { height: 190px; }
+      .activity-card-body { padding: 18px 20px 22px; }
+      .light-cta-box { padding: 40px 28px !important; }
+    }
+
+    /* Mobile (≤ 575px) */
+    @media (max-width: 575.98px) {
+      .filter-wrap { gap: 6px; }
+      .filter-btn  { padding: 7px 14px; font-size: 0.82rem; }
+      .activity-card-img { height: 180px; }
+      .activity-card-body { padding: 16px 16px 20px; }
+      .activity-card-title { font-size: 0.97rem; }
+      .activity-card-desc  { font-size: 0.87rem; }
+      .activity-card-tag   { font-size: 0.72rem; }
+      .light-cta-box { padding: 32px 18px !important; border-radius: 20px !important; }
+      .light-cta-box h2 { font-size: 1.75rem !important; }
+      .light-cta-box .section-desc { font-size: 0.93rem; }
+    }
+
+    /* Very Small Phones (≤ 390px) */
+    @media (max-width: 390px) {
+      .filter-btn  { padding: 6px 12px; font-size: 0.79rem; }
+      .activity-card-img { height: 160px; }
+      .light-cta-box h2 { font-size: 1.55rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Loader -->
+  <div class="loader-overlay" id="loaderOverlay">
+    <img src="../SRC/logo inla sumut.png" alt="INLA Logo" class="loader-logo">
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+
+  <!-- Cursor Glow -->
+  <div class="cursor-glow"></div>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <span class="lightbox-counter" id="lightbox-counter"></span>
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">‹</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">›</button>
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="Gallery image">
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="custom-navbar navbar navbar-expand-lg navbar-dark" aria-label="Main navigation">
+    <div class="container-fluid">
+      <div class="navbar-inner">
+        <a class="navbar-brand" href="../index.html">
+          <img src="../SRC/logo inla sumut.png" alt="INLA SUMUT Logo" class="brand-logo">
+          <span class="brand-text">INLA SUMUT</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./about.html">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="./activities.html">Activities</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO BANNER ===== -->
+  <section class="hero-banner" aria-label="Activities banner">
+    <div class="hero-banner-bg"
+         style="background-image: url('../SRC/a-tree-in-a-field-with-stunning-space-backdrop-SBI-301081197.jpg');"
+         aria-hidden="true"></div>
+    <!-- Particles -->
+    <div class="particles" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container hero-banner-content">
+      <span class="banner-tag">Dokumentasi Kegiatan</span>
+      <h1 class="banner-title">Our<br><span style="color: var(--green-primary);">Activities</span></h1>
+      <p class="banner-subtitle">
+        Setiap kegiatan adalah wujud nyata dari cinta kami kepada alam, manusia,
+        dan kehidupan. Dari alam terbuka hingga panggung seni, kami hadir.
+      </p>
+      <div class="banner-btns d-flex gap-3 mt-4 flex-wrap">
+        <a href="#gallery" class="btn-primary-green">Lihat Galeri ↓</a>
+        <a href="./about.html" class="btn-outline-light">Tentang Kami</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item">Kegiatan Alam</span>
+      <span class="marquee-item">Seni Pertunjukan</span>
+      <span class="marquee-item">Pendidikan Moral</span>
+      <span class="marquee-item">Komunitas</span>
+      <span class="marquee-item">Lingkungan Hidup</span>
+      <span class="marquee-item">Budaya &amp; Tradisi</span>
+      <span class="marquee-item">Kesehatan</span>
+      <span class="marquee-item">Kegiatan Alam</span>
+      <span class="marquee-item">Seni Pertunjukan</span>
+      <span class="marquee-item">Pendidikan Moral</span>
+      <span class="marquee-item">Komunitas</span>
+      <span class="marquee-item">Lingkungan Hidup</span>
+      <span class="marquee-item">Budaya &amp; Tradisi</span>
+      <span class="marquee-item">Kesehatan</span>
+    </div>
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main style="background:#ffffff; color:var(--text-dark);">
+
+    <!-- GALLERY SECTION -->
+    <section style="padding: 110px 0 80px;" id="gallery" aria-label="Activity gallery">
+      <div class="container">
+        <div class="section-center mb-4">
+          <span class="section-tag" data-aos="fade-up">Foto Kegiatan</span>
+          <h2 class="section-title" data-aos="fade-up" data-aos-delay="60">Galeri Kegiatan</h2>
+          <div class="reveal-line" data-aos="fade-up" data-aos-delay="100"></div>
+          <p class="section-desc mt-3" data-aos="fade-up" data-aos-delay="120">
+            Klik pada foto untuk melihat lebih detail. Gunakan tombol navigasi atau
+            tombol keyboard ← → untuk berpindah antar foto.
+          </p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="filter-wrap mb-5" data-aos="fade-up" data-aos-delay="160">
+          <button class="filter-btn active" data-filter="all">Semua</button>
+          <button class="filter-btn" data-filter="alam">🌿 Alam</button>
+          <button class="filter-btn" data-filter="seni">🎭 Seni &amp; Budaya</button>
+          <button class="filter-btn" data-filter="komunitas">👥 Komunitas</button>
+        </div>
+
+        <!-- Gallery Grid (lightbox enabled) -->
+        <div class="activities-gallery" data-aos="fade-up">
+          <div class="gallery-item featured filterable" data-category="alam"
+               data-lightbox data-src="../SRC/p06.jpg" data-caption="Kegiatan alam utama INLA SUMUT — harmoni di alam terbuka">
+            <img src="../SRC/p06.jpg" alt="Kegiatan alam utama INLA" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text">
+                <div class="gallery-overlay-icon">↗</div>
+                Kegiatan Alam Utama
+              </div>
+            </div>
+          </div>
+          <div class="gallery-item filterable" data-category="komunitas"
+               data-lightbox data-src="../SRC/bg5.jpg" data-caption="Kegiatan komunitas — bersama dalam semangat INLA">
+            <img src="../SRC/bg5.jpg" alt="Kegiatan komunitas" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text"><div class="gallery-overlay-icon">↗</div> Kegiatan Komunitas</div>
+            </div>
+          </div>
+          <div class="gallery-item filterable" data-category="seni"
+               data-lightbox data-src="../SRC/p01.jpg" data-caption="Penampilan seni budaya INLA SUMUT">
+            <img src="../SRC/p01.jpg" alt="Penampilan seni budaya" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text"><div class="gallery-overlay-icon">↗</div> Seni &amp; Budaya</div>
+            </div>
+          </div>
+          <div class="gallery-item filterable" data-category="komunitas"
+               data-lightbox data-src="../SRC/p02.jpg" data-caption="Momen kebersamaan anggota INLA">
+            <img src="../SRC/p02.jpg" alt="Momen kebersamaan" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text"><div class="gallery-overlay-icon">↗</div> Momen Bersama</div>
+            </div>
+          </div>
+          <div class="gallery-item filterable" data-category="seni"
+               data-lightbox data-src="../SRC/p03.jpg" data-caption="Ekspresi seni INLA — tarian dan budaya">
+            <img src="../SRC/p03.jpg" alt="Ekspresi seni INLA" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text"><div class="gallery-overlay-icon">↗</div> Ekspresi Seni</div>
+            </div>
+          </div>
+          <div class="gallery-item filterable" data-category="alam"
+               data-lightbox data-src="../SRC/bg3.jpg" data-caption="Kegiatan di alam terbuka — mengenal dan menjaga alam">
+            <img src="../SRC/bg3.jpg" alt="Kegiatan di alam terbuka" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text"><div class="gallery-overlay-icon">↗</div> Alam Terbuka</div>
+            </div>
+          </div>
+          <div class="gallery-item filterable" data-category="komunitas"
+               data-lightbox data-src="../SRC/p05.jpg" data-caption="Program INLA SUMUT untuk masyarakat">
+            <img src="../SRC/p05.jpg" alt="Program masyarakat" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text"><div class="gallery-overlay-icon">↗</div> Program Masyarakat</div>
+            </div>
+          </div>
+          <div class="gallery-item filterable" data-category="alam"
+               data-lightbox data-src="../SRC/bg2.jpg" data-caption="Eksplorasi alam bersama anggota INLA">
+            <img src="../SRC/bg2.jpg" alt="Eksplorasi alam" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text"><div class="gallery-overlay-icon">↗</div> Eksplorasi Alam</div>
+            </div>
+          </div>
+          <div class="gallery-item filterable" data-category="seni"
+               data-lightbox data-src="../SRC/WhatsApp Image 2026-03-25 at 13.53.59.jpeg" data-caption="Dokumentasi kegiatan INLA SUMUT">
+            <img src="../SRC/WhatsApp Image 2026-03-25 at 13.53.59.jpeg" alt="Dokumentasi kegiatan" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-text"><div class="gallery-overlay-icon">↗</div> Dokumentasi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTIVITY CARDS SECTION -->
+    <section style="padding: 0 0 100px;" aria-label="Activity highlights">
+      <div class="container">
+        <div class="section-center mb-5">
+          <span class="section-tag" data-aos="fade-up">Program Unggulan</span>
+          <h2 class="section-title" data-aos="fade-up" data-aos-delay="60">Kegiatan Terkini</h2>
+          <div class="reveal-line" data-aos="fade-up" data-aos-delay="100"></div>
+          <p class="section-desc mt-3" data-aos="fade-up" data-aos-delay="120">
+            Berbagai program aktif yang dijalankan INLA SUMUT untuk masyarakat
+            dan lingkungan di Sumatera Utara dan sekitarnya.
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="60">
+            <div class="activity-card">
+              <div class="activity-card-img-wrap">
+                <img src="../SRC/a-tree-in-a-field-with-stunning-space-backdrop-SBI-301081197.jpg"
+                     alt="Program Pelestarian Alam" class="activity-card-img" loading="lazy">
+              </div>
+              <div class="activity-card-body">
+                <span class="activity-card-tag">🌿 Alam</span>
+                <h3 class="activity-card-title">Program Pelestarian Alam</h3>
+                <p class="activity-card-desc">
+                  Kegiatan penanaman pohon, edukasi lingkungan, dan eksplorasi
+                  alam untuk menumbuhkan rasa cinta terhadap bumi dan ekosistemnya.
+                </p>
+                <span class="activity-card-meta">📅 Rutin Bulanan</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="140">
+            <div class="activity-card">
+              <div class="activity-card-img-wrap">
+                <img src="../SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg"
+                     alt="Festival Seni Budaya" class="activity-card-img" loading="lazy">
+              </div>
+              <div class="activity-card-body">
+                <span class="activity-card-tag">🎭 Seni</span>
+                <h3 class="activity-card-title">Festival Seni &amp; Budaya</h3>
+                <p class="activity-card-desc">
+                  Pertunjukan tarian, musik, dan seni sebagai media penyampaian
+                  nilai moral dan etika kepada masyarakat luas, terutama generasi muda.
+                </p>
+                <span class="activity-card-meta">📅 Tahunan</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="220">
+            <div class="activity-card">
+              <div class="activity-card-img-wrap">
+                <img src="../SRC/boy-running-through-wheat-field-holding-butterfly-net-in-hand-sunny-sky-relaxing-enjoy-SBI-350099286.jpg"
+                     alt="Pendidikan Moral untuk Anak" class="activity-card-img" loading="lazy">
+              </div>
+              <div class="activity-card-body">
+                <span class="activity-card-tag">📚 Pendidikan</span>
+                <h3 class="activity-card-title">Pendidikan Moral Anak</h3>
+                <p class="activity-card-desc">
+                  Program pendidikan nilai dan karakter untuk anak-anak melalui
+                  permainan, cerita, dan kegiatan kreatif yang menyenangkan.
+                </p>
+                <span class="activity-card-meta">📅 Setiap Minggu</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="80">
+            <div class="activity-card">
+              <div class="activity-card-img-wrap">
+                <img src="../SRC/collage-of-half-faces-of-young-caucasian-men-and-women-looking-straight-to-camera-hand-SBI-349501584.jpg"
+                     alt="Pemberdayaan Komunitas" class="activity-card-img" loading="lazy">
+              </div>
+              <div class="activity-card-body">
+                <span class="activity-card-tag">👥 Komunitas</span>
+                <h3 class="activity-card-title">Pemberdayaan Komunitas</h3>
+                <p class="activity-card-desc">
+                  Membangun jaringan dan memperkuat komunitas lokal melalui
+                  diskusi, workshop, dan program sosial yang berdampak nyata.
+                </p>
+                <span class="activity-card-meta">📅 Dua Kali Sebulan</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="160">
+            <div class="activity-card">
+              <div class="activity-card-img-wrap">
+                <img src="../SRC/realistic-earth-closeup-render-SBI-301825525.jpg"
+                     alt="Program Kesehatan Holistik" class="activity-card-img" loading="lazy">
+              </div>
+              <div class="activity-card-body">
+                <span class="activity-card-tag">🏃 Kesehatan</span>
+                <h3 class="activity-card-title">Kesehatan Holistik</h3>
+                <p class="activity-card-desc">
+                  Program kesehatan jiwa dan raga yang mengintegrasikan nilai
+                  cinta alam dengan gaya hidup sehat dan seimbang untuk seluruh anggota.
+                </p>
+                <span class="activity-card-meta">📅 Mingguan</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="240">
+            <div class="activity-card">
+              <div class="activity-card-img-wrap">
+                <img src="../SRC/hongkong.jpg"
+                     alt="Pertukaran Budaya Global" class="activity-card-img" loading="lazy">
+              </div>
+              <div class="activity-card-body">
+                <span class="activity-card-tag">🌍 Global</span>
+                <h3 class="activity-card-title">Pertukaran Budaya Global</h3>
+                <p class="activity-card-desc">
+                  Program kolaborasi dengan cabang INLA di seluruh dunia — berbagi
+                  pengalaman, tradisi, dan semangat yang memperkuat persaudaraan global.
+                </p>
+                <span class="activity-card-meta">📅 Tahunan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE SECTION -->
+    <section style="padding: 0 0 110px;" aria-label="Activity timeline">
+      <div class="container">
+        <div class="section-center mb-4">
+          <span class="section-tag" data-aos="fade-up">Perjalanan</span>
+          <h2 class="section-title" data-aos="fade-up" data-aos-delay="60">Jejak Langkah INLA SUMUT</h2>
+          <div class="reveal-line" data-aos="fade-up" data-aos-delay="100"></div>
+          <p class="section-desc mt-3" data-aos="fade-up" data-aos-delay="120">
+            Setiap tahun adalah babak baru dalam perjalanan panjang kami menyebarkan
+            cinta dan keharmonisan di bumi Sumatera Utara.
+          </p>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" data-aos="fade-right">
+              <div class="timeline-date">2006 — Hong Kong</div>
+              <div class="timeline-title">Lahirnya INLA</div>
+              <p class="timeline-desc">
+                INLA didirikan di Hong Kong oleh para pendiri yang memiliki visi
+                menyebarkan nilai cinta alam dan kemanusiaan ke seluruh dunia.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item right">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" data-aos="fade-left">
+              <div class="timeline-date">2010 — Indonesia</div>
+              <div class="timeline-title">INLA Hadir di Indonesia</div>
+              <p class="timeline-desc">
+                Cabang pertama INLA di Indonesia resmi dibuka, membawa semangat
+                dan program organisasi ke tanah air.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" data-aos="fade-right">
+              <div class="timeline-date">2015 — Sumatera Utara</div>
+              <div class="timeline-title">INLA SUMUT Berdiri</div>
+              <p class="timeline-desc">
+                INLA SUMUT resmi terbentuk sebagai cabang di Sumatera Utara,
+                mulai aktif menjalankan program-program lokal yang berdampak nyata.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item right">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" data-aos="fade-left">
+              <div class="timeline-date">2019 — Program Alam</div>
+              <div class="timeline-title">Peluncuran Program Pelestarian Alam</div>
+              <p class="timeline-desc">
+                INLA SUMUT meluncurkan program pelestarian alam yang melibatkan
+                ratusan anggota dan komunitas lokal dalam aksi nyata menjaga lingkungan.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" data-aos="fade-right">
+              <div class="timeline-date">2022 — Festival Budaya</div>
+              <div class="timeline-title">Festival Seni &amp; Budaya Perdana</div>
+              <p class="timeline-desc">
+                Festival seni budaya INLA SUMUT pertama yang menampilkan tarian,
+                musik, dan pertunjukan budaya yang menarik ribuan penonton.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item right">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content" data-aos="fade-left">
+              <div class="timeline-date">2024 — Ekspansi</div>
+              <div class="timeline-title">Memperluas Jangkauan</div>
+              <p class="timeline-desc">
+                INLA SUMUT memperluas program ke lebih banyak wilayah di Sumatera Utara
+                dan memperkuat kolaborasi dengan cabang global INLA.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background: var(--green-accent); animation: pulseDot 2s ease-in-out infinite;"></div>
+            <div class="timeline-content" data-aos="fade-right" style="border: 1.5px solid rgba(107,170,117,0.3);">
+              <div class="timeline-date">2026 — Sekarang</div>
+              <div class="timeline-title">Terus Bertumbuh 🌱</div>
+              <p class="timeline-desc">
+                INLA SUMUT terus bertumbuh dengan program-program baru, anggota baru,
+                dan semangat yang tak pernah padam untuk dunia yang lebih harmonis.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section style="padding: 0 0 110px;" aria-label="Call to action">
+      <div class="container">
+        <div class="p-5 text-center light-cta-box" style="border-radius: 28px;" data-aos="zoom-in">
+          <span class="section-tag">Bergabunglah</span>
+          <h2 style="font-size: 2.4rem; font-weight: 800; margin: 16px 0 16px; letter-spacing: -0.5px;">
+            Jadilah Bagian dari<br>Keluarga INLA SUMUT
+          </h2>
+          <p class="section-desc" style="font-size: 1rem;">
+            Bersama kita bisa menciptakan perubahan yang lebih besar. Bergabunglah
+            dengan komunitas kami dan ikut serta dalam perjalanan penuh makna ini.
+          </p>
+          <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+            <a href="./about.html" class="btn-primary-green">Kenali Kami →</a>
+            <a href="../index.html" style="border:1.5px solid var(--green-primary);color:var(--green-accent);padding:12px 26px;border-radius:50px;font-weight:600;text-decoration:none;transition:all .28s ease;" onmouseover="this.style.background='var(--green-primary)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--green-accent)'">Kembali ke Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" aria-label="Footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="../SRC/logo inla sumut.png" alt="INLA SUMUT Logo">
+          <div>
+            <div class="footer-brand-name">INLA SUMUT</div>
+            <div class="footer-brand-tagline">International Nature Loving Association</div>
+          </div>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="../index.html">Dashboard</a>
+          <a href="./about.html">About Us</a>
+          <a href="./activities.html">Activities</a>
+        </nav>
+
+        <div class="footer-links">
+          <a href="#" aria-label="WhatsApp">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            WhatsApp
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a href="#" aria-label="YouTube">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            YouTube
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>Copyright &copy; INLA SUMUT 2026. All rights reserved.</span>
+        <span>Made with ♥ for a better world</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="../JS/main.js"></script>
+</body>
+</html>

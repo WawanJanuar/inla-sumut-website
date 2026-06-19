@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — INLA SUMUT</title>
+  <meta name="description" content="Kenali lebih dekat INLA SUMUT — sejarah, misi, visi, dan nilai-nilai yang kami perjuangkan.">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../CSS/animations.css">
+
+  <style>
+    /* ── About page specific ── */
+    .about-hero-section {
+      min-height: 60vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .about-hero-section::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(8,18,12,0.72) 50%, rgba(8,18,12,0.35));
+      z-index: 1;
+    }
+    .about-hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('../SRC/About.jpg') center center / cover no-repeat;
+      z-index: 0;
+      transform: scale(1.05);
+      transition: transform 7s ease;
+    }
+    .about-hero-section.loaded .about-hero-bg { transform: scale(1); }
+    .about-hero-content { position: relative; z-index: 2; }
+
+    /* ── White page bg ── */
+    .page-white {
+      background: #ffffff;
+      color: var(--text-dark);
+    }
+
+    /* ── Intro row ── */
+    .intro-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .intro-two-col .text-col p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+    .intro-two-col .text-col p:last-child { margin-bottom: 0; }
+    .intro-two-col .img-col {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    }
+    .intro-two-col .img-col img {
+      width: 100%; height: 420px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .intro-two-col .img-col:hover img { transform: scale(1.04); }
+
+    /* ── Stat pills inside intro ── */
+    .stat-pill-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 28px; }
+    .stat-pill {
+      background: #f0faf3;
+      border: 1.5px solid #c6e8cc;
+      border-radius: 14px;
+      padding: 14px 22px;
+      text-align: center;
+      min-width: 110px;
+    }
+    .stat-pill-num { display: block; font-size: 1.8rem; font-weight: 800; color: var(--green-accent); line-height: 1; }
+    .stat-pill-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    /* ── Full-width image strip ── */
+    .full-img-strip {
+      width: 100%; height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+    .origin-strip {
+      position: relative;
+      overflow: hidden;
+    }
+    .origin-strip-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(8,18,12,0.82) 45%, rgba(8,18,12,0.35));
+      display: flex;
+      align-items: center;
+    }
+    .origin-strip-text { padding: 0 40px; max-width: 580px; }
+    .origin-strip-text h2 { font-size: 2.4rem; font-weight: 800; color: #fff; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .origin-strip-text p { color: rgba(255,255,255,0.82); font-size: 1rem; line-height: 1.85; }
+    .origin-year-right {
+      position: absolute;
+      right: 60px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 6rem;
+      font-weight: 900;
+      color: rgba(107,170,117,0.25);
+      letter-spacing: -4px;
+      user-select: none;
+    }
+
+    /* ── Mission card ── */
+    .m-card {
+      background: #fff;
+      border: 1px solid #e8f5eb;
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      height: 100%;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .m-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green-primary), var(--green-accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .m-card:hover { transform: translateY(-8px); box-shadow: 0 20px 56px rgba(0,0,0,0.1); }
+    .m-card:hover::after { transform: scaleX(1); }
+    .m-card-icon {
+      width: 68px; height: 68px;
+      background: linear-gradient(135deg, var(--green-primary), var(--green-accent));
+      border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px rgba(107,170,117,0.3);
+    }
+    .m-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
+    .m-card p { font-size: 0.93rem; color: var(--text-muted); line-height: 1.78; margin: 0; }
+
+    /* ── Vision block ── */
+    .vision-block {
+      background: linear-gradient(135deg, #f0faf3, #e8f5eb);
+      border: 1.5px solid #c6e8cc;
+      border-radius: 24px;
+      padding: 56px 40px;
+      text-align: center;
+    }
+    .vision-block blockquote {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.45;
+      margin: 16px 0 20px;
+      font-style: italic;
+    }
+    .vision-block p { color: var(--text-muted); font-size: 0.97rem; line-height: 1.8; max-width: 640px; margin: 0 auto; }
+
+    /* ── Flip card override for white bg ── */
+    .fc-wrap {
+      perspective: 1000px;
+      height: 220px;
+    }
+    .fc-inner {
+      position: relative; width: 100%; height: 100%;
+      transition: transform 0.7s cubic-bezier(0.23,1,0.32,1);
+      transform-style: preserve-3d;
+    }
+    .fc-wrap:hover .fc-inner { transform: rotateY(180deg); }
+    .fc-front, .fc-back {
+      position: absolute; inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 18px;
+      padding: 28px 20px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+    }
+    .fc-front {
+      background: #fff;
+      border: 1.5px solid #e8f5eb;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .fc-back {
+      background: linear-gradient(135deg, var(--green-primary), var(--green-hover));
+      transform: rotateY(180deg);
+      color: #fff;
+      box-shadow: 0 8px 32px rgba(107,170,117,0.35);
+    }
+    .fc-icon { font-size: 2.4rem; margin-bottom: 12px; line-height: 1; }
+    .fc-front h4 { font-size: 1.05rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+    .fc-back h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+    .fc-back p { font-size: 0.88rem; line-height: 1.72; margin: 0; opacity: 0.93; }
+
+    /* ── Country grid ── */
+    .country-grid {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .c-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #f0faf3;
+      border: 1.5px solid #c6e8cc;
+      color: var(--green-accent);
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 0.9rem; font-weight: 500;
+      transition: all 0.28s ease;
+    }
+    .c-badge:hover {
+      background: var(--green-primary);
+      border-color: var(--green-primary);
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(107,170,117,0.3);
+    }
+
+    /* ── Community gallery ── */
+    .com-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .com-gallery-item {
+      border-radius: 18px;
+      overflow: hidden;
+      height: 280px;
+      position: relative;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+    }
+    .com-gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.55s ease;
+    }
+    .com-gallery-item:hover img { transform: scale(1.07); }
+
+    /* ── Section divider line ── */
+    .sec-divider { border: none; border-top: 1.5px solid #f0f0f0; margin: 0; }
+
+    /* ── Responsive ── */
+
+    /* Tablet (≤ 991px) */
+    @media (max-width: 991.98px) {
+      .intro-two-col { grid-template-columns: 1fr; gap: 40px; }
+      .intro-two-col .img-col img { height: 300px; }
+      .origin-year-right { display: none; }
+      .origin-strip-text { padding: 0 24px; }
+      .origin-strip-text h2 { font-size: 2rem; }
+      .com-gallery { grid-template-columns: repeat(2, 1fr); }
+      .com-gallery-item { height: 240px; }
+      .stat-pill-row { gap: 14px; }
+      .country-grid { gap: 8px; }
+      .full-img-strip { height: 320px; }
+      .vision-block { padding: 48px 32px; }
+      .vision-block blockquote { font-size: 1.55rem; }
+      #misi { padding: 80px 0 60px; }
+    }
+
+    /* Small Tablet / Large Phone (≤ 767px) */
+    @media (max-width: 767.98px) {
+      .intro-two-col { gap: 32px; }
+      .intro-two-col .img-col img { height: 260px; }
+      .origin-strip-text h2 { font-size: 1.8rem; }
+      .origin-strip-text p { font-size: 0.93rem; }
+      .full-img-strip { height: 280px; }
+      .com-gallery { grid-template-columns: repeat(2, 1fr); }
+      .com-gallery-item { height: 210px; }
+      .stat-pill-row { gap: 10px; }
+      .stat-pill { min-width: 90px; padding: 12px 14px; }
+      .stat-pill-num { font-size: 1.55rem; }
+      .vision-block blockquote { font-size: 1.4rem; }
+      #tentang { padding: 70px 0 60px; }
+      #misi { padding: 70px 0 50px; }
+    }
+
+    /* Mobile (≤ 575px) */
+    @media (max-width: 575.98px) {
+      .intro-two-col { gap: 24px; }
+      .intro-two-col .img-col img { height: 230px; }
+      .origin-strip-text h2 { font-size: 1.6rem; }
+      .origin-strip-text p { font-size: 0.9rem; }
+      .full-img-strip { height: 230px; }
+      .vision-block { padding: 32px 18px; }
+      .vision-block blockquote { font-size: 1.2rem; }
+      .vision-block p { font-size: 0.9rem; }
+      .com-gallery { grid-template-columns: 1fr; }
+      .com-gallery-item { height: 200px; }
+      .fc-wrap { height: 190px; }
+      .fc-front, .fc-back { padding: 20px 16px; }
+      .fc-icon { font-size: 2rem; margin-bottom: 10px; }
+      .fc-front h4, .fc-back h4 { font-size: 0.97rem; }
+      .fc-back p { font-size: 0.83rem; }
+      .stat-pill-row { gap: 8px; flex-wrap: wrap; }
+      .stat-pill { min-width: 80px; padding: 10px 12px; }
+      .stat-pill-num { font-size: 1.4rem; }
+      .stat-pill-label { font-size: 0.68rem; }
+      .c-badge { font-size: 0.83rem; padding: 7px 14px; }
+      .m-card { padding: 28px 20px; }
+      .m-card-icon { width: 56px; height: 56px; font-size: 1.45rem; margin-bottom: 16px; }
+      #tentang { padding: 60px 0 48px; }
+      #misi { padding: 60px 0 48px; }
+    }
+
+    /* Very Small Phones (≤ 390px) */
+    @media (max-width: 390px) {
+      .origin-strip-text h2 { font-size: 1.4rem; }
+      .full-img-strip { height: 200px; }
+      .vision-block blockquote { font-size: 1.05rem; }
+      .fc-wrap { height: 175px; }
+      .com-gallery-item { height: 175px; }
+      .stat-pill-num { font-size: 1.25rem; }
+      .m-card-icon { width: 50px; height: 50px; font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Loader -->
+  <div class="loader-overlay" id="loaderOverlay">
+    <img src="../SRC/logo inla sumut.png" alt="INLA Logo" class="loader-logo">
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+
+  <!-- Cursor Glow -->
+  <div class="cursor-glow"></div>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="custom-navbar navbar navbar-expand-lg navbar-dark" aria-label="Main navigation">
+    <div class="container-fluid">
+      <div class="navbar-inner">
+        <a class="navbar-brand" href="../index.html">
+          <img src="../SRC/logo inla sumut.png" alt="INLA SUMUT Logo" class="brand-logo">
+          <span class="brand-text">INLA SUMUT</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+            <li class="nav-item"><a class="nav-link" href="../index.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link active" href="./about.html">About Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="./activities.html">Activities</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO BANNER ===== -->
+  <section class="about-hero-section" id="about-hero" aria-label="About hero">
+    <div class="about-hero-bg" aria-hidden="true"></div>
+    <div class="particles" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container about-hero-content">
+      <span class="banner-tag">Profil Organisasi</span>
+      <h1 class="banner-title">
+        About Us —<br>
+        <span style="color: var(--green-primary);">INLA SUMUT</span>
+      </h1>
+      <p class="banner-subtitle">
+        Mengenal lebih dekat perjalanan, misi, dan nilai-nilai yang mendasari
+        gerakan cinta alam dan kemanusiaan bersama INLA SUMUT.
+      </p>
+      <div class="d-flex gap-3 mt-4 flex-wrap">
+        <a href="#tentang" class="btn-primary-green">Pelajari Kami ↓</a>
+        <a href="./activities.html" class="btn-outline-light">Lihat Kegiatan</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item">Cinta Alam</span><span class="marquee-item">Love &amp; Harmony</span>
+      <span class="marquee-item">Seni Budaya</span><span class="marquee-item">Nature Loving</span>
+      <span class="marquee-item">Moral &amp; Etika</span><span class="marquee-item">Global Community</span>
+      <span class="marquee-item">Satu Keluarga</span><span class="marquee-item">Cinta Alam</span>
+      <span class="marquee-item">Love &amp; Harmony</span><span class="marquee-item">Seni Budaya</span>
+      <span class="marquee-item">Nature Loving</span><span class="marquee-item">Moral &amp; Etika</span>
+      <span class="marquee-item">Global Community</span><span class="marquee-item">Satu Keluarga</span>
+    </div>
+  </div>
+
+  <!-- ===== MAIN CONTENT (putih) ===== -->
+  <main class="page-white">
+
+    <!-- ── SECTION 1: TENTANG INLA ──────────────────────── -->
+    <section id="tentang" style="padding: 100px 0 80px;">
+      <div class="container">
+        <div class="intro-two-col">
+          <!-- Teks -->
+          <div class="text-col" data-aos="fade-right">
+            <span class="section-tag">Siapa Kami</span>
+            <h2 style="font-size:2.4rem; font-weight:800; color:var(--text-dark); margin:14px 0 20px; letter-spacing:-0.5px;">
+              The International<br>
+              <span style="color:var(--green-accent);">Loving Association</span>
+            </h2>
+            <p>
+              <strong>INLA (The International Loving Association)</strong> adalah organisasi
+              nirlaba internasional yang berdedikasi menyebarkan nilai-nilai moral, etika,
+              dan cinta kepada alam semesta melalui media seni dan budaya.
+            </p>
+            <p>
+              Dengan memanfaatkan kekuatan tarian, musik, dan seni pertunjukan, INLA
+              menyampaikan pesan kehidupan yang bermakna dan mudah diterima oleh semua
+              kalangan — terutama generasi muda.
+            </p>
+            <p>
+              INLA SUMUT adalah cabang di Sumatera Utara yang aktif menjalankan
+              program-program edukatif dan budaya untuk masyarakat lokal, selaras
+              dengan visi global organisasi menciptakan dunia yang harmonis.
+            </p>
+            <!-- Stat pills -->
+            <div class="stat-pill-row" data-aos="fade-up" data-aos-delay="120">
+              <div class="stat-pill">
+                <span class="stat-pill-num">2006</span>
+                <span class="stat-pill-label">Tahun Berdiri</span>
+              </div>
+              <div class="stat-pill">
+                <span class="stat-pill-num">10+</span>
+                <span class="stat-pill-label">Negara</span>
+              </div>
+              <div class="stat-pill">
+                <span class="stat-pill-num">1000+</span>
+                <span class="stat-pill-label">Anggota</span>
+              </div>
+            </div>
+            <div class="mt-4">
+              <a href="./activities.html" class="btn-primary-green">Lihat Kegiatan →</a>
+            </div>
+          </div>
+          <!-- Gambar -->
+          <div data-aos="zoom-in" data-aos-delay="120">
+            <div class="img-col">
+              <img src="../SRC/collage-of-half-faces-of-young-caucasian-men-and-women-looking-straight-to-camera-hand-SBI-349501584.jpg"
+                   alt="Keberagaman anggota INLA" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- ── SECTION 2: ASAL MULA (full-width image) ───────── -->
+    <section class="origin-strip" aria-label="Asal mula INLA" data-aos="fade-up">
+      <img src="../SRC/hongkong.jpg" alt="Hong Kong — kota asal INLA" class="full-img-strip" loading="lazy">
+      <div class="origin-strip-overlay">
+        <div class="origin-strip-text container">
+          <span class="section-tag" style="background:rgba(107,170,117,0.25);border-color:rgba(107,170,117,0.5);color:#a3d9ab;">
+            Asal Mula
+          </span>
+          <h2 data-aos="fade-right" data-aos-delay="100">Lahir dari Kota<br>Hong Kong, 2006</h2>
+          <p data-aos="fade-right" data-aos-delay="160">
+            INLA pertama kali didirikan di <strong style="color:#a3d9ab;">Hong Kong, Tiongkok</strong> pada tahun 2006.
+            Dari kota metropolitan yang dinamis ini, nilai-nilai cinta alam dan kemanusiaan mulai
+            menyebar ke seluruh penjuru dunia — Taipei, Indonesia, Malaysia, Amerika Serikat,
+            Kanada, Filipina, Australia, Singapura, Korea Selatan, dan Nepal.
+          </p>
+        </div>
+      </div>
+      <div class="origin-year-right" aria-hidden="true">2006</div>
+    </section>
+
+    <!-- ── SECTION 3: MISI & VISI ─────────────────────────── -->
+    <section style="padding: 100px 0 80px;" id="misi" aria-label="Misi dan Visi">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="section-tag" data-aos="fade-up">Tujuan Kami</span>
+          <h2 style="font-size:2.4rem;font-weight:800;color:var(--text-dark);margin:14px 0 10px;letter-spacing:-0.5px;" data-aos="fade-up" data-aos-delay="60">
+            Misi &amp; Visi
+          </h2>
+          <div class="reveal-line" data-aos="fade-up" data-aos-delay="100"></div>
+          <p class="section-desc mt-3" data-aos="fade-up" data-aos-delay="120">
+            Kami berjalan dengan panduan nilai yang jelas — untuk dunia yang lebih damai,
+            harmonis, dan penuh kasih.
+          </p>
+        </div>
+
+        <div class="row g-4 mb-5">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="60">
+            <div class="m-card">
+              <div class="m-card-icon">🌿</div>
+              <h3>Cinta Alam</h3>
+              <p>Mendorong kesadaran dan penghormatan terhadap alam semesta sebagai fondasi kehidupan yang berkelanjutan bagi semua makhluk hidup.</p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="140">
+            <div class="m-card">
+              <div class="m-card-icon">🎭</div>
+              <h3>Seni &amp; Budaya</h3>
+              <p>Menggunakan tarian, musik, dan seni pertunjukan sebagai medium penyampaian nilai moral dan etika yang mudah diterima semua kalangan.</p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="220">
+            <div class="m-card">
+              <div class="m-card-icon">🤝</div>
+              <h3>Harmoni Global</h3>
+              <p>Membangun jembatan persaudaraan lintas budaya, bangsa, dan generasi untuk mewujudkan dunia sebagai satu keluarga besar yang saling peduli.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visi Quote -->
+        <div class="vision-block" data-aos="zoom-in">
+          <span class="section-tag">Visi Kami</span>
+          <blockquote>
+            "Mewujudkan dunia yang damai, harmonis,<br>dan penuh kasih sebagai satu keluarga."
+          </blockquote>
+          <p>
+            INLA percaya bahwa setiap individu memiliki potensi untuk menciptakan kebaikan.
+            Dengan pendidikan nilai dan seni budaya, kami ingin menyentuh hati jutaan orang
+            di seluruh dunia — satu kegiatan, satu senyum, satu keluarga.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- ── SECTION 4: NILAI-NILAI (Flip Cards) ───────────── -->
+    <section style="padding: 80px 0;" aria-label="Nilai-nilai INLA">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="section-tag" data-aos="fade-up">Prinsip Kami</span>
+          <h2 style="font-size:2.4rem;font-weight:800;color:var(--text-dark);margin:14px 0 10px;letter-spacing:-0.5px;" data-aos="fade-up" data-aos-delay="60">
+            Nilai-Nilai INLA
+          </h2>
+          <div class="reveal-line" data-aos="fade-up" data-aos-delay="100"></div>
+          <p class="section-desc mt-3" data-aos="fade-up" data-aos-delay="120">
+            Arahkan kursor ke setiap kartu untuk mengetahui makna di balik nilai yang kami pegang.
+          </p>
+        </div>
+        <div class="row g-4">
+          <div class="col-sm-6 col-lg-3" data-aos="flip-left" data-aos-delay="60">
+            <div class="fc-wrap" role="group" aria-label="Nilai: Alam">
+              <div class="fc-inner">
+                <div class="fc-front"><div class="fc-icon">🌍</div><h4>Alam</h4></div>
+                <div class="fc-back"><h4>Alam</h4><p>Menghormati dan menjaga alam semesta sebagai titipan berharga yang harus kita lestarikan bersama.</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3" data-aos="flip-left" data-aos-delay="140">
+            <div class="fc-wrap" role="group" aria-label="Nilai: Manusia">
+              <div class="fc-inner">
+                <div class="fc-front"><div class="fc-icon">❤️</div><h4>Manusia</h4></div>
+                <div class="fc-back"><h4>Manusia</h4><p>Menghargai setiap kehidupan manusia tanpa memandang latar belakang, ras, atau kepercayaan.</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3" data-aos="flip-left" data-aos-delay="220">
+            <div class="fc-wrap" role="group" aria-label="Nilai: Seni">
+              <div class="fc-inner">
+                <div class="fc-front"><div class="fc-icon">🎨</div><h4>Seni</h4></div>
+                <div class="fc-back"><h4>Seni</h4><p>Menyebarkan nilai moral dan keindahan melalui ekspresi seni budaya yang menyentuh hati semua kalangan.</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3" data-aos="flip-left" data-aos-delay="300">
+            <div class="fc-wrap" role="group" aria-label="Nilai: Harmoni">
+              <div class="fc-inner">
+                <div class="fc-front"><div class="fc-icon">☮️</div><h4>Harmoni</h4></div>
+                <div class="fc-back"><h4>Harmoni</h4><p>Menciptakan keselarasan antara manusia, alam, dan semua makhluk hidup demi kedamaian abadi.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- ── SECTION 5: JANGKAUAN GLOBAL ───────────────────── -->
+    <section style="padding: 80px 0;" aria-label="Jangkauan global">
+      <div class="container">
+        <div class="row g-5 align-items-center">
+          <div class="col-lg-6" data-aos="zoom-in" data-aos-delay="80">
+            <div class="img-col" style="border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.12);">
+              <img src="../SRC/realistic-earth-closeup-render-SBI-301825525.jpg"
+                   alt="Peta global cabang INLA" loading="lazy"
+                   style="width:100%;height:420px;object-fit:cover;display:block;">
+            </div>
+          </div>
+          <div class="col-lg-6" data-aos="fade-left" data-aos-delay="100">
+            <span class="section-tag">Kehadiran Global</span>
+            <h2 style="font-size:2.2rem;font-weight:800;color:var(--text-dark);margin:14px 0 16px;letter-spacing:-0.5px;">
+              Hadir di Lebih<br>dari 10 Negara
+            </h2>
+            <div class="reveal-line left mb-4"></div>
+            <p style="color:var(--text-muted);font-size:1rem;line-height:1.85;margin-bottom:24px;">
+              INLA telah membentuk cabang di lebih dari 10 negara di 5 benua. Setiap cabang
+              membawa semangat yang sama — cinta alam, harmoni, dan penghormatan terhadap
+              kehidupan melalui seni dan budaya lokal masing-masing.
+            </p>
+            <div class="country-grid">
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="0">🇭🇰 Hong Kong</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="40">🇹🇼 Taipei</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="80">🇮🇩 Indonesia</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="120">🇲🇾 Malaysia</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="160">🇺🇸 Amerika Serikat</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="200">🇨🇦 Kanada</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="240">🇵🇭 Filipina</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="280">🇦🇺 Australia</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="320">🇸🇬 Singapura</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="360">🇰🇷 Korea Selatan</span>
+              <span class="c-badge" data-aos="fade-up" data-aos-delay="400">🇳🇵 Nepal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="sec-divider">
+
+    <!-- ── SECTION 6: GALERI KOMUNITAS ───────────────────── -->
+    <section style="padding: 80px 0 100px;" aria-label="Galeri komunitas">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="section-tag" data-aos="fade-up">Komunitas</span>
+          <h2 style="font-size:2.4rem;font-weight:800;color:var(--text-dark);margin:14px 0 10px;letter-spacing:-0.5px;" data-aos="fade-up" data-aos-delay="60">
+            Wajah INLA SUMUT
+          </h2>
+          <div class="reveal-line" data-aos="fade-up" data-aos-delay="100"></div>
+          <p class="section-desc mt-3" data-aos="fade-up" data-aos-delay="120">
+            Setiap wajah mewakili semangat yang sama — cinta, harmoni, dan harapan
+            untuk dunia yang lebih baik bagi semua.
+          </p>
+        </div>
+        <div class="com-gallery">
+          <div class="com-gallery-item" data-aos="zoom-in" data-aos-delay="60">
+            <img src="../SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg"
+                 alt="Anak-anak INLA bermain di alam" loading="lazy">
+          </div>
+          <div class="com-gallery-item" data-aos="zoom-in" data-aos-delay="150">
+            <img src="../SRC/boy-running-through-wheat-field-holding-butterfly-net-in-hand-sunny-sky-relaxing-enjoy-SBI-350099286.jpg"
+                 alt="Kebebasan di alam terbuka" loading="lazy">
+          </div>
+          <div class="com-gallery-item" data-aos="zoom-in" data-aos-delay="240">
+            <img src="../SRC/a-tree-in-a-field-with-stunning-space-backdrop-SBI-301081197.jpg"
+                 alt="Pohon kehidupan — simbol INLA" loading="lazy">
+          </div>
+        </div>
+        <div class="text-center mt-5" data-aos="fade-up">
+          <a href="./activities.html" class="btn-primary-green">Lihat Semua Kegiatan →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" aria-label="Footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="../SRC/logo inla sumut.png" alt="INLA SUMUT Logo">
+          <div>
+            <div class="footer-brand-name">INLA SUMUT</div>
+            <div class="footer-brand-tagline">International Nature Loving Association</div>
+          </div>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="../index.html">Dashboard</a>
+          <a href="./about.html">About Us</a>
+          <a href="./activities.html">Activities</a>
+        </nav>
+        <div class="footer-links">
+          <a href="#" aria-label="WhatsApp">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            WhatsApp
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a href="#" aria-label="YouTube">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            YouTube
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>Copyright &copy; INLA SUMUT 2026. All rights reserved.</span>
+        <span>Made with ♥ for a better world</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="../JS/main.js"></script>
+  <script>
+    // Trigger hero bg zoom
+    window.addEventListener('load', () => {
+      document.getElementById('about-hero')?.classList.add('loaded');
+    });
+  </script>
+</body>
+</html>

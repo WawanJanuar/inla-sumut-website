@@ -1,0 +1,42 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.1 Safari/605.1.15" version="29.6.3">
+  <diagram name="Halaman-1" id="B5wppYtaGY56bM3qBI4h">
+    <mxGraphModel dx="901" dy="646" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="euqV3CHHchIKzn2F8BTx-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="START" vertex="1">
+          <mxGeometry height="60" width="120" x="340" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="euqV3CHHchIKzn2F8BTx-2" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="terdapat beberapa fitur:&lt;div&gt;1. dashboard(halaman utama)&lt;/div&gt;&lt;div&gt;2. what is?(tentang inla)&lt;/div&gt;&lt;div&gt;3. activity(kegiatan &lt;span style=&quot;white-space: pre;&quot;&gt;dokumentasi inla)&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="140" as="geometry" />
+        </mxCell>
+        <mxCell id="euqV3CHHchIKzn2F8BTx-9" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="euqV3CHHchIKzn2F8BTx-5" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="249.66" as="sourcePoint" />
+            <mxPoint x="150" y="249.66" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="euqV3CHHchIKzn2F8BTx-11" edge="1" parent="1" source="euqV3CHHchIKzn2F8BTx-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="euqV3CHHchIKzn2F8BTx-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="euqV3CHHchIKzn2F8BTx-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="DASHBOARD" vertex="1">
+          <mxGeometry height="60" width="120" x="340" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="euqV3CHHchIKzn2F8BTx-4" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" target="euqV3CHHchIKzn2F8BTx-3" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="400" y="100" as="sourcePoint" />
+            <mxPoint x="450" y="50" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="euqV3CHHchIKzn2F8BTx-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="What Is?" vertex="1">
+          <mxGeometry height="60" width="120" x="80" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="euqV3CHHchIKzn2F8BTx-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Activity" vertex="1">
+          <mxGeometry height="60" width="120" x="580" y="280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
