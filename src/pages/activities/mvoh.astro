@@ -1,0 +1,172 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import HeroDetail from '../../components/HeroDetail.astro';
+import StatsStrip from '../../components/StatsStrip.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import HistorySidebar from '../../components/HistorySidebar.astro';
+import RelatedActivities from '../../components/RelatedActivities.astro';
+import Footer from '../../components/Footer.astro';
+
+const stats = [
+  { value: '300+',   label: 'Penampil' },
+  { value: '2.000+', label: 'Penonton' },
+  { value: '2017',   label: 'Season pertama' },
+  { value: '8',      label: 'Season digelar' },
+];
+
+const history = [
+  { year: '2025', title: 'MVOH Season 8',  meta: 'Grand Finale · Special Guest' },
+  { year: '2024', title: 'MVOH Season 7',  meta: '250+ Penampil' },
+  { year: '2023', title: 'MVOH Season 6',  meta: 'Multi-stage Show' },
+  { year: '2022', title: 'MVOH Season 5',  meta: 'Hybrid Concert' },
+  { year: '2021', title: 'MVOH Season 4',  meta: 'Live Streaming' },
+  { year: '2020', title: 'MVOH Season 3',  meta: 'Virtual Edition' },
+  { year: '2018', title: 'MVOH Season 2',  meta: '150 Penampil' },
+  { year: '2017', title: 'MVOH Season 1',  meta: 'Perdana Medan' },
+];
+
+const related = [
+  {
+    href: '/activities/igts',
+    tag: 'Pendidikan',
+    title: 'INLA Goes To School',
+    description: 'Program inspirasi ke sekolah-sekolah di seluruh Sumut.',
+    emoji: '📚',
+    bgClass: 'thumb-green',
+    image: '/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg',
+  },
+  {
+    href: '/activities/igt',
+    tag: 'Kompetisi',
+    title: 'INLA Got Talent',
+    description: 'Kompetisi bakat vokal, tari, dan pertunjukan seni.',
+    emoji: '🎤',
+    bgClass: 'thumb-gold',
+    image: '/SRC/p06.jpg',
+  },
+  {
+    href: '/activities/pagelaran',
+    tag: 'Pagelaran',
+    title: 'Pagelaran SKS',
+    description: 'Pementasan seni budaya berskala internasional.',
+    emoji: '🎭',
+    bgClass: 'thumb-purple',
+    image: '/SRC/bg3.jpg',
+  },
+];
+---
+
+<Layout title="MVOH — INLA SUMUT">
+  <Navbar activePage="activities" />
+
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="/activities">Kegiatan</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">MVOH</span>
+  </div>
+
+  <!-- TODO: ganti VIDEO_ID dengan video acara ini -->
+  <HeroDetail
+    eyebrow="03 — Konser & Musik"
+    title="Musical Voice"
+    titleHighlight="of Harmony"
+    description="Konser vokal dan musik yang merayakan keharmonisan antara manusia, alam, dan semesta melalui ekspresi seni yang mendalam."
+    tags={['Konser', 'Vokal', 'Musik', 'Harmoni']}
+    emoji="🎵"
+    bgClass="g2"
+    videoId="cA2a7xzGOtc"
+  />
+
+  <StatsStrip stats={stats} />
+
+  <GalleryGrid
+    gallery="mvoh"
+    images={[
+      '/SRC/bg5.jpg',
+      '/SRC/bg3.jpg',
+      '/SRC/p01.jpg',
+      '/SRC/p05.jpg',
+      '/SRC/p06.jpg',
+    ]}
+  />
+
+  <div class="detail-main">
+    <div class="detail-left">
+      <div data-reveal>
+        <p class="sec-eyebrow">Tentang Program</p>
+        <h2 class="sec-h2" style="font-size:22px;">Musical Voice of Harmony (MVOH)</h2>
+        <p class="sec-p" style="font-size:13px;">MVOH adalah konser musik dan vokal tahunan INLA SUMUT yang menggabungkan keindahan seni dengan pesan cinta alam. Sejak Season pertama di 2017, MVOH telah menjadi momen paling ditunggu-tunggu oleh komunitas INLA setiap tahunnya.</p>
+        <p class="sec-p" style="font-size:13px;">Setiap season menghadirkan tema unik yang terinspirasi dari alam, dengan penampil yang terdiri dari anggota INLA berbagai usia dan latar belakang budaya.</p>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div class="feature-card" data-reveal>
+        <p class="feature-label">Format Penampilan</p>
+        <h3 class="feature-title">Berbagai Format Vokal & Musik</h3>
+        <p class="feature-desc">MVOH menghadirkan beragam format penampilan yang memastikan setiap suara dan talenta mendapat tempat.</p>
+        <div class="feature-items">
+          <div class="feature-item">
+            <div class="feature-item-icon">🎤</div>
+            <div class="feature-item-title">Solo Vocal</div>
+            <div class="feature-item-desc">Penampilan vokal tunggal dengan berbagai genre dari pop hingga klasik.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">🎵</div>
+            <div class="feature-item-title">Paduan Suara</div>
+            <div class="feature-item-desc">Koor dan ensemble yang menciptakan harmoni suara yang memukau.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">🎸</div>
+            <div class="feature-item-title">Instrumental</div>
+            <div class="feature-item-desc">Penampilan instrumen dari piano, gitar, hingga alat musik tradisional.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">⭐</div>
+            <div class="feature-item-title">Spesial</div>
+            <div class="feature-item-desc">Kolaborasi istimewa dengan artis tamu dan penampilan grand finale.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div data-reveal>
+        <p class="sec-eyebrow">Kategori Peserta</p>
+        <h3 class="sec-h2" style="font-size:18px;margin-bottom:14px;">Untuk Semua Usia</h3>
+        <div class="cat-row">
+          <div class="cat-card">
+            <div class="cat-icon">🌸</div>
+            <div class="cat-title">Cilik</div>
+            <div class="cat-desc">Usia 5–10 tahun</div>
+          </div>
+          <div class="cat-card">
+            <div class="cat-icon">🌟</div>
+            <div class="cat-title">Junior</div>
+            <div class="cat-desc">Usia 11–15 tahun</div>
+          </div>
+          <div class="cat-card">
+            <div class="cat-icon">🏆</div>
+            <div class="cat-title">Senior</div>
+            <div class="cat-desc">Usia 16 tahun ke atas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-sidebar">
+      <HistorySidebar items={history} />
+      <div class="sidebar-card">
+        <p class="sidebar-title">Ikut MVOH Season 9</p>
+        <p style="font-size:13px;color:#5a5a4a;line-height:1.7;margin-bottom:14px;">Pendaftaran MVOH Season 9 akan segera dibuka. Siapkan suara terbaikmu!</p>
+        <a href="/karir" class="btn-green" style="display:block;text-align:center;font-size:13px;">Daftar Sekarang</a>
+      </div>
+    </div>
+  </div>
+
+  <RelatedActivities items={related} />
+  <Footer />
+</Layout>

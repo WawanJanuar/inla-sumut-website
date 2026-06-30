@@ -1,0 +1,172 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import HeroDetail from '../../components/HeroDetail.astro';
+import StatsStrip from '../../components/StatsStrip.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import HistorySidebar from '../../components/HistorySidebar.astro';
+import RelatedActivities from '../../components/RelatedActivities.astro';
+import Footer from '../../components/Footer.astro';
+
+const stats = [
+  { value: '50+',    label: 'Sekolah' },
+  { value: '5.000+', label: 'Siswa' },
+  { value: '2018',   label: 'Program berdiri' },
+  { value: '12',     label: 'Kota' },
+];
+
+const history = [
+  { year: '2025', title: 'IGTS Angkatan 8', meta: 'Medan · 12 Sekolah' },
+  { year: '2024', title: 'IGTS Angkatan 7', meta: 'Binjai · 8 Sekolah' },
+  { year: '2023', title: 'IGTS Angkatan 6', meta: 'Tebing Tinggi · 7 Sekolah' },
+  { year: '2022', title: 'IGTS Angkatan 5', meta: 'Pematangsiantar · 6 Sekolah' },
+  { year: '2021', title: 'IGTS Angkatan 4', meta: 'Online · 15 Sekolah' },
+  { year: '2020', title: 'IGTS Angkatan 3', meta: 'Medan · 5 Sekolah' },
+  { year: '2019', title: 'IGTS Angkatan 2', meta: 'Deli Serdang · 4 Sekolah' },
+  { year: '2018', title: 'IGTS Angkatan 1', meta: 'Medan · 3 Sekolah' },
+];
+
+const related = [
+  {
+    href: '/activities/igt',
+    tag: 'Kompetisi',
+    title: 'INLA Got Talent',
+    description: 'Kompetisi bakat vokal, tari, dan pertunjukan seni.',
+    emoji: '🎤',
+    bgClass: 'thumb-gold',
+    image: '/SRC/p06.jpg',
+  },
+  {
+    href: '/activities/mvoh',
+    tag: 'Konser',
+    title: 'Musical Voice of Harmony',
+    description: 'Konser vokal dan musik yang penuh harmoni dan makna.',
+    emoji: '🎵',
+    bgClass: 'thumb-blue',
+    image: '/SRC/bg5.jpg',
+  },
+  {
+    href: '/activities/pagelaran',
+    tag: 'Pagelaran',
+    title: 'Pagelaran SKS',
+    description: 'Pementasan seni dan budaya berskala internasional.',
+    emoji: '🎭',
+    bgClass: 'thumb-purple',
+    image: '/SRC/bg3.jpg',
+  },
+];
+---
+
+<Layout title="IGTS — INLA SUMUT">
+  <Navbar activePage="activities" />
+
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="/activities">Kegiatan</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">IGTS</span>
+  </div>
+
+  <!-- TODO: ganti VIDEO_ID dengan video acara ini -->
+  <HeroDetail
+    eyebrow="01 — Pendidikan"
+    title="INLA Goes"
+    titleHighlight="To School"
+    description="Program inspirasi langsung ke sekolah-sekolah, membangun karakter anak dan remaja melalui nilai-nilai kepedulian alam dan sesama."
+    tags={['Pendidikan', 'Karakter', 'Sekolah', 'Remaja']}
+    emoji="📚"
+    bgClass="g1"
+    videoId="cA2a7xzGOtc"
+  />
+
+  <StatsStrip stats={stats} />
+
+  <GalleryGrid
+    gallery="igts"
+    images={[
+      '/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg',
+      '/SRC/p01.jpg',
+      '/SRC/p02.jpg',
+      '/SRC/p03.jpg',
+      '/SRC/boy-running-through-wheat-field-holding-butterfly-net-in-hand-sunny-sky-relaxing-enjoy-SBI-350099286.jpg',
+    ]}
+  />
+
+  <div class="detail-main">
+    <div class="detail-left">
+      <div data-reveal>
+        <p class="sec-eyebrow">Tentang Program</p>
+        <h2 class="sec-h2" style="font-size:22px;">INLA Goes To School (IGTS)</h2>
+        <p class="sec-p" style="font-size:13px;">IGTS adalah program kunjungan inspiratif ke sekolah-sekolah di seluruh Sumatera Utara. Tim INLA hadir langsung ke sekolah untuk memberikan motivasi, edukasi karakter, dan menumbuhkan kecintaan terhadap alam pada generasi muda.</p>
+        <p class="sec-p" style="font-size:13px;">Sejak 2018, program ini telah menyentuh lebih dari 5.000 siswa di 12 kota, menjadikannya salah satu program pendidikan karakter terbesar di Sumatera Utara.</p>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div class="sip-card" data-reveal>
+        <p class="sip-label">Pilar Program</p>
+        <h3 class="sip-title">Spirit, Integrity & Purpose</h3>
+        <p class="sip-desc">Tiga pilar utama yang menjadi fondasi setiap kunjungan IGTS ke sekolah.</p>
+        <div class="sip-items">
+          <div class="sip-item">
+            <div class="sip-item-icon">💡</div>
+            <div class="sip-item-title">Motivasi</div>
+            <div class="sip-item-desc">Membangun semangat dan kepercayaan diri siswa melalui sesi inspirasi interaktif.</div>
+          </div>
+          <div class="sip-item">
+            <div class="sip-item-icon">⚖️</div>
+            <div class="sip-item-title">Nilai Moral</div>
+            <div class="sip-item-desc">Menanamkan nilai-nilai kejujuran, tanggung jawab, dan kepedulian terhadap lingkungan.</div>
+          </div>
+          <div class="sip-item">
+            <div class="sip-item-icon">🧭</div>
+            <div class="sip-item-title">Bimbingan</div>
+            <div class="sip-item-desc">Sesi tanya jawab langsung dengan mentor INLA yang berpengalaman.</div>
+          </div>
+          <div class="sip-item">
+            <div class="sip-item-icon">🎯</div>
+            <div class="sip-item-title">Goal Setting</div>
+            <div class="sip-item-desc">Workshop penetapan tujuan hidup untuk membantu siswa merencanakan masa depan.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div data-reveal>
+        <p class="sec-eyebrow">Jenjang Program</p>
+        <h3 class="sec-h2" style="font-size:18px;margin-bottom:14px;">Target Usia Peserta</h3>
+        <div class="jenjang-row">
+          <div class="jenjang-card">
+            <div class="jenjang-icon">📗</div>
+            <div class="jenjang-title">SD</div>
+            <div class="jenjang-desc">Usia 7–12 tahun, fokus pada pengenalan alam dan nilai dasar.</div>
+          </div>
+          <div class="jenjang-card">
+            <div class="jenjang-icon">📘</div>
+            <div class="jenjang-title">SMP</div>
+            <div class="jenjang-desc">Usia 13–15 tahun, pengembangan karakter dan kepemimpinan.</div>
+          </div>
+          <div class="jenjang-card">
+            <div class="jenjang-icon">📙</div>
+            <div class="jenjang-title">SMA</div>
+            <div class="jenjang-desc">Usia 16–18 tahun, persiapan karir dan visi masa depan.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-sidebar">
+      <HistorySidebar items={history} />
+      <div class="sidebar-card">
+        <p class="sidebar-title">Daftarkan Sekolahmu</p>
+        <p style="font-size:13px;color:#5a5a4a;line-height:1.7;margin-bottom:14px;">Ingin program IGTS hadir di sekolahmu? Hubungi kami untuk informasi lebih lanjut.</p>
+        <a href="/karir" class="btn-green" style="display:block;text-align:center;font-size:13px;">Hubungi Kami</a>
+      </div>
+    </div>
+  </div>
+
+  <RelatedActivities items={related} />
+  <Footer />
+</Layout>

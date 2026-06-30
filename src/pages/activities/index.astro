@@ -1,0 +1,184 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+const activityCards = [
+  { id:'igts',      label:'IGTS',     thumb:'thumb-green',  title:'INLA Goes To School',        desc:'Program inspirasi ke sekolah-sekolah untuk membangun karakter anak.',       meta:'50+ Sekolah',    href:'/activities/igts',      image:'/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg' },
+  { id:'igt',       label:'IGT',      thumb:'thumb-gold',   title:'INLA Got Talent',             desc:'Kompetisi bakat vokal, tari, dan pertunjukan dari seluruh kota.',           meta:'500+ Peserta',   href:'/activities/igt',       image:'/SRC/p06.jpg' },
+  { id:'mvoh',      label:'MVOH',     thumb:'thumb-blue',   title:'Musical Voice of Harmony',    desc:'Konser vokal dan musik yang merayakan harmoni alam dan manusia.',           meta:'2.000+ Penonton',href:'/activities/mvoh',      image:'/SRC/bg5.jpg' },
+  { id:'pagelaran', label:'Pagelaran',thumb:'thumb-purple', title:'Pagelaran SKS',               desc:'Pementasan seni senam, kebudayaan, dan seni berskala besar.',              meta:'3.000+ Peserta', href:'/activities/pagelaran', image:'/SRC/bg3.jpg' },
+  { id:'igts',      label:'IGTS',     thumb:'thumb-green',  title:'IGTS Angkatan 8 — Medan',     desc:'Kunjungan ke 12 sekolah di Kota Medan dengan tema Alam sebagai Guru.',     meta:'12 Sekolah',     href:'/activities/igts',      image:'/SRC/boy-running-through-wheat-field-holding-butterfly-net-in-hand-sunny-sky-relaxing-enjoy-SBI-350099286.jpg' },
+  { id:'igt',       label:'IGT',      thumb:'thumb-gold',   title:'IGT Season 10',               desc:'Grand final bakat terbesar INLA dengan peserta dari 20+ kota.',           meta:'Grand Final',    href:'/activities/igt',       image:'/SRC/p01.jpg' },
+  { id:'senam',     label:'Senam',    thumb:'thumb-earth',  title:'Senam Massal 2025',           desc:'Senam massal bersama 5.000+ peserta di Lapangan Merdeka Medan.',           meta:'5.000+ Peserta', href:'/activities',           image:'/SRC/p02.jpg' },
+  { id:'mvoh',      label:'MVOH',     thumb:'thumb-blue',   title:'MVOH Season 8',               desc:'Puncak konser MVOH dengan penampilan spesial dari artis internasional.',   meta:'Special Concert',href:'/activities/mvoh',      image:'/SRC/p05.jpg' },
+  { id:'igts',      label:'IGTS',     thumb:'thumb-green',  title:'IGTS Angkatan 7 — Binjai',    desc:'Program IGTS menjangkau kota Binjai dengan 8 sekolah partisipan.',        meta:'8 Sekolah',      href:'/activities/igts',      image:'/SRC/p03.jpg' },
+  { id:'pagelaran', label:'Pagelaran',thumb:'thumb-purple', title:'Pagelaran SKS XIV',           desc:'Edisi ke-14 Pagelaran SKS dengan tema Harmoni Lintas Budaya.',            meta:'Grand Show',     href:'/activities/pagelaran', image:'/SRC/bg2.jpg' },
+  { id:'sks',       label:'SKS',      thumb:'thumb-earth',  title:'Workshop Seni Budaya',        desc:'Workshop intensif seni tari dan musik tradisional Sumatera Utara.',        meta:'2 Hari',         href:'/activities',           image:'/SRC/collage-of-half-faces-of-young-caucasian-men-and-women-looking-straight-to-camera-hand-SBI-349501584.jpg' },
+  { id:'igt',       label:'IGT',      thumb:'thumb-gold',   title:'IGT Junior Category',         desc:'Kategori junior IGT untuk bakat-bakat muda usia 7–12 tahun.',              meta:'Junior Stage',   href:'/activities/igt',       image:'/SRC/About.jpg' },
+];
+---
+
+<Layout title="Kegiatan — INLA SUMUT">
+  <Navbar activePage="activities" />
+
+  <!-- HERO -->
+  <section class="hero-activities">
+    <p class="hero-eyebrow">Program & Kegiatan</p>
+    <h1 class="hero-h1">Semua Kegiatan <em>INLA SUMUT</em></h1>
+    <p class="hero-p">Jelajahi seluruh program dan kegiatan kami — dari pendidikan karakter, kompetisi bakat, hingga pagelaran seni budaya berskala internasional.</p>
+  </section>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-item active" data-filter="all">
+      <span class="filter-dot" style="background:#3d7a3d;"></span>Semua
+    </button>
+    <button class="filter-item" data-filter="igts">
+      <span class="filter-dot" style="background:#4a9e4a;"></span>IGTS
+    </button>
+    <button class="filter-item" data-filter="igt">
+      <span class="filter-dot" style="background:#b88000;"></span>IGT
+    </button>
+    <button class="filter-item" data-filter="mvoh">
+      <span class="filter-dot" style="background:#1a4a8a;"></span>MVOH
+    </button>
+    <button class="filter-item" data-filter="pagelaran">
+      <span class="filter-dot" style="background:#6a3a9e;"></span>Pagelaran
+    </button>
+    <button class="filter-item" data-filter="senam">
+      <span class="filter-dot" style="background:#8a5020;"></span>Senam/SKS
+    </button>
+  </div>
+
+  <!-- ACARA TERBARU -->
+  <section class="latest-section">
+    <div class="latest-inner">
+      <div class="latest-header">
+        <div>
+          <p class="latest-eyebrow">Acara Terbaru</p>
+          <h2 class="latest-title">Sorotan <em>Kegiatan Terkini</em></h2>
+        </div>
+        <a href="#semua" class="latest-see-all">Lihat Semua →</a>
+      </div>
+      <div class="latest-grid">
+        <a href="/activities/igts" class="latest-card-main" style="text-decoration:none;">
+          <div class="latest-main-bg" style="background-image:url('/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg');background-size:cover;background-position:center;"></div>
+          <div class="latest-main-overlay"></div>
+          <span class="latest-main-deco">🌿</span>
+          <div class="latest-main-body">
+            <div class="latest-new-badge">
+              <span class="latest-new-dot"></span>Baru
+            </div>
+            <div class="latest-main-label">IGTS · 2025</div>
+            <h3 class="latest-main-title">IGTS Angkatan 8<br />Kota Medan</h3>
+            <p class="latest-main-desc">Program inspirasi terbaru menjangkau 12 sekolah di Kota Medan dengan tema "Alam sebagai Guru Terbesar".</p>
+            <span class="latest-main-btn">Lihat Detail →</span>
+          </div>
+        </a>
+        <div class="latest-side">
+          <a href="/activities/igt" class="latest-card-side" style="text-decoration:none;">
+            <div class="latest-side-thumb">
+              <div class="latest-side-bg" style="position:absolute;inset:0;background-image:url('/SRC/p06.jpg');background-size:cover;background-position:center;"></div>
+            </div>
+            <div class="latest-side-body">
+              <div class="latest-side-label">IGT</div>
+              <div class="latest-side-title">IGT Season 10 Grand Final</div>
+              <span class="latest-side-link">Lihat →</span>
+            </div>
+          </a>
+          <a href="/activities/mvoh" class="latest-card-side" style="text-decoration:none;">
+            <div class="latest-side-thumb">
+              <div class="latest-side-bg" style="position:absolute;inset:0;background-image:url('/SRC/bg5.jpg');background-size:cover;background-position:center;"></div>
+            </div>
+            <div class="latest-side-body">
+              <div class="latest-side-label">MVOH</div>
+              <div class="latest-side-title">MVOH Season 8 Special Concert</div>
+              <span class="latest-side-link">Lihat →</span>
+            </div>
+          </a>
+          <a href="/activities/pagelaran" class="latest-card-side" style="text-decoration:none;">
+            <div class="latest-side-thumb">
+              <div class="latest-side-bg" style="position:absolute;inset:0;background-image:url('/SRC/bg3.jpg');background-size:cover;background-position:center;"></div>
+            </div>
+            <div class="latest-side-body">
+              <div class="latest-side-label">Pagelaran</div>
+              <div class="latest-side-title">Pagelaran SKS XIV — Harmoni</div>
+              <span class="latest-side-link">Lihat →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY GRID -->
+  <section class="grid-section" id="semua">
+    <div class="grid-header">
+      <div>
+        <p class="grid-eyebrow">Semua Program</p>
+        <h2 class="grid-title">Jelajahi <em>Kegiatan Kami</em></h2>
+      </div>
+      <span class="grid-count" id="gridCount">12 program</span>
+    </div>
+    <div class="act-grid" id="actGrid">
+      {activityCards.map(card => (
+        <a href={card.href} class="act-card" data-label={card.id} style="text-decoration:none;">
+          <div class:list={['act-thumb', card.thumb]}>
+            <div class="act-thumb-bg" style={`background-image:url('${card.image}');`}></div>
+            <div class="act-thumb-overlay"></div>
+            <div class="act-thumb-top">
+              <span class="act-label-badge">{card.label}</span>
+            </div>
+          </div>
+          <div class="act-body">
+            <div class="act-card-title">{card.title}</div>
+            <div class="act-card-desc">{card.desc}</div>
+            <div class="act-card-footer">
+              <span class="act-detail-link">Lihat Selengkapnya <span class="arrow">→</span></span>
+              <span style="font-size:11px;color:#9a9a8a;">{card.meta}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+      <div class="grid-empty" id="gridEmpty">Tidak ada program di kategori ini.</div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2 class="cta-h2">Ingin <em>Berpartisipasi</em>?</h2>
+    <p class="cta-p">Daftarkan dirimu atau sekolahmu untuk bergabung dalam program-program INLA SUMUT berikutnya.</p>
+    <a href="/karir" class="btn-white">Daftar Sekarang</a>
+  </section>
+
+  <Footer />
+</Layout>
+
+<script>
+  function initFilter() {
+    const btns = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = document.querySelectorAll<HTMLElement>('.act-card');
+    const count = document.getElementById('gridCount');
+    const empty = document.getElementById('gridEmpty');
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter ?? 'all';
+        let visible = 0;
+        cards.forEach(card => {
+          const show = filter === 'all' || card.dataset.label === filter;
+          card.classList.toggle('hidden', !show);
+          if (show) visible++;
+        });
+        if (count) count.textContent = `${visible} program`;
+        if (empty) empty.classList.toggle('show', visible === 0);
+      });
+    });
+  }
+
+  initFilter();
+  document.addEventListener('astro:after-swap', initFilter);
+</script>

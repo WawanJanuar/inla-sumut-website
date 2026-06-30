@@ -1,0 +1,471 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
+import imgLogo        from '../assets/images/logo.png';
+import imgChildren    from '../assets/images/children-sunset.jpg';
+import imgDanceBali   from '../assets/images/dance-bali.jpg';
+import imgDanceKimono from '../assets/images/dance-kimono.jpg';
+import imgFestival    from '../assets/images/festival-stage.jpg';
+import imgMountain    from '../assets/images/hero-mountain.jpg';
+import imgWheat       from '../assets/images/wheat-field.jpg';
+---
+
+<Layout title="About Us — INLA SUMUT">
+  <Navbar activePage="about" />
+
+  <!-- HERO -->
+  <section class="hero-about">
+    <p class="hero-eyebrow">Tentang Kami</p>
+    <h1 class="hero-about-h1">Mengenal <em>INLA SUMUT</em></h1>
+    <p class="hero-about-p">International Nature Loving Association — membangun harmoni antara manusia, alam, dan semesta sejak 2005.</p>
+  </section>
+
+  <!-- IN-PAGE NAV -->
+  <nav class="page-nav" aria-label="Navigasi halaman">
+    <a href="#sejarah"    class="page-nav-item active">Sejarah</a>
+    <a href="#tujuan"     class="page-nav-item">Tujuan</a>
+    <a href="#target"     class="page-nav-item">Target</a>
+    <a href="#makna"      class="page-nav-item">Makna</a>
+    <a href="#misi"       class="page-nav-item">Misi</a>
+    <a href="#perjalanan" class="page-nav-item">Perjalanan</a>
+  </nav>
+
+  <!-- SEJARAH -->
+  <section id="sejarah" class="sejarah-bg">
+    <div class="sejarah-inner">
+      <div>
+        <p class="eyebrow-light">01 — Sejarah</p>
+        <h2 class="sec-h2-light">Lahir dari <em>Cinta Alam</em></h2>
+        <p class="sec-p-light">INLA (International Nature Loving Association) didirikan di Hong Kong pada tahun 2005 dengan visi membangun jaringan komunitas pecinta alam lintas negara. Cabang Sumatera Utara berdiri sebagai salah satu cabang pertama di Indonesia.</p>
+        <p class="sec-p-light">Sejak berdiri, INLA SUMUT telah menjadi wadah bagi ribuan anak muda untuk mengekspresikan kecintaan mereka terhadap alam melalui seni, pendidikan, dan budaya.</p>
+        <div class="stats-row-sm" style="margin-top:20px;">
+          <div class="stat-mini glass-card" style="padding:14px;">
+            <div class="stat-mini-num">20+</div>
+            <div class="stat-mini-label">Negara Anggota</div>
+          </div>
+          <div class="stat-mini glass-card" style="padding:14px;">
+            <div class="stat-mini-num">2005</div>
+            <div class="stat-mini-label">Tahun Berdiri</div>
+          </div>
+        </div>
+      </div>
+      <div class="sejarah-right">
+        <div class="glass-card" style="overflow:hidden;">
+          <div class="glass-img">🌏 Gambar Kantor Pusat HK</div>
+          <div class="stats-row-sm">
+            <div class="stat-mini">
+              <div class="stat-mini-num">1.000+</div>
+              <div class="stat-mini-label">Anggota</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-num">50+</div>
+              <div class="stat-mini-label">Program</div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card flags-card">
+          <p class="flags-title">Negara Anggota</p>
+          <div class="flags-grid">
+            <div class="flag-item"><span class="flag-emoji">🇭🇰</span><span class="flag-name">Hong Kong</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇹🇼</span><span class="flag-name">Taiwan</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇮🇩</span><span class="flag-name">Indonesia</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇲🇾</span><span class="flag-name">Malaysia</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇺🇸</span><span class="flag-name">USA</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇨🇦</span><span class="flag-name">Kanada</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇵🇭</span><span class="flag-name">Filipina</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇦🇺</span><span class="flag-name">Australia</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇸🇬</span><span class="flag-name">Singapura</span></div>
+            <div class="flag-item"><span class="flag-emoji">🇰🇷</span><span class="flag-name">Korea</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TUJUAN -->
+  <section id="tujuan" class="bg-cream">
+    <div>
+      <p class="eyebrow">02 — Tujuan</p>
+      <h2 class="sec-h2">Apa yang Ingin <em>Kami Capai</em></h2>
+      <p class="sec-p" style="max-width:560px;margin-bottom:28px;">INLA SUMUT hadir dengan tujuan yang jelas: membangun generasi yang mencintai alam dan berkontribusi positif bagi dunia.</p>
+    </div>
+    <div class="goals-grid">
+      <div class="goal-card" data-reveal>
+        <div class="goal-icon">🌱</div>
+        <div>
+          <div class="goal-title">Pendidikan Karakter</div>
+          <div class="goal-desc">Membangun karakter anak muda yang peduli lingkungan melalui program edukasi inovatif.</div>
+        </div>
+      </div>
+      <div class="goal-card" data-reveal data-reveal-delay="1">
+        <div class="goal-icon">🎭</div>
+        <div>
+          <div class="goal-title">Pelestarian Budaya</div>
+          <div class="goal-desc">Melestarikan dan mengembangkan seni budaya lokal dalam konteks global yang inklusif.</div>
+        </div>
+      </div>
+      <div class="goal-card" data-reveal data-reveal-delay="2">
+        <div class="goal-icon">🌍</div>
+        <div>
+          <div class="goal-title">Jaringan Internasional</div>
+          <div class="goal-desc">Menghubungkan pemuda Indonesia dengan komunitas internasional di 20+ negara.</div>
+        </div>
+      </div>
+      <div class="goal-card" data-reveal data-reveal-delay="3">
+        <div class="goal-icon">🤝</div>
+        <div>
+          <div class="goal-title">Pemberdayaan Komunitas</div>
+          <div class="goal-desc">Memberdayakan komunitas lokal untuk bergerak bersama demi masa depan yang lebih baik.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TARGET -->
+  <section id="target" class="bg-white">
+    <div>
+      <div class="target-grid">
+        <div>
+          <p class="eyebrow">03 — Target</p>
+          <h2 class="sec-h2">Siapa yang Ingin <em>Kami Jangkau</em></h2>
+          <p class="sec-p">Program kami dirancang untuk menjangkau berbagai kelompok usia dan latar belakang, dari anak-anak hingga dewasa, dari dalam kota hingga pelosok daerah.</p>
+        </div>
+        <div class="target-list">
+          <div class="target-item" data-reveal>
+            <div class="target-num">1</div>
+            <div class="target-text">Anak dan remaja usia 5–17 tahun yang ingin mengembangkan bakat dan karakter.</div>
+          </div>
+          <div class="target-item" data-reveal data-reveal-delay="1">
+            <div class="target-num">2</div>
+            <div class="target-text">Dewasa muda (18–30) yang ingin berkarir di bidang seni, budaya, dan lingkungan.</div>
+          </div>
+          <div class="target-item" data-reveal data-reveal-delay="2">
+            <div class="target-num">3</div>
+            <div class="target-text">Sekolah dan institusi pendidikan yang mencari program pengembangan karakter.</div>
+          </div>
+          <div class="target-item" data-reveal data-reveal-delay="3">
+            <div class="target-num">4</div>
+            <div class="target-text">Komunitas dan organisasi yang ingin berkolaborasi dalam program sosial dan budaya.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAKNA INLA -->
+  <section id="makna" class="meanings-bg">
+    <div class="meanings-inner">
+      <p class="eyebrow-light">04 — Makna</p>
+      <h2 class="meanings-h2">Makna di Balik <em style="color:#7dd87d;font-style:normal;">INLA</em></h2>
+      <p class="meanings-p">Setiap huruf dalam INLA membawa makna yang dalam tentang misi dan nilai-nilai kami.</p>
+      <div class="meanings-grid">
+        <div class="meaning-card" data-reveal>
+          <div class="meaning-icon">🌐</div>
+          <div class="meaning-title">I — International</div>
+          <div class="meaning-desc">Melampaui batas negara, menyatukan manusia dari berbagai penjuru dunia dalam satu visi.</div>
+        </div>
+        <div class="meaning-card" data-reveal data-reveal-delay="1">
+          <div class="meaning-icon">🌿</div>
+          <div class="meaning-title">N — Nature</div>
+          <div class="meaning-desc">Alam adalah guru terbesar — kami belajar darinya dan berkomitmen untuk menjaganya.</div>
+        </div>
+        <div class="meaning-card" data-reveal data-reveal-delay="2">
+          <div class="meaning-icon">❤️</div>
+          <div class="meaning-title">L — Loving</div>
+          <div class="meaning-desc">Cinta adalah kekuatan penggerak — cinta terhadap alam, sesama, dan kehidupan.</div>
+        </div>
+        <div class="meaning-card" data-reveal data-reveal-delay="3">
+          <div class="meaning-icon">🤝</div>
+          <div class="meaning-title">A — Association</div>
+          <div class="meaning-desc">Bersama kita lebih kuat — komunitas adalah pondasi dari semua yang kami lakukan.</div>
+        </div>
+        <div class="meaning-card" data-reveal data-reveal-delay="4">
+          <div class="meaning-icon">🗺️</div>
+          <div class="meaning-title">S — Sumatera</div>
+          <div class="meaning-desc">Berakar di bumi Sumatera, tumbuh menjangkau dunia dengan identitas lokal yang kuat.</div>
+        </div>
+        <div class="meaning-card" data-reveal>
+          <div class="meaning-icon">⬆️</div>
+          <div class="meaning-title">U — Utara</div>
+          <div class="meaning-desc">Utara sebagai titik kompas — selalu menunjuk ke arah yang benar, jujur, dan terpercaya.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISI -->
+  <section id="misi" class="bg-cream">
+    <div>
+      <div class="missions-grid">
+        <div>
+          <p class="eyebrow">05 — Misi</p>
+          <h2 class="sec-h2">Langkah Nyata <em>Menuju Perubahan</em></h2>
+          <p class="sec-p">Misi kami adalah serangkaian komitmen konkret yang kami wujudkan setiap hari melalui program dan kegiatan.</p>
+          <div class="mission-list">
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div class="mission-text">Menyelenggarakan program pendidikan karakter berbasis alam untuk generasi muda.</div>
+            </div>
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div class="mission-text">Mengembangkan bakat seni dan budaya sebagai ekspresi kecintaan terhadap alam.</div>
+            </div>
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div class="mission-text">Membangun jaringan internasional yang saling mendukung dan menginspirasi.</div>
+            </div>
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div class="mission-text">Mendorong kesadaran lingkungan melalui aksi nyata di komunitas lokal.</div>
+            </div>
+            <div class="mission-item">
+              <div class="mission-dot"></div>
+              <div class="mission-text">Menciptakan ruang aman bagi semua orang untuk tumbuh, belajar, dan berkontribusi.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="mission-img-placeholder">🌿 Foto Kegiatan</div>
+          <div class="mission-img-placeholder" style="margin-top:14px;height:120px;">🌍 Foto Tim Global</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <div class="closing">
+    <div class="closing-zh">世界一家</div>
+    <div class="closing-id">Satu Dunia, Satu Keluarga</div>
+    <p class="closing-p">Filosofi yang menjadi fondasi segala yang kami lakukan — bahwa seluruh umat manusia adalah satu keluarga besar.</p>
+  </div>
+
+  <!-- PERJALANAN / TIMELINE -->
+  <section id="perjalanan" class="journey-bg">
+    <div class="journey-inner">
+      <p class="eyebrow">06 — Perjalanan</p>
+      <h2 class="journey-h2">Dua Dekade <em>Bersama Alam</em></h2>
+      <p class="journey-sub">Dari sebuah komunitas kecil di Hong Kong, INLA telah berkembang menjadi gerakan internasional. Berikut tonggak-tonggak perjalanan kami.</p>
+
+      <div class="timeline">
+        <div class="tl-item tl-left">
+          <div class="tl-card">
+            <div class="tl-year">2006</div>
+            <div class="tl-title">Founding — Hong Kong</div>
+            <div class="tl-desc">INLA resmi didirikan di Hong Kong sebagai asosiasi pecinta alam internasional pertama di Asia.</div>
+          </div>
+          <div class="tl-dot"></div>
+          <div class="tl-empty"></div>
+        </div>
+        <div class="tl-item tl-right">
+          <div class="tl-empty"></div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-year">2008</div>
+            <div class="tl-title">Ekspansi ke Indonesia</div>
+            <div class="tl-desc">Cabang pertama di Indonesia dibuka di Sumatera Utara, menandai langkah besar INLA di Asia Tenggara.</div>
+          </div>
+        </div>
+        <div class="tl-item tl-left">
+          <div class="tl-card">
+            <div class="tl-year">2010</div>
+            <div class="tl-title">Program IGTS Pertama</div>
+            <div class="tl-desc">Peluncuran program INLA Goes To School yang menjadi andalan pendidikan karakter berbasis alam.</div>
+          </div>
+          <div class="tl-dot"></div>
+          <div class="tl-empty"></div>
+        </div>
+        <div class="tl-item tl-right">
+          <div class="tl-empty"></div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-year">2012</div>
+            <div class="tl-title">Pagelaran SKS I</div>
+            <div class="tl-desc">Pagelaran Senam, Kebudayaan & Seni pertama digelar, menarik 3.000+ penonton dari seluruh Sumut.</div>
+          </div>
+        </div>
+        <div class="tl-item tl-left">
+          <div class="tl-card">
+            <div class="tl-year">2015</div>
+            <div class="tl-title">IGT Season 1</div>
+            <div class="tl-desc">Kompetisi bakat INLA Got Talent diluncurkan, membuka panggung bagi ratusan peserta berbakat.</div>
+          </div>
+          <div class="tl-dot"></div>
+          <div class="tl-empty"></div>
+        </div>
+        <div class="tl-item tl-right">
+          <div class="tl-empty"></div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-year">2017</div>
+            <div class="tl-title">MVOH Season 1</div>
+            <div class="tl-desc">Musical Voice of Harmony lahir, menggabungkan musik dan pesan cinta alam dalam format konser.</div>
+          </div>
+        </div>
+        <div class="tl-item tl-left">
+          <div class="tl-card">
+            <div class="tl-year">2019</div>
+            <div class="tl-title">Anggota ke-1.000</div>
+            <div class="tl-desc">INLA SUMUT merayakan pencapaian 1.000 anggota aktif — tonggak bersejarah dalam pertumbuhan komunitas.</div>
+          </div>
+          <div class="tl-dot"></div>
+          <div class="tl-empty"></div>
+        </div>
+        <div class="tl-item tl-right">
+          <div class="tl-empty"></div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-year">2021</div>
+            <div class="tl-title">Go Digital</div>
+            <div class="tl-desc">Pandemi mendorong inovasi — program dan konser INLA berhasil digelar secara virtual untuk pertama kali.</div>
+          </div>
+        </div>
+        <div class="tl-item tl-left">
+          <div class="tl-card">
+            <div class="tl-year">2023</div>
+            <div class="tl-title">20+ Negara Bergabung</div>
+            <div class="tl-desc">Jaringan INLA kini mencakup lebih dari 20 negara, mewujudkan visi 世界一家 — satu dunia, satu keluarga.</div>
+          </div>
+          <div class="tl-dot"></div>
+          <div class="tl-empty"></div>
+        </div>
+        <div class="tl-item tl-right">
+          <div class="tl-empty"></div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="tl-year">2025</div>
+            <div class="tl-title">Generasi Baru INLA</div>
+            <div class="tl-desc">Peluncuran platform digital baru dan program beasiswa untuk mendukung generasi pemimpin berikutnya.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTEN TERBARU (RECENT) -->
+  <section class="sosmed-section">
+    <div class="sosmed-header">
+      <span class="sosmed-eyebrow">Recent</span>
+      <h2 class="sosmed-title">Konten Terbaru <em>INLA SUMUT</em></h2>
+      <p class="sosmed-subtitle">Momen dan kegiatan terkini dari perjalanan kami bersama alam.</p>
+    </div>
+
+    <div class="sosmed-grid">
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgChildren} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Mengasihi alam adalah cara kita mengasihi sesama 🌿</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgMountain} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Bersama alam, kita temukan kedamaian sejati 🌄</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgWheat} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Generasi muda INLA siap menjaga bumi 🌍</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgDanceBali} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Seni dan budaya sebagai jembatan antar bangsa 🎭</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgDanceKimono} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Setiap langkah kecil memberi dampak besar 🌱</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgFestival} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Harmoni manusia dan semesta dimulai dari diri kita ✨</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sosmed-footer-cta">
+      <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-follow-btn">
+        Follow
+      </a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2 class="cta-h2">Jadilah Bagian dari <em>Perjalanan Ini</em></h2>
+    <p class="cta-p">Bergabunglah dengan ribuan anggota yang telah memilih untuk peduli terhadap alam dan sesama.</p>
+    <a href="/karir" class="btn-white">Bergabung Sekarang</a>
+  </section>
+
+  <Footer />
+</Layout>
+
+<script>
+  // Highlight active page-nav item on scroll
+  function initAbout() {
+    const sections = ['sejarah','tujuan','target','makna','misi','perjalanan'];
+    const navItems = document.querySelectorAll<HTMLAnchorElement>('.page-nav-item');
+    if (!navItems.length) return;
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          navItems.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+        }
+      });
+    }, { rootMargin: '-60px 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
+    });
+  }
+
+  initAbout();
+  document.addEventListener('astro:after-swap', initAbout);
+</script>

@@ -1,98 +1,323 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Panduan untuk Claude Code saat bekerja di repo ini. File ini adalah **sumber kebenaran** — selalu baca ini sebelum membuat perubahan.
 
-## Project Overview
+---
 
-Static 3-page website for INLA SUMUT (International Nature Loving Association — Sumatera Utara). No build tools, no package manager — everything runs by opening HTML files in a browser.
+## Gambaran Proyek
 
-**To preview:** Open `index.html` directly in a browser, or use a local server:
+Website **INLA SUMUT** (International Nature Loving Association — Sumatera Utara). Seluruh halaman kini dibangun dengan **Astro 7**, termasuk halaman detail kegiatan, About, dan Bergabung. Legacy static HTML (`public/Page/`) masih ada tapi hanya sebagai fallback — pengembangan aktif dilakukan di stack Astro.
+
+> `aboutproject.md` (repo root) adalah snapshot dokumentasi lama sebelum migrasi Astro. Sudah **kadaluarsa** — gunakan file ini sebagai referensi.
+
+---
+
+## Cara Menjalankan
+
 ```bash
 cd "/Users/wawanjanuar/Documents/INLA SUMUT/Project Web INLA"
-python3 -m http.server 8080
-# then open http://localhost:8080
+npm install        # pertama kali saja
+npm run dev        # dev server dengan HMR (hot reload)
+npm run build      # output ke dist/
+npm run preview    # serve dist/ secara lokal
 ```
 
-## File Structure
+Deploy: output ada di `dist/` (gitignored). Jalankan `npm run build` sebelum deploy.
+
+---
+
+## Struktur File
 
 ```
-index.html          — Dashboard (root, main page)
-style.css           — Shared styles for all 3 pages
-CSS/animations.css  — Keyframes, loader, marquee, back-to-top, cursor glow
-JS/main.js          — All JavaScript (shared across pages)
-Page/about.html     — About Us page
-Page/activities.html — Activities page
-SRC/                — All images (logos, photos, backgrounds)
+package.json, astro.config.mjs, tsconfig.json
+src/
+  pages/
+    index.astro                  — Home (route: /)
+    about.astro                  — About Us (route: /about)
+    karir.astro                  — Bergabung / Join (route: /karir)
+    activities/
+      index.astro                — Daftar semua kegiatan (route: /activities)
+      igts.astro                 — INLA Goes To School (route: /activities/igts)
+      igt.astro                  — INLA Got Talent (route: /activities/igt)
+      mvoh.astro                 — Musical Voice of Harmony (route: /activities/mvoh)
+      pagelaran.astro            — Pagelaran SKS (route: /activities/pagelaran)
+  layouts/
+    Layout.astro                 — <head>, ClientRouter, lightbox HTML, video modal HTML,
+                                   semua JS global (astro:page-load)
+  components/
+    Navbar.astro                 — Navbar + hamburger mobile drawer
+    Footer.astro                 — Footer dengan navigasi
+    HeroDetail.astro             — Hero untuk halaman detail kegiatan (video background opsional)
+    StatsStrip.astro             — Strip statistik angka
+    GalleryGrid.astro            — Grid foto dengan lightbox
+    HistorySidebar.astro         — Sidebar timeline riwayat edisi kegiatan
+    RelatedActivities.astro      — Kartu kegiatan terkait di bawah halaman detail
+    Hero.astro                   — (legacy, tidak aktif digunakan)
+    AboutGlimpse.astro           — (legacy, tidak aktif digunakan)
+    ActivitiesGlimpse.astro      — (legacy, tidak aktif digunakan)
+    ConnectBand.astro            — (legacy, tidak aktif digunakan)
+  data/
+    activities.ts                — Sumber data kegiatan (digunakan home + bisa dikembangkan)
+  styles/
+    global.css                   — Semua CSS: variabel warna, layout, komponen, animasi
+  assets/images/                 — Gambar untuk halaman Astro (dioptimasi jadi WebP saat build)
+    logo.png                     — Logo INLA SUMUT
+    Landingpage(main).png        — Slide 1 hero home
+    Landinpage (Event).jpg       — Slide 2 hero home
+    children-sunset.jpg
+    dance-bali.jpg
+    dance-kimono.jpg
+    festival-stage.jpg
+    hero-mountain.jpg
+    wheat-field.jpg
+public/                          — Disalin as-is ke dist/ (tidak diproses Astro)
+  Page/
+    about.html                   — Legacy About Us (static HTML, tidak aktif dikembangkan)
+    activities.html              — Legacy Activities (static HTML, tidak aktif dikembangkan)
+  SRC/                           — Gambar untuk legacy pages dan kartu kegiatan di Astro
+  style.css                      — CSS legacy pages
+  CSS/animations.css             — Animasi legacy
+  JS/main.js                     — JS legacy pages
+dist/                            — Build output (gitignored)
 ```
 
-## Path Conventions
+---
 
-Pages in `Page/` use relative paths with `../` prefix:
-- `../style.css`, `../CSS/animations.css`, `../JS/main.js`
-- `../SRC/image.jpg` for images
+## Stack & Teknologi
 
-`index.html` (root) uses `./` prefix:
-- `./SRC/image.jpg`, `./CSS/animations.css`
-
-## Libraries (CDN only, no local install)
-
-| Library | Version | Purpose |
+| Tool | Versi | Kegunaan |
 |---|---|---|
-| Bootstrap | 5.3.8 | Grid, navbar, collapse |
-| GSAP + ScrollTrigger | 3.12.5 | Hero entrance animation, parallax |
-| Typed.js | 2.1.0 | Cycling text in hero (Dashboard only) |
-| AOS | 2.3.4 | Scroll-triggered fade/zoom animations |
+| Astro | 7 | Static site builder, routing berbasis file, `<Image />` optimization |
+| Pure CSS | — | **Tidak ada Tailwind.** Semua styling di `src/styles/global.css` |
+| `astro:transitions` `ClientRouter` | — | SPA-like navigasi antar halaman Astro |
+| `astro:assets` `<Image />` | — | Otomatis konversi gambar ke WebP saat build |
+| TypeScript | — | Digunakan di `src/data/activities.ts` |
 
-## JavaScript Patterns
+**Tidak ada:** Tailwind, GSAP, Framer Motion, AOS, Bootstrap, library eksternal lainnya di halaman Astro. Semua interaksi hand-rolled vanilla JS.
 
-**Feature detection before init** — JS checks for element existence before running page-specific code:
-- GSAP hero timeline only runs when `.hero-badge` exists (Dashboard only)
-- GSAP banner animation only runs when `.banner-title` exists (sub-pages only)
-- Typed.js only runs when `#typed-text` exists
+---
 
-**Counter animation** — uses `data-target` and `data-suffix` attributes on `.counter-number` elements. IntersectionObserver triggers ease-out cubic count-up on first scroll into view.
+## Sistem Warna (WAJIB DIIKUTI)
 
-**Lightbox** — any element with `[data-lightbox]`, `data-src`, and `data-caption` attributes becomes a gallery trigger. The `#lightbox` overlay must be present in the HTML. Keyboard: Esc closes, ←/→ navigates.
+Semua warna didefinisikan sebagai nilai literal di `global.css`. **Jangan** gunakan warna di luar daftar ini:
 
-**Gallery filter** — `.filter-btn[data-filter]` buttons toggle `.filterable[data-category]` items. `data-filter="all"` shows everything.
-
-**Page transitions** — all internal `<a href>` clicks add `.page-leaving` to `body` and wait 380ms before navigating. Excluded: `#hash`, `http://`, `mailto:`, `tel:`.
-
-## CSS Architecture
-
-**Two background classes:**
-- `.main-content` — marble texture for `index.html` (uses `./SRC/...`)
-- `.main-content-sub` — marble texture for `Page/*.html` (uses `../SRC/...`)
-- `page-white` / inline `background:#ffffff` — pure white, used on `about.html` and `activities.html`
-
-**Navbar behavior:** `.custom-navbar` transitions from transparent → `.scrolled` (dark glass) at `window.scrollY > 80`.
-
-**Responsive breakpoints** (all 4 files use the same 5 tiers):
-- `≤1199px` large tablet/small laptop
-- `≤991px` tablet
-- `≤767px` large phone / small tablet
-- `≤575px` mobile
-- `≤390px` very small phones (iPhone SE)
-
-**Dark theme remnants** — `.dark-page` and its child overrides (`.dark-page .dark-cta-box`, etc.) exist in `style.css` but are no longer used by any page. Do not add `class="dark-page"` to any `<main>` — backgrounds are now white.
-
-## Image Assignments
-
-| Image file | Used in |
+| Variabel / Nilai | Kegunaan |
 |---|---|
-| `Discover awal.jpg` | Dashboard hero background |
-| `About.jpg` | About Us hero background |
-| `a-tree-in-a-field-with-stunning-space-backdrop-SBI-301081197.jpg` | Activities hero background |
-| `light-soft-white-marble-texture-SBI-303742593.jpg` | Page background texture (`.main-content`, `.main-content-sub`) |
-| `logo inla sumut.png` | Navbar brand, loader, footer |
-| `hongkong.jpg` | About page origin full-width strip |
-| `realistic-earth-closeup-render-SBI-301825525.jpg` | About page global reach section |
-| `collage-of-half-faces-...SBI-349501584.jpg` | About page intro image |
-| `silhouette-group-of-happy-children-...SBI-300996172.jpg` | About community gallery, Activities card |
-| `boy-running-through-wheat-field-...SBI-350099286.jpg` | About community gallery, Activities card |
-| `p01–p06.jpg`, `bg2.jpg`, `bg3.jpg`, `bg5.jpg` | Activity gallery grid |
-| `WhatsApp Image 2026-03-25 at 13.53.59.jpeg` | Activities gallery (has spaces in filename — quote paths) |
+| `#1c2e1c` | Warna teks utama, background navbar, tombol primary |
+| `#3d7a3d` | Hijau utama — CTA, link, aksen |
+| `#4a9e4a` | Hijau terang — hover state |
+| `#f5f2ec` | Background utama (krem/offwhite) |
+| `#7ec87e` | Aksen hijau muda |
+| `#fff` | Background section putih |
 
-## Page-Specific Inline Styles
+**Tidak ada gold/amber.** Pernah ditambahkan lalu dihapus atas permintaan klien ("tidak masuk, kita gunakan warna hijau"). Jangan tambahkan kembali tanpa konfirmasi.
 
-`about.html` and `activities.html` each have an inline `<style>` block in `<head>` for components unique to that page (flip cards, portrait strip, CTA box, etc.). Responsive `@media` rules for those components live in the same inline block, not in `style.css`.
+---
+
+## JavaScript — Pola Global (Layout.astro)
+
+**SEMUA JS** diinisialisasi di dalam:
+```js
+document.addEventListener('astro:page-load', () => { ... });
+```
+Jangan gunakan `DOMContentLoaded` atau `astro:after-swap`. `astro:page-load` dipilih karena firing pada initial load DAN setiap navigasi via ClientRouter.
+
+**Tidak ada `_globalSetupDone` flag** — pernah dipakai, dihapus karena menyebabkan event handler tidak ter-attach ulang setelah DOM swap oleh ViewTransitions.
+
+### Fitur JS Global (di Layout.astro)
+
+| Fitur | Cara Kerja |
+|---|---|
+| Scroll reveal | `[data-reveal]` + `IntersectionObserver`, delay via `data-reveal-delay` |
+| Magnetic buttons | `[data-magnetic]` — mouse tracking offset |
+| Counter animasi | `[data-counter]` / `[data-suffix]` — ease-out cubic count-up |
+| Cursor glow | `div#cursor-glow` mengikuti posisi mouse |
+| Navbar scroll | `.scrolled` ditambah ke navbar saat `scrollY > 60` |
+| **Lightbox foto** | `[data-gallery]` + `[data-src]` pada tiap item, dikelompokkan per nilai `data-gallery`. `display:flex/none` (bukan class toggle). Z-index 9999/10000/10001 semua inline. |
+| **Video modal** | `[data-watch-video="videoId"]` pada tombol, membuka iframe YouTube fullscreen. `display:flex/none`. |
+
+### Z-Index Modal (JANGAN UBAH)
+```
+overlay (#lightbox / #videoModal): z-index 9999
+konten modal:                       z-index 10000
+tombol (close / prev / next):       z-index 10001  ← semua inline style
+```
+
+---
+
+## Halaman Home (`src/pages/index.astro`)
+
+### Sections (urutan dari atas):
+1. **Hero** — 2-slide slideshow (fade 1.2s, interval 5s, Ken Burns `scale(1→1.06)`). Gambar: `Landingpage(main).png` + `Landinpage (Event).jpg`. Di atas slides ada frosted glass card (`hero-glass-card`: `backdrop-filter: blur(4px)`, `background: rgba(255,255,255,0.03)`).
+2. **About** — Grid 2 kolom: teks + 4 pillar icon.
+3. **Highlight Kegiatan** (`#aktivitas`) — Horizontal scroll 6 kartu. Data diambil dari `src/data/activities.ts`, di-sort by `publishedAt` terbaru. Di akhir scroll ada tombol bulat `→` link ke `/activities`.
+4. **Konten Media Sosial** — Horizontal scroll 6 kartu Instagram. Logo INLA muncul saat hover via `<Image src={imgLogo}>`. Tombol bawah: "Follow" → Instagram.
+
+### Navbar nav item: "Home" (bukan "Dashboard" — sudah direname semua)
+
+---
+
+## Data Kegiatan (`src/data/activities.ts`)
+
+**Sumber kebenaran** untuk semua metadata kegiatan yang tampil di home highlights.
+
+```ts
+interface Activity {
+  slug: string;
+  title: string;
+  tag: string;
+  description: string;
+  image: string;      // path dari public/SRC/
+  href: string;       // link ke halaman detail atau /activities
+  publishedAt: string; // ISO date — sorting berdasarkan ini
+}
+```
+
+Fungsi `getHighlights(limit = 6)` mengembalikan `limit` kegiatan terbaru berdasarkan `publishedAt` descending.
+
+**Cara tambah kegiatan baru ke highlights home:**
+1. Tambah entri baru di array `activities` di file ini
+2. Set `publishedAt` ke tanggal terbaru agar muncul di posisi atas
+3. Jalankan `npm run build`
+
+Kegiatan terkini saat ini: **IGTS Angkatan 8** (`publishedAt: '2026-06-20'`).
+
+---
+
+## Halaman Detail Kegiatan
+
+Setiap halaman di `src/pages/activities/*.astro` menggunakan komponen:
+
+| Komponen | Props penting |
+|---|---|
+| `HeroDetail` | `eyebrow`, `title`, `titleHighlight`, `description`, `tags[]`, `emoji`, `bgClass`, `videoId?` |
+| `StatsStrip` | `stats: [{value, label}]` |
+| `GalleryGrid` | `images?: string[]`, `gallery?: string` — `data-gallery` dan `data-src` per item untuk lightbox |
+| `HistorySidebar` | `items: [{year, title, meta}]` |
+| `RelatedActivities` | `items: [{href, tag, title, description, emoji, bgClass, image}]` |
+
+**Video di HeroDetail:** gunakan prop `videoId` (YouTube ID). Tombol "Tonton Video" hanya render jika `videoId` diberikan. Menggunakan `data-watch-video={videoId}` (bukan `data-video-id`).
+
+**Lightbox GalleryGrid:** setiap item `data-gallery` harus punya nilai unik per halaman (`"igts"`, `"igt"`, `"mvoh"`, `"pagelaran"`). Lightbox dikelompokkan berdasarkan nilai ini.
+
+---
+
+## Halaman Karir (`src/pages/karir.astro`)
+
+Form bergabung dengan validasi client-side:
+- `id="joinForm"` + `novalidate`
+- Validasi di `astro:page-load`, bukan submit default browser
+- Error ditampilkan dengan `.error-msg` span (append ke `parentElement`)
+- Field invalid diberi class `.input-error`
+- Radio group "peran" divalidasi dengan `showGroupError()`
+- Modal sukses (`#modalOverlay`) muncul setelah semua validasi lolos, menggunakan class `.show`
+
+---
+
+## Halaman About (`src/pages/about.astro`)
+
+Versi Astro dari About Us. Berisi:
+- Hero section
+- Konten tentang INLA
+- Section **Recent** — horizontal scroll 6 kartu konten Instagram (sama seperti di home, menggunakan logo Astro `<Image>`)
+- CTA bergabung
+
+---
+
+## Komponen Navbar (`src/components/Navbar.astro`)
+
+- Nav items: Home `/`, About Us `/about`, Kegiatan `/activities`, Bergabung `/karir`
+- `activePage` prop menentukan item aktif
+- Hamburger toggle via `#navToggle` + `.nav-drawer` — **tidak ada Bootstrap collapse**
+- Tidak ada `data-bs-toggle`
+
+---
+
+## CSS Architecture (`src/styles/global.css`)
+
+Satu file untuk semua CSS Astro. Tidak ada Tailwind utility classes.
+
+### Pola kelas penting:
+| Kelas | Kegunaan |
+|---|---|
+| `.hero-slides` / `.hero-slide` / `.hero-slide.active` | Slideshow hero home |
+| `.hero-glass-card` | Frosted glass wrapper teks hero |
+| `.cards` | Horizontal scroll container highlight kegiatan (`display:flex; overflow-x:auto; scroll-snap-type:x mandatory`) |
+| `.card` | Item highlight (`flex: 0 0 260px; scroll-snap-align:start`) |
+| `.cards-see-all` / `.cards-see-all-btn` | Tombol bulat "→" di akhir scroll kegiatan |
+| `.sosmed-grid` | Horizontal scroll container kartu Instagram (`display:flex; overflow-x:auto`) |
+| `.sosmed-card` | Item kartu Instagram (`flex: 0 0 240px`) |
+| `.sosmed-overlay-logo` | Logo INLA di overlay hover kartu Instagram |
+| `.input-error` | Border merah field form invalid |
+| `.error-msg` | Pesan error validasi form |
+
+### Animasi:
+- `@keyframes kenburns` — zoom perlahan hero slide (`scale 1→1.06`)
+- `@keyframes fadeIn` — fade in umum
+- `[data-reveal]` + `IntersectionObserver` — scroll reveal (bukan AOS)
+
+---
+
+## Gambar — Astro Pages (`src/assets/images/`)
+
+Semua gambar ini diproses Astro → WebP otomatis. Gunakan `<Image src={import} />`.
+
+| File | Digunakan di |
+|---|---|
+| `logo.png` | Overlay kartu sosmed (home + about), navbar (opsional) |
+| `Landingpage(main).png` | Hero home slide 1 |
+| `Landinpage (Event).jpg` | Hero home slide 2 |
+| `children-sunset.jpg` | Kartu sosmed home + about |
+| `dance-bali.jpg` | Kartu sosmed |
+| `dance-kimono.jpg` | Kartu sosmed |
+| `festival-stage.jpg` | Kartu sosmed |
+| `hero-mountain.jpg` | Kartu sosmed |
+| `wheat-field.jpg` | Kartu sosmed |
+
+## Gambar — Legacy & Kegiatan (`public/SRC/`)
+
+Gambar ini dipakai langsung via path `/SRC/...` (tidak diproses Astro):
+
+| File | Digunakan di |
+|---|---|
+| `logo inla sumut.png` | Legacy pages, navbar legacy |
+| `silhouette-group-of-happy-children-...SBI-300996172.jpg` | Kartu IGTS |
+| `p06.jpg` | Kartu IGT |
+| `bg5.jpg` | Kartu MVOH |
+| `bg2.jpg` | Kartu Pagelaran |
+| `bg3.jpg` | Kartu Program Komunitas |
+| `boy-running-through-wheat-field-...SBI-350099286.jpg` | Kartu Kegiatan Alam |
+| `bg2.jpg`, `bg3.jpg`, `p02.jpg`, `p03.jpg` | Gallery Pagelaran |
+| `About.jpg` | Legacy About Us hero |
+| `hongkong.jpg` | Legacy About origin strip |
+| `p01–p06.jpg` | Gallery activities legacy |
+| `WhatsApp Image 2026-03-25 at 13.53.59.jpeg` | Gallery (ada spasi — selalu quote path) |
+
+---
+
+## Legacy Pages (`public/Page/`)
+
+`about.html` dan `activities.html` masih ada sebagai fallback. Path relatif dengan `../` prefix (dari `public/Page/`):
+- `../style.css`, `../CSS/animations.css`, `../JS/main.js`
+- `../SRC/image.jpg`
+
+**Tidak aktif dikembangkan** — pengembangan baru dilakukan di stack Astro.
+
+Libraries legacy (CDN):
+- Bootstrap 5.3.8
+- GSAP + ScrollTrigger 3.12.5
+- AOS 2.3.4
+- Typed.js 2.1.0
+
+---
+
+## Hal yang TIDAK BOLEH Dilakukan
+
+- ❌ Tambah warna gold/amber tanpa konfirmasi klien
+- ❌ Gunakan `_globalSetupDone` flag di JS
+- ❌ Gunakan `DOMContentLoaded` atau `astro:after-swap` — gunakan `astro:page-load`
+- ❌ Toggle modal/lightbox dengan class `.open` — gunakan `element.style.display = 'flex'/'none'`
+- ❌ Install library eksternal baru (GSAP, Framer Motion, dll) tanpa konfirmasi
+- ❌ Ubah z-index tombol modal/lightbox di bawah 10001
+- ❌ Gunakan `ViewTransitions` — sudah diganti `ClientRouter` dari `astro:transitions`
+- ❌ Tambah tombol CTA ke halaman detail di dalam section konten home (navigasi ke detail hanya via navbar dan footer)

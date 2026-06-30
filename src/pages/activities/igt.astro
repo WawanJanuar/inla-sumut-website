@@ -1,0 +1,173 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import HeroDetail from '../../components/HeroDetail.astro';
+import StatsStrip from '../../components/StatsStrip.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import HistorySidebar from '../../components/HistorySidebar.astro';
+import RelatedActivities from '../../components/RelatedActivities.astro';
+import Footer from '../../components/Footer.astro';
+
+const stats = [
+  { value: '500+', label: 'Peserta' },
+  { value: '10+',  label: 'Kota' },
+  { value: '2015', label: 'Season pertama' },
+  { value: '20+',  label: 'Kategori bakat' },
+];
+
+const history = [
+  { year: '2025', title: 'IGT Season 10', meta: 'Grand Final Medan' },
+  { year: '2024', title: 'IGT Season 9',  meta: '400+ Peserta' },
+  { year: '2023', title: 'IGT Season 8',  meta: 'Multi-kota' },
+  { year: '2022', title: 'IGT Season 7',  meta: 'Hybrid Event' },
+  { year: '2021', title: 'IGT Season 6',  meta: 'Online Edition' },
+  { year: '2020', title: 'IGT Season 5',  meta: 'Virtual Show' },
+  { year: '2019', title: 'IGT Season 4',  meta: '300 Peserta' },
+  { year: '2018', title: 'IGT Season 3',  meta: '200 Peserta' },
+  { year: '2016', title: 'IGT Season 2',  meta: '150 Peserta' },
+  { year: '2015', title: 'IGT Season 1',  meta: 'Perdana Medan' },
+];
+
+const related = [
+  {
+    href: '/activities/igts',
+    tag: 'Pendidikan',
+    title: 'INLA Goes To School',
+    description: 'Program inspirasi ke sekolah-sekolah di seluruh Sumut.',
+    emoji: '📚',
+    bgClass: 'thumb-green',
+    image: '/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg',
+  },
+  {
+    href: '/activities/mvoh',
+    tag: 'Konser',
+    title: 'Musical Voice of Harmony',
+    description: 'Konser vokal dan musik penuh harmoni dan makna.',
+    emoji: '🎵',
+    bgClass: 'thumb-blue',
+    image: '/SRC/bg5.jpg',
+  },
+  {
+    href: '/activities/pagelaran',
+    tag: 'Pagelaran',
+    title: 'Pagelaran SKS',
+    description: 'Pementasan seni budaya berskala internasional.',
+    emoji: '🎭',
+    bgClass: 'thumb-purple',
+    image: '/SRC/bg3.jpg',
+  },
+];
+---
+
+<Layout title="IGT — INLA SUMUT">
+  <Navbar activePage="activities" />
+
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="/activities">Kegiatan</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">IGT</span>
+  </div>
+
+  <HeroDetail
+    eyebrow="02 — Kompetisi Bakat"
+    title="INLA"
+    titleHighlight="Got Talent"
+    description="Kompetisi bakat terbuka yang mengundang penampil muda berbakat dari seluruh kota untuk unjuk diri di panggung bergengsi INLA."
+    tags={['Vokal', 'Tari', 'Bakat', 'Kompetisi']}
+    emoji="🎤"
+    bgClass="g4"
+    videoId="cA2a7xzGOtc"
+  />
+
+  <StatsStrip stats={stats} />
+
+  <GalleryGrid
+    gallery="igt"
+    images={[
+      '/SRC/p06.jpg',
+      '/SRC/p05.jpg',
+      '/SRC/bg2.jpg',
+      '/SRC/bg3.jpg',
+      '/SRC/p01.jpg',
+    ]}
+  />
+
+  <div class="detail-main">
+    <div class="detail-left">
+      <div data-reveal>
+        <p class="sec-eyebrow">Tentang Program</p>
+        <h2 class="sec-h2" style="font-size:22px;">INLA Got Talent (IGT)</h2>
+        <p class="sec-p" style="font-size:13px;">IGT adalah kompetisi bakat tahunan INLA yang memberikan panggung bagi anak muda berbakat dari Sumatera Utara dan kota-kota sekitarnya. Sejak Season 1 di 2015, IGT telah menjadi salah satu kompetisi bakat paling bergengsi di wilayah ini.</p>
+        <p class="sec-p" style="font-size:13px;">Dengan lebih dari 500 peserta setiap tahunnya, IGT bukan hanya tentang menang — ini tentang membangun kepercayaan diri, disiplin, dan kecintaan terhadap seni.</p>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div class="feature-card" data-reveal>
+        <p class="feature-label">Kategori Penampilan</p>
+        <h3 class="feature-title">Apa yang Bisa Ditampilkan?</h3>
+        <p class="feature-desc">IGT terbuka untuk berbagai jenis bakat — semua bentuk ekspresi seni disambut di panggung kami.</p>
+        <div class="feature-items">
+          <div class="feature-item">
+            <div class="feature-item-icon">🎤</div>
+            <div class="feature-item-title">Vokal</div>
+            <div class="feature-item-desc">Solo, duet, atau grup vokal dalam berbagai genre musik.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">💃</div>
+            <div class="feature-item-title">Tari</div>
+            <div class="feature-item-desc">Tari tradisional, modern, kontemporer, atau koreografi original.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">🎭</div>
+            <div class="feature-item-title">Pertunjukan</div>
+            <div class="feature-item-desc">Drama pendek, pantomim, sulap, atau pertunjukan seni lainnya.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">⭐</div>
+            <div class="feature-item-title">Bakat Unik</div>
+            <div class="feature-item-desc">Bakat istimewa lainnya yang belum pernah ada sebelumnya.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div data-reveal>
+        <p class="sec-eyebrow">Kategori Usia</p>
+        <h3 class="sec-h2" style="font-size:18px;margin-bottom:14px;">Semua Kelompok Usia Bisa Ikut</h3>
+        <div class="cat-row">
+          <div class="cat-card">
+            <div class="cat-icon">🌱</div>
+            <div class="cat-title">Junior</div>
+            <div class="cat-desc">Usia 7–12 tahun</div>
+          </div>
+          <div class="cat-card">
+            <div class="cat-icon">⭐</div>
+            <div class="cat-title">Teen</div>
+            <div class="cat-desc">Usia 13–17 tahun</div>
+          </div>
+          <div class="cat-card">
+            <div class="cat-icon">🏆</div>
+            <div class="cat-title">Open</div>
+            <div class="cat-desc">Usia 18 tahun ke atas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-sidebar">
+      <HistorySidebar items={history} />
+      <div class="sidebar-card">
+        <p class="sidebar-title">Daftar sebagai Peserta</p>
+        <p style="font-size:13px;color:#5a5a4a;line-height:1.7;margin-bottom:14px;">Pendaftaran IGT Season berikutnya akan segera dibuka. Pantau terus update kami.</p>
+        <a href="/karir" class="btn-green" style="display:block;text-align:center;font-size:13px;">Info Pendaftaran</a>
+      </div>
+    </div>
+  </div>
+
+  <RelatedActivities items={related} />
+  <Footer />
+</Layout>

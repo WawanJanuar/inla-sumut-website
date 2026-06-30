@@ -1,0 +1,187 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'INLA SUMUT — International Nature Loving Association Sumatera Utara' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title}</title>
+  <link rel="icon" type="image/png" href="/SRC/logo inla sumut.png" />
+  <ClientRouter />
+</head>
+<body>
+  <slot />
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.92); align-items:center; justify-content:center;">
+    <button id="lb-close" style="position:absolute;top:20px;right:24px;z-index:10001;font-size:36px;color:#fff;background:none;border:none;cursor:pointer;padding:8px;line-height:1;opacity:0.85;">×</button>
+    <button id="lb-prev" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:10001;font-size:40px;color:#fff;background:rgba(255,255,255,0.12);border:none;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.8;">‹</button>
+    <button id="lb-next" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:10001;font-size:40px;color:#fff;background:rgba(255,255,255,0.12);border:none;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.8;">›</button>
+    <img id="lb-img" src="" alt="" style="max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px;z-index:10000;transition:opacity 0.15s ease;" />
+    <div id="lb-counter" style="position:absolute;bottom:20px;color:rgba(255,255,255,0.6);font-size:13px;z-index:10001;letter-spacing:0.05em;"></div>
+  </div>
+
+  <!-- VIDEO MODAL -->
+  <div id="videoModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.92); align-items:center; justify-content:center;">
+    <button id="videoModalClose" style="position:absolute;top:20px;right:24px;z-index:10001;font-size:36px;color:#fff;background:none;border:none;cursor:pointer;line-height:1;padding:8px;opacity:0.85;">×</button>
+    <div style="position:relative; width:90vw; max-width:960px; aspect-ratio:16/9; z-index:10000;">
+      <iframe id="videoModalFrame" src="" style="width:100%; height:100%; border:none; border-radius:12px;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('astro:page-load', () => {
+      // ── Sticky navbar ──────────────────────────────────────────────
+      const nav = document.querySelector('.nav');
+      if (nav) {
+        const onScroll = () => nav.classList.toggle('nav-scrolled', window.scrollY > 60);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+
+      // ── Scroll reveal ──────────────────────────────────────────────
+      const reveals = document.querySelectorAll('[data-reveal]');
+      if (reveals.length) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.12 });
+        reveals.forEach(el => io.observe(el));
+      }
+
+      // ── Hamburger drawer ───────────────────────────────────────────
+      const hamburger = document.querySelector<HTMLElement>('.nav-hamburger');
+      const drawer    = document.querySelector<HTMLElement>('.nav-drawer');
+      if (hamburger && drawer) {
+        hamburger.addEventListener('click', () => {
+          const isOpen = drawer.classList.contains('open');
+          hamburger.classList.toggle('open', !isOpen);
+          if (isOpen) {
+            drawer.classList.remove('open');
+            setTimeout(() => { if (!drawer.classList.contains('open')) drawer.style.display = 'none'; }, 300);
+          } else {
+            drawer.style.display = 'flex';
+            drawer.getBoundingClientRect();
+            drawer.classList.add('open');
+          }
+        });
+      }
+
+      // ── Lightbox ───────────────────────────────────────────────────
+      let lbImages: string[] = [];
+      let lbIndex = 0;
+
+      const lb      = document.getElementById('lightbox') as HTMLDivElement | null;
+      const lbImg   = document.getElementById('lb-img')  as HTMLImageElement | null;
+      const lbCtr   = document.getElementById('lb-counter');
+      const lbClose = document.getElementById('lb-close');
+      const lbPrev  = document.getElementById('lb-prev');
+      const lbNext  = document.getElementById('lb-next');
+
+      function showLightbox() {
+        if (!lb || !lbImg) return;
+        lbImg.src = lbImages[lbIndex];
+        if (lbCtr) lbCtr.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+        lb.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLb() {
+        if (!lb) return;
+        lb.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+
+      function navLb(dir: number) {
+        lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+        if (!lbImg) return;
+        lbImg.style.opacity = '0';
+        setTimeout(() => {
+          lbImg.src = lbImages[lbIndex];
+          lbImg.style.opacity = '1';
+          if (lbCtr) lbCtr.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+        }, 150);
+      }
+
+      // Gallery item click — collect group images by data-gallery value
+      document.querySelectorAll<HTMLElement>('[data-gallery]').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', () => {
+          const group = el.dataset.gallery!;
+          const groupEls = [...document.querySelectorAll<HTMLElement>(`[data-gallery="${group}"]`)];
+          lbImages = groupEls.map(e => {
+            const img = e.querySelector<HTMLImageElement>('img');
+            return (img?.src) || (e.dataset.src ?? '');
+          }).filter(Boolean);
+          lbIndex = groupEls.indexOf(el);
+          showLightbox();
+        });
+      });
+
+      lbClose?.addEventListener('click', closeLb);
+      lbPrev?.addEventListener('click', () => navLb(-1));
+      lbNext?.addEventListener('click', () => navLb(1));
+      lb?.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+
+      // Swipe (touch)
+      let touchStartX = 0;
+      lb?.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      lb?.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) navLb(diff > 0 ? 1 : -1);
+      });
+
+      // ── Video Modal ────────────────────────────────────────────────
+      const modal     = document.getElementById('videoModal') as HTMLDivElement | null;
+      const frame     = document.getElementById('videoModalFrame') as HTMLIFrameElement | null;
+      const modalClose = document.getElementById('videoModalClose');
+
+      function openVideoModal(videoId: string) {
+        if (!modal || !frame) return;
+        frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1`;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeVideoModal() {
+        if (!modal || !frame) return;
+        modal.style.display = 'none';
+        frame.src = '';
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll<HTMLElement>('[data-watch-video]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.watchVideo;
+          if (id) openVideoModal(id);
+        });
+      });
+
+      modalClose?.addEventListener('click', closeVideoModal);
+      modal?.addEventListener('click', e => { if (e.target === modal) closeVideoModal(); });
+
+      // ── Keyboard handler ───────────────────────────────────────────
+      document.addEventListener('keydown', e => {
+        if (lb?.style.display === 'flex') {
+          if (e.key === 'Escape')     closeLb();
+          if (e.key === 'ArrowLeft')  navLb(-1);
+          if (e.key === 'ArrowRight') navLb(1);
+        }
+        if (modal?.style.display === 'flex' && e.key === 'Escape') {
+          closeVideoModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+---
+interface Props {
+  images?: string[];
+  gallery?: string;  // group name for lightbox (e.g. "igts", "igt", "mvoh", "pagelaran")
+  colors?: string[];
+  emojis?: string[];
+}
+const {
+  images,
+  gallery,
+  colors = ['g1','g2','g3','g4','g5'],
+  emojis = ['🌿','🌱','🍃','🌲','🌾'],
+} = Astro.props;
+
+// Only enable lightbox when both images and gallery name are provided
+const lb = images && gallery ? gallery : undefined;
+---
+<div class="gallery-wrap">
+  <p class="gallery-eyebrow">Galeri Foto</p>
+  <div class="gallery-grid">
+    <div
+      class:list={['g-main g-thumb', images ? '' : colors[0]]}
+      {...(lb ? { 'data-gallery': lb, 'data-src': images![0] } : {})}
+    >
+      {images
+        ? <img src={images[0]} alt="Galeri 1" />
+        : <span class="g-placeholder">{emojis[0]}</span>
+      }
+    </div>
+    <div
+      class:list={['g-thumb', images ? '' : colors[1]]}
+      {...(lb ? { 'data-gallery': lb, 'data-src': images![1] } : {})}
+    >
+      {images
+        ? <img src={images[1]} alt="Galeri 2" />
+        : <span class="g-placeholder" style="font-size:28px;">{emojis[1]}</span>
+      }
+    </div>
+    <div
+      class:list={['g-thumb', images ? '' : colors[2]]}
+      {...(lb ? { 'data-gallery': lb, 'data-src': images![2] } : {})}
+    >
+      {images
+        ? <img src={images[2]} alt="Galeri 3" />
+        : <span class="g-placeholder" style="font-size:28px;">{emojis[2]}</span>
+      }
+    </div>
+    <div
+      class:list={['g-thumb', images ? '' : colors[3]]}
+      {...(lb ? { 'data-gallery': lb, 'data-src': images![3] } : {})}
+    >
+      {images
+        ? <img src={images[3]} alt="Galeri 4" />
+        : <span class="g-placeholder" style="font-size:28px;">{emojis[3]}</span>
+      }
+    </div>
+    <div
+      class:list={['g-thumb', images ? '' : (colors[4] ?? colors[3])]}
+      style="position:relative;"
+      {...(lb ? { 'data-gallery': lb, 'data-src': images![4] ?? images![3] } : {})}
+    >
+      {images
+        ? <img src={images[4] ?? images[3]} alt="Galeri 5" />
+        : <span class="g-placeholder" style="font-size:28px;">{emojis[4] ?? emojis[3]}</span>
+      }
+      <div class="g-more-overlay">
+        <span class="g-more-text">+8 foto</span>
+      </div>
+    </div>
+  </div>
+</div>

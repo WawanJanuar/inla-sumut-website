@@ -1,0 +1,273 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
+import { getHighlights } from '../data/activities';
+
+const highlighted = getHighlights(6);
+import slideMain       from '../assets/images/Landingpage(main).png';
+import slideEvent      from '../assets/images/Landinpage (Event).jpg';
+import imgLogo         from '../assets/images/logo.png';
+import imgChildren     from '../assets/images/children-sunset.jpg';
+import imgDanceBali    from '../assets/images/dance-bali.jpg';
+import imgDanceKimono  from '../assets/images/dance-kimono.jpg';
+import imgFestival     from '../assets/images/festival-stage.jpg';
+import imgMountain     from '../assets/images/hero-mountain.jpg';
+import imgWheat        from '../assets/images/wheat-field.jpg';
+---
+
+<Layout title="INLA SUMUT — Home">
+  <Navbar activePage="home" />
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-slides">
+      <div class="hero-slide active">
+        <Image src={slideMain} alt="INLA SUMUT" class="hero-slide-img" />
+      </div>
+      <div class="hero-slide">
+        <Image src={slideEvent} alt="INLA SUMUT Event" class="hero-slide-img" />
+      </div>
+      <div class="hero-slide-overlay"></div>
+    </div>
+
+    <svg class="hero-mountains" viewBox="0 0 1440 260" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0 260 L240 80 L480 180 L720 40 L960 160 L1200 60 L1440 140 L1440 260 Z" fill="rgba(28,46,28,0.55)"/>
+      <path d="M0 260 L160 140 L320 200 L560 100 L800 190 L1040 90 L1280 170 L1440 110 L1440 260 Z" fill="rgba(28,46,28,0.75)"/>
+    </svg>
+
+    <div class="hero-body">
+      <div class="hero-glass-card">
+        <span class="hero-tag">🌿 International Nature Loving Association</span>
+        <h1 class="hero-h1">Harmoni Manusia,<br /><em>Alam & Semesta</em></h1>
+        <p class="hero-p">Bergabung dalam perjalanan kami membangun kepedulian terhadap alam melalui pendidikan, seni, dan budaya lintas bangsa.</p>
+        <div class="cta-row">
+          <a href="#aktivitas" class="btn-green">Lihat Aktivitas Kami</a>
+          <a href="/about" class="btn-ghost">Tentang INLA</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-n">20+</div>
+        <div class="stat-l">Negara</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">2005</div>
+        <div class="stat-l">Berdiri</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">1.000+</div>
+        <div class="stat-l">Anggota</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">50+</div>
+        <div class="stat-l">Program</div>
+      </div>
+    </div>
+
+    <div class="hero-dots">
+      <button class="hero-dot active" data-slide="0" aria-label="Slide 1"></button>
+      <button class="hero-dot"        data-slide="1" aria-label="Slide 2"></button>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="tentang">
+    <div class="about-grid">
+      <div data-reveal>
+        <p class="section-eyebrow">Tentang Kami</p>
+        <h2 class="about-h2">Satu Keluarga,<br /><em>Satu Dunia</em></h2>
+        <p class="about-p">INLA SUMUT adalah cabang dari International Nature Loving Association yang berpusat di Hong Kong. Kami hadir di Sumatera Utara sejak 2005 untuk membangun karakter generasi muda melalui seni, alam, dan budaya.</p>
+        <p class="about-p">Dengan anggota dari lebih 20 negara, kami percaya bahwa cinta alam adalah bahasa universal yang menyatukan manusia.</p>
+        <a href="/about" class="about-link">Pelajari Lebih Lanjut →</a>
+      </div>
+      <div class="about-right">
+        <div class="pillar" data-reveal data-reveal-delay="1">
+          <div class="pillar-icon">🌱</div>
+          <div>
+            <div class="pillar-title">Pendidikan Alam</div>
+            <div class="pillar-desc">Program edukasi lingkungan untuk anak dan remaja di seluruh kota.</div>
+          </div>
+        </div>
+        <div class="pillar" data-reveal data-reveal-delay="2">
+          <div class="pillar-icon">🎭</div>
+          <div>
+            <div class="pillar-title">Seni & Budaya</div>
+            <div class="pillar-desc">Pertunjukan seni yang merayakan keberagaman dan kecintaan terhadap alam.</div>
+          </div>
+        </div>
+        <div class="pillar" data-reveal data-reveal-delay="3">
+          <div class="pillar-icon">🌍</div>
+          <div>
+            <div class="pillar-title">Jaringan Global</div>
+            <div class="pillar-desc">Terhubung dengan komunitas di 20+ negara dari Hong Kong hingga Amerika.</div>
+          </div>
+        </div>
+        <div class="pillar" data-reveal data-reveal-delay="4">
+          <div class="pillar-icon">🤝</div>
+          <div>
+            <div class="pillar-title">Komunitas</div>
+            <div class="pillar-desc">Lebih dari 1.000 anggota aktif yang bergerak bersama menuju dunia yang lebih baik.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEGIATAN -->
+  <section class="activities-section" id="aktivitas">
+    <div class="section-header" style="max-width:none;">
+      <div>
+        <h2 class="section-title">Highlight <em>Kegiatan</em></h2>
+      </div>
+      <a href="/activities" class="see-all">Lihat Semua →</a>
+    </div>
+    <div class="cards">
+      {highlighted.map((act) => (
+        <div class="card">
+          <div class="card-img" style={`background-image:url('${act.image}');background-size:cover;background-position:center;`}>
+            <div class="card-img-overlay"></div>
+            <span class="card-tag">{act.tag}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">{act.title}</div>
+            <div class="card-desc">{act.description}</div>
+            <a href={act.href} class="card-see-more">Lihat Selengkapnya <span class="arrow">→</span></a>
+          </div>
+        </div>
+      ))}
+      <div class="cards-see-all">
+        <a href="/activities" class="cards-see-all-btn" title="Lihat semua kegiatan">→</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTEN INSTAGRAM -->
+  <section class="sosmed-section">
+    <div class="sosmed-header">
+      <span class="sosmed-eyebrow">📸 Media Sosial</span>
+      <h2 class="sosmed-title">Ikuti Perjalanan <em>INLA SUMUT</em></h2>
+      <p class="sosmed-subtitle">Konten terbaru dari kegiatan dan momen bersama alam kami.</p>
+    </div>
+
+    <div class="sosmed-grid">
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgChildren} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Mengasihi alam adalah cara kita mengasihi sesama 🌿</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgMountain} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Bersama alam, kita temukan kedamaian sejati 🌄</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgWheat} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Generasi muda INLA siap menjaga bumi 🌍</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgDanceBali} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Seni dan budaya sebagai jembatan antar bangsa 🎭</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgDanceKimono} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Setiap langkah kecil memberi dampak besar 🌱</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+      <div class="sosmed-card">
+        <div class="sosmed-img-wrap">
+          <Image src={imgFestival} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
+          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
+        </div>
+        <div class="sosmed-body">
+          <p class="sosmed-caption">Harmoni manusia dan semesta dimulai dari diri kita ✨</p>
+          <!-- TODO: ganti dengan link post spesifik -->
+          <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sosmed-footer-cta">
+      <a href="https://www.instagram.com/inlasumut/" target="_blank" rel="noopener" class="sosmed-follow-btn">
+        Follow
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const slides = document.querySelectorAll<HTMLElement>('.hero-slide');
+    const dots   = document.querySelectorAll<HTMLElement>('.hero-dot');
+    if (!slides.length) return;
+
+    let current = 0;
+    let timer: ReturnType<typeof setInterval>;
+
+    function goToSlide(idx: number) {
+      slides[current].classList.remove('active');
+      dots[current]?.classList.remove('active');
+      current = idx;
+      slides[current].classList.add('active');
+      dots[current]?.classList.add('active');
+    }
+
+    function startAuto() {
+      timer = setInterval(() => goToSlide((current + 1) % slides.length), 5000);
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        clearInterval(timer);
+        goToSlide(i);
+        startAuto();
+      });
+    });
+
+    startAuto();
+  });
+</script>

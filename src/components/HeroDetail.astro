@@ -1,0 +1,45 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  titleHighlight: string;
+  description: string;
+  tags: string[];
+  emoji: string;
+  bgClass?: string;
+  videoId?: string;
+}
+const { eyebrow, title, titleHighlight, description, tags, emoji, bgClass = 'g1', videoId } = Astro.props;
+---
+<section class="hero-detail">
+  <div class:list={['hero-video-bg', bgClass]}>
+    {videoId ? (
+      <iframe
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1`}
+        style="position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.77vh;transform:translate(-50%,-50%);border:none;pointer-events:none;"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+      />
+    ) : (
+      <span>{emoji}</span>
+    )}
+  </div>
+  <div class="hero-detail-overlay"></div>
+  <div class="hero-detail-content">
+    <p class="detail-eyebrow">{eyebrow}</p>
+    <h1 class="detail-h1">{title} <em>{titleHighlight}</em></h1>
+    <p class="detail-hero-p">{description}</p>
+    <div class="detail-tags">
+      {tags.map(tag => <span class="detail-tag">{tag}</span>)}
+    </div>
+  </div>
+  {videoId && (
+    <button class="hero-watch-btn" data-watch-video={videoId}>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="8" r="7.5" stroke="white" stroke-opacity="0.7"/>
+        <path d="M6.5 5.5L11 8L6.5 10.5V5.5Z" fill="white"/>
+      </svg>
+      Tonton Video
+    </button>
+  )}
+</section>

@@ -1,0 +1,255 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Bergabung — INLA SUMUT">
+  <Navbar activePage="karir" />
+
+  <!-- HERO -->
+  <section class="hero-karir">
+    <p class="hero-eyebrow">Bergabung dengan Kami</p>
+    <h1 class="hero-h1">Jadilah Bagian dari <em>Keluarga INLA</em></h1>
+    <p class="hero-p">Kami selalu membuka pintu bagi individu-individu yang bersemangat, peduli terhadap alam, dan ingin berkontribusi untuk dunia yang lebih baik.</p>
+  </section>
+
+  <!-- FORM SECTION -->
+  <section class="form-section">
+    <div class="form-wrap">
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="form-card-icon">🌿</div>
+          <div class="form-card-header-text">
+            <h2>Formulir Bergabung</h2>
+            <p>Isi data dirimu dengan lengkap dan benar</p>
+          </div>
+        </div>
+
+        <div class="form-body">
+          <form id="joinForm" novalidate>
+            <!-- Nama & Usia -->
+            <div class="field-row">
+              <div class="field-group">
+                <label class="field-label" for="nama">Nama Lengkap <span>*</span></label>
+                <input class="field-input" type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required />
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="usia">Usia <span>*</span> <span class="field-sub">(tahun)</span></label>
+                <input class="field-input" type="number" id="usia" name="usia" placeholder="Contoh: 20" min="5" max="99" required />
+              </div>
+            </div>
+
+            <!-- Cara Kenal -->
+            <div class="field-group">
+              <label class="field-label" for="kenal">Sudah berapa lama mengenal INLA? <span>*</span></label>
+              <select class="field-select" id="kenal" name="kenal" required>
+                <option value="" disabled selected>Pilih durasi</option>
+                <option>Baru saja mengenal (kurang dari 1 bulan)</option>
+                <option>1–6 bulan</option>
+                <option>6–12 bulan</option>
+                <option>Lebih dari 1 tahun</option>
+                <option>Lebih dari 3 tahun</option>
+              </select>
+            </div>
+
+            <!-- Sumber Info -->
+            <div class="field-group">
+              <label class="field-label" for="sumber">Dari mana kamu mengetahui INLA? <span>*</span></label>
+              <select class="field-select" id="sumber" name="sumber" required>
+                <option value="" disabled selected>Pilih sumber informasi</option>
+                <option>Media sosial (Instagram/Facebook/YouTube)</option>
+                <option>Teman atau keluarga</option>
+                <option>Sekolah atau kampus</option>
+                <option>Acara atau event INLA</option>
+                <option>Website resmi</option>
+                <option>Lainnya</option>
+              </select>
+            </div>
+
+            <!-- Alasan -->
+            <div class="field-group">
+              <label class="field-label" for="alasan">Mengapa kamu ingin bergabung dengan INLA? <span>*</span></label>
+              <textarea class="field-textarea" id="alasan" name="alasan" placeholder="Ceritakan motivasi dan harapanmu bergabung dengan INLA SUMUT..." required></textarea>
+            </div>
+
+            <hr class="form-divider" />
+
+            <!-- Peran -->
+            <div class="field-group">
+              <label class="field-label">Peran yang ingin diambil <span>*</span></label>
+              <div class="radio-group">
+                <div class="radio-card">
+                  <input type="radio" id="peranRelawan" name="peran" value="relawan" required />
+                  <label class="radio-label" for="peranRelawan">
+                    <div class="radio-top">
+                      <span class="radio-dot"></span>
+                      <span class="radio-icon">🤝</span>
+                      <span class="radio-name">Relawan</span>
+                    </div>
+                    <p class="radio-desc">Bergabung sebagai sukarelawan untuk mendukung program dan kegiatan INLA.</p>
+                  </label>
+                </div>
+                <div class="radio-card">
+                  <input type="radio" id="peranStaf" name="peran" value="staf" />
+                  <label class="radio-label" for="peranStaf">
+                    <div class="radio-top">
+                      <span class="radio-dot"></span>
+                      <span class="radio-icon">💼</span>
+                      <span class="radio-name">Staf</span>
+                    </div>
+                    <p class="radio-desc">Bergabung sebagai anggota staf tetap dalam tim operasional INLA.</p>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-submit-wrap">
+              <button type="submit" class="btn-submit">
+                <span>Kirim Formulir</span>
+                <span>🌿</span>
+              </button>
+            </div>
+            <p class="form-note">Dengan mengirim formulir ini, kamu menyetujui bahwa data yang diberikan adalah benar dan dapat dihubungi oleh tim INLA SUMUT.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <div class="modal-top">
+        <div class="modal-checkmark">✅</div>
+        <h2 class="modal-title">Selamat Bergabung,<br />Keluarga INLA!</h2>
+        <p class="modal-subtitle">Formulirmu telah berhasil dikirim dan sedang dalam proses review tim kami.</p>
+      </div>
+      <div class="modal-body">
+        <p class="modal-msg">Terima kasih telah memilih untuk menjadi bagian dari perjalanan kami dalam membangun harmoni antara manusia, alam, dan semesta. Tim INLA SUMUT akan menghubungimu dalam waktu 3–5 hari kerja.</p>
+        <p class="modal-salam">Salam, Tim INLA SUMUT 🌿</p>
+        <p class="modal-zh">世界一家 — Satu Dunia, Satu Keluarga</p>
+        <button class="modal-btn" id="modalClose">
+          <span>Kembali ke Beranda</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const form    = document.getElementById('joinForm') as HTMLFormElement | null;
+    const overlay = document.getElementById('modalOverlay');
+    const closeBtn = document.getElementById('modalClose');
+
+    // ── Modal handlers ─────────────────────────────────────────
+    closeBtn?.addEventListener('click', () => { window.location.href = '/'; });
+    overlay?.addEventListener('click', e => {
+      if (e.target === overlay) overlay.classList.remove('show');
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') overlay?.classList.remove('show');
+    });
+
+    if (!form) return;
+
+    // ── Helpers ────────────────────────────────────────────────
+    function getLabelText(field: HTMLElement): string {
+      const lbl = document.querySelector<HTMLElement>(`label[for="${field.id}"]`);
+      return lbl?.textContent?.replace('*', '').replace('(tahun)', '').trim()
+        || field.getAttribute('placeholder')
+        || 'Field ini';
+    }
+
+    function showError(field: HTMLElement, message: string) {
+      field.classList.add('input-error');
+      const parent = field.parentElement!;
+      if (!parent.querySelector('.error-msg')) {
+        const span = document.createElement('span');
+        span.className = 'error-msg';
+        span.textContent = message;
+        parent.appendChild(span);
+      }
+    }
+
+    function showGroupError(group: HTMLElement, message: string) {
+      const parent = group.parentElement!;
+      if (!parent.querySelector('.error-msg')) {
+        const span = document.createElement('span');
+        span.className = 'error-msg';
+        span.textContent = message;
+        parent.appendChild(span);
+      }
+    }
+
+    function clearFieldError(field: HTMLElement) {
+      field.classList.remove('input-error');
+      field.parentElement?.querySelectorAll('.error-msg').forEach(el => el.remove());
+    }
+
+    function clearGroupError(group: HTMLElement) {
+      group.parentElement?.querySelectorAll('.error-msg').forEach(el => el.remove());
+    }
+
+    // ── Submit validation ──────────────────────────────────────
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      // Clear all previous errors
+      form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+      form.querySelectorAll('.error-msg').forEach(el => el.remove());
+
+      let firstErrorEl: HTMLElement | null = null;
+      let valid = true;
+
+      // Validate text / number / select / textarea
+      form.querySelectorAll<HTMLElement>('input:not([type=radio]), select, textarea').forEach(field => {
+        const input = field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+        if (!input.required) return;
+        if (!input.value.trim()) {
+          const msg = input.tagName === 'SELECT'
+            ? 'Pilih salah satu pilihan'
+            : `${getLabelText(field)} wajib diisi`;
+          showError(field, msg);
+          if (!firstErrorEl) firstErrorEl = field;
+          valid = false;
+        }
+      });
+
+      // Validate radio group "peran"
+      const peranChecked = form.querySelector<HTMLInputElement>('input[name="peran"]:checked');
+      if (!peranChecked) {
+        const radioGroup = form.querySelector<HTMLElement>('.radio-group');
+        if (radioGroup) {
+          showGroupError(radioGroup, 'Pilih salah satu peran');
+          if (!firstErrorEl) firstErrorEl = radioGroup;
+        }
+        valid = false;
+      }
+
+      if (!valid) {
+        firstErrorEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      // All valid — show success modal
+      overlay?.classList.add('show');
+    });
+
+    // ── Clear error on user input ──────────────────────────────
+    form.querySelectorAll<HTMLElement>('input, select, textarea').forEach(field => {
+      field.addEventListener('input',  () => clearFieldError(field));
+      field.addEventListener('change', () => {
+        clearFieldError(field);
+        if ((field as HTMLInputElement).type === 'radio') {
+          const rg = field.closest<HTMLElement>('.radio-group');
+          if (rg) clearGroupError(rg);
+        }
+      });
+    });
+  });
+</script>

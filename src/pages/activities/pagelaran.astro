@@ -1,0 +1,177 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import HeroDetail from '../../components/HeroDetail.astro';
+import StatsStrip from '../../components/StatsStrip.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import HistorySidebar from '../../components/HistorySidebar.astro';
+import RelatedActivities from '../../components/RelatedActivities.astro';
+import Footer from '../../components/Footer.astro';
+
+const stats = [
+  { value: '3.000+',  label: 'Peserta' },
+  { value: '10.000+', label: 'Penonton' },
+  { value: '2012',    label: 'Pertama digelar' },
+  { value: '15+',     label: 'Kota peserta' },
+];
+
+const history = [
+  { year: '2025', title: 'Pagelaran SKS XIV',  meta: 'Grand Show · Harmoni' },
+  { year: '2024', title: 'Pagelaran SKS XIII', meta: 'Theme: Nusantara' },
+  { year: '2023', title: 'Pagelaran SKS XII',  meta: '8.000+ Penonton' },
+  { year: '2022', title: 'Pagelaran SKS XI',   meta: 'Hybrid Edition' },
+  { year: '2021', title: 'Pagelaran SKS X',    meta: 'Virtual Show' },
+  { year: '2019', title: 'Pagelaran SKS IX',   meta: '9.000+ Penonton' },
+  { year: '2018', title: 'Pagelaran SKS VIII', meta: 'Theme: Budaya Batak' },
+  { year: '2017', title: 'Pagelaran SKS VII',  meta: 'International Stage' },
+  { year: '2016', title: 'Pagelaran SKS VI',   meta: '5.000+ Penonton' },
+  { year: '2015', title: 'Pagelaran SKS V',    meta: 'Multi-kota' },
+  { year: '2014', title: 'Pagelaran SKS IV',   meta: 'Medan Besar' },
+  { year: '2013', title: 'Pagelaran SKS III',  meta: '3.000 Peserta' },
+  { year: '2012', title: 'Pagelaran SKS I–II', meta: 'Perdana Medan' },
+];
+
+const related = [
+  {
+    href: '/activities/igts',
+    tag: 'Pendidikan',
+    title: 'INLA Goes To School',
+    description: 'Program inspirasi ke sekolah-sekolah di seluruh Sumut.',
+    emoji: '📚',
+    bgClass: 'thumb-green',
+    image: '/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg',
+  },
+  {
+    href: '/activities/igt',
+    tag: 'Kompetisi',
+    title: 'INLA Got Talent',
+    description: 'Kompetisi bakat vokal, tari, dan pertunjukan seni.',
+    emoji: '🎤',
+    bgClass: 'thumb-gold',
+    image: '/SRC/p06.jpg',
+  },
+  {
+    href: '/activities/mvoh',
+    tag: 'Konser',
+    title: 'Musical Voice of Harmony',
+    description: 'Konser vokal dan musik penuh harmoni dan makna.',
+    emoji: '🎵',
+    bgClass: 'thumb-blue',
+    image: '/SRC/bg5.jpg',
+  },
+];
+---
+
+<Layout title="Pagelaran SKS — INLA SUMUT">
+  <Navbar activePage="activities" />
+
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="/activities">Kegiatan</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">Pagelaran SKS</span>
+  </div>
+
+  <!-- TODO: ganti VIDEO_ID dengan video acara ini -->
+  <HeroDetail
+    eyebrow="04 — Pagelaran Seni"
+    title="Pagelaran"
+    titleHighlight="SKS"
+    description="Pagelaran Senam, Kebudayaan & Seni — pertunjukan seni dan budaya berskala internasional yang menjadi puncak perayaan INLA setiap tahunnya."
+    tags={['Pagelaran', 'Seni', 'Budaya', 'Kebudayaan']}
+    emoji="🎭"
+    bgClass="g5"
+    videoId="cA2a7xzGOtc"
+  />
+
+  <StatsStrip stats={stats} />
+
+  <GalleryGrid
+    gallery="pagelaran"
+    images={[
+      '/SRC/bg2.jpg',
+      '/SRC/bg3.jpg',
+      '/SRC/bg5.jpg',
+      '/SRC/p02.jpg',
+      '/SRC/p03.jpg',
+    ]}
+  />
+
+  <div class="detail-main">
+    <div class="detail-left">
+      <div data-reveal>
+        <p class="sec-eyebrow">Tentang Program</p>
+        <h2 class="sec-h2" style="font-size:22px;">Pagelaran Senam, Kebudayaan & Seni (SKS)</h2>
+        <p class="sec-p" style="font-size:13px;">Pagelaran SKS adalah puncak dari semua program INLA — pertunjukan seni budaya berskala besar yang menampilkan ribuan peserta dari berbagai kota. Sejak 2012, pagelaran ini telah menjadi identitas dan kebanggaan INLA SUMUT.</p>
+        <p class="sec-p" style="font-size:13px;">Setiap edisi menghadirkan tema budaya yang berbeda, merayakan kekayaan Nusantara sambil menyampaikan pesan universal tentang harmoni manusia dan alam.</p>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div class="feature-card" data-reveal>
+        <p class="feature-label">Segmen Utama</p>
+        <h3 class="feature-title">Apa yang Ada di Pagelaran?</h3>
+        <p class="feature-desc">Pagelaran SKS terdiri dari beberapa segmen yang masing-masing membawa pesan dan keindahan tersendiri.</p>
+        <div class="feature-items">
+          <div class="feature-item">
+            <div class="feature-item-icon">🤸</div>
+            <div class="feature-item-title">Senam Massal</div>
+            <div class="feature-item-desc">Senam bersama ribuan peserta yang disinkronisasi dalam koreografi megah.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">🎭</div>
+            <div class="feature-item-title">Pertunjukan Seni</div>
+            <div class="feature-item-desc">Tari tradisional, drama, dan penampilan seni budaya Nusantara.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">💚</div>
+            <div class="feature-item-title">Pesan Nilai</div>
+            <div class="feature-item-desc">Segmen khusus menyampaikan pesan cinta alam dan kebersamaan.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">🌟</div>
+            <div class="feature-item-title">Grand Finale</div>
+            <div class="feature-item-desc">Penutupan spektakuler dengan seluruh peserta di atas panggung bersama.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div data-reveal>
+        <p class="sec-eyebrow">Segmen Acara</p>
+        <h3 class="sec-h2" style="font-size:18px;margin-bottom:14px;">Alur Pagelaran</h3>
+        <div class="cat-row">
+          <div class="cat-card">
+            <div class="cat-icon">🌅</div>
+            <div class="cat-title">Pembukaan</div>
+            <div class="cat-desc">Upacara pembuka dan prosesi peserta dari berbagai kota.</div>
+          </div>
+          <div class="cat-card">
+            <div class="cat-icon">🎪</div>
+            <div class="cat-title">Pementasan</div>
+            <div class="cat-desc">Rangkaian pertunjukan seni budaya dari semua peserta.</div>
+          </div>
+          <div class="cat-card">
+            <div class="cat-icon">🌟</div>
+            <div class="cat-title">Penutupan</div>
+            <div class="cat-desc">Grand finale dan seremonial penutupan bersama.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-sidebar">
+      <HistorySidebar items={history} />
+      <div class="sidebar-card">
+        <p class="sidebar-title">Daftar untuk SKS XV</p>
+        <p style="font-size:13px;color:#5a5a4a;line-height:1.7;margin-bottom:14px;">Pagelaran SKS XV akan segera hadir! Daftarkan sanggar atau kelompokmu sekarang.</p>
+        <a href="/karir" class="btn-green" style="display:block;text-align:center;font-size:13px;">Info Pendaftaran</a>
+      </div>
+    </div>
+  </div>
+
+  <RelatedActivities items={related} />
+  <Footer />
+</Layout>

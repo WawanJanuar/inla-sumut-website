@@ -459,6 +459,10 @@ button { cursor: pointer; }
   font-size: 1.02rem;
 }
 
+/* ===== PILLARS SECTION ===== */
+.pillars-section { padding: 110px 0 30px; }
+.pillars-section + .intro-section { padding-top: 30px; }
+
 /* ===== INTRO SECTION ===== */
 .intro-section { padding: 120px 0 80px; text-align: center; }
 .intro-flex {
@@ -1080,6 +1084,7 @@ button { cursor: pointer; }
   .stat-item { padding: 24px 32px; }
   .origin-year { font-size: 4rem; right: 20px; }
   .navbar-inner { padding: 0 20px; }
+  .pillars-section { padding: 70px 0 10px; }
   .intro-section { padding: 80px 0 60px; }
   .about-section { padding: 60px 0 80px; }
   .activity-section { padding: 20px 0 80px; }
@@ -1105,6 +1110,7 @@ button { cursor: pointer; }
   .community-gallery-item { height: 220px; }
   .origin-year { display: none; }
   .about-intro-img img { height: 300px; }
+  .pillars-section { padding: 56px 0 10px; }
   .intro-section { padding: 70px 0 50px; }
   .intro-flex { gap: 36px; }
   .intro-img-wrap img { height: 280px; }
@@ -1138,6 +1144,8 @@ button { cursor: pointer; }
   .about-main-title, .activity-title { font-size: 1.75rem; }
   .banner-title    { font-size: 1.85rem; letter-spacing: -0.5px; }
   .banner-subtitle { font-size: 0.93rem; }
+  .pillars-section { padding: 40px 0 0; }
+  .mission-card    { padding: 28px 20px; }
   .intro-section   { padding: 60px 0 40px; }
   .about-section   { padding: 40px 0 50px; }
   .about-cards-row { gap: 16px; margin-top: 28px; }

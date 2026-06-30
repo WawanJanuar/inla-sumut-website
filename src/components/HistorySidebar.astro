@@ -1,0 +1,20 @@
+---
+interface HistoryItem { year: string; title: string; meta: string; }
+interface Props { items: HistoryItem[]; }
+const { items } = Astro.props;
+---
+<div class="sidebar-card">
+  <p class="sidebar-title">Sejarah Penyelenggaraan</p>
+  <div class="history-list">
+    {items.map(item => (
+      <a href="#" class="history-item">
+        <div class="history-year-badge">{item.year}</div>
+        <div class="history-info">
+          <div class="history-title">{item.title}</div>
+          <div class="history-meta">{item.meta}</div>
+        </div>
+        <span class="history-arrow">›</span>
+      </a>
+    ))}
+  </div>
+</div>

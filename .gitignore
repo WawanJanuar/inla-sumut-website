@@ -16,3 +16,12 @@ Thumbs.db
 
 # Raw/unoptimized source files (keep original exports local only)
 # SRC/ images are committed in optimized form
+
+# Astro / npm (dashboard experiment — see CLAUDE.md)
+node_modules/
+dist/
+.astro/
+
+# Python bytecode cache (uipro skill scripts)
+__pycache__/
+*.pyc
