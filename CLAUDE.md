@@ -22,7 +22,93 @@ npm run build      # output ke dist/
 npm run preview    # serve dist/ secara lokal
 ```
 
-Deploy: output ada di `dist/` (gitignored). Jalankan `npm run build` sebelum deploy.
+Deploy: output ada di `dist/` (gitignored). Push ke `main` → GitHub Actions otomatis build & deploy.
+
+---
+
+## Deployment — GitHub Pages
+
+**URL publik:** `https://wawanjanuar.github.io/inla-sumut-website`
+
+**Cara kerja:** `.github/workflows/deploy.yml` dijalankan otomatis setiap push ke `main`. Workflow: checkout → `npm ci` → `npm run build` → upload `dist/` → deploy ke GitHub Pages.
+
+**Aktivasi pertama kali (manual, sekali saja):**
+1. Buka GitHub repo → Settings → Pages
+2. Source: pilih **GitHub Actions** (bukan "Deploy from a branch")
+3. Save — setelah itu semua push otomatis deploy
+
+**Cek status deploy:** GitHub repo → tab Actions → workflow "Deploy to GitHub Pages"
+
+---
+
+## Base Path — PENTING untuk Pengembangan
+
+Karena repo bernama `inla-sumut-website` (bukan `wawanjanuar.github.io`), GitHub Pages menyajikan site di subfolder `/inla-sumut-website/`. Ini artinya semua path di Astro harus pakai prefix base URL.
+
+**Konfigurasi di `astro.config.mjs`:**
+```js
+export default defineConfig({
+  site: 'https://wawanjanuar.github.io',
+  base: '/inla-sumut-website',
+});
+```
+
+**Pola wajib di setiap `.astro` file yang pakai path:**
+```astro
+---
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+// Development: BASE = '' (kosong)
+// Production:  BASE = '/inla-sumut-website'
+---
+```
+
+Kemudian gunakan `BASE` sebagai prefix:
+```astro
+<!-- BENAR -->
+<a href={BASE + '/about'}>About</a>
+<img src={BASE + '/SRC/logo.png'} />
+<div style={`background-image:url('${BASE}/SRC/image.jpg')`}></div>
+
+<!-- SALAH — jangan hardcode tanpa BASE -->
+<a href="/about">About</a>
+<img src="/SRC/logo.png" />
+```
+
+**File yang sudah diupdate dengan pola BASE:**
+- `src/layouts/Layout.astro` — favicon, `<body data-base={import.meta.env.BASE_URL}>`
+- `src/components/Navbar.astro` — semua href + logo src
+- `src/components/Footer.astro` — semua href + logo src
+- `src/components/GalleryGrid.astro` — semua img src dan data-src
+- `src/components/RelatedActivities.astro` — background-image URL dan href
+- `src/pages/index.astro` — href dan background-image kartu kegiatan
+- `src/pages/about.astro` — href CTA
+- `src/pages/karir.astro` — JS modal close redirect
+- `src/pages/activities/index.astro` — semua href dan background-image
+- `src/pages/activities/igts.astro` — breadcrumb dan sidebar href
+- `src/pages/activities/igt.astro` — breadcrumb dan sidebar href
+- `src/pages/activities/mvoh.astro` — breadcrumb dan sidebar href
+- `src/pages/activities/pagelaran.astro` — breadcrumb dan sidebar href
+
+**Komponen yang menangani BASE secara internal** (halaman pemanggil tidak perlu tambah BASE):
+- `GalleryGrid.astro` — otomatis prefix images prop
+- `RelatedActivities.astro` — otomatis prefix item.image dan item.href
+
+**Untuk client-side JS (script tag):** Base URL tidak bisa diakses langsung dengan `import.meta.env`. Gunakan `document.body.dataset.base` yang sudah di-set di `Layout.astro`:
+```js
+const base = document.body.dataset.base ?? '/';
+window.location.href = base; // redirect ke home
+```
+
+**Kalau ada halaman atau komponen baru** yang pakai path absolut (href, src, url()), wajib tambah prefix `BASE`. Tanpa ini, path akan rusak di production tapi tampak benar di local dev.
+
+**Troubleshooting:**
+| Gejala | Kemungkinan penyebab | Solusi |
+|---|---|---|
+| Gambar tidak muncul di production | Path `/SRC/...` tanpa BASE prefix | Tambah `${BASE}` sebelum path |
+| Link navigasi ke halaman blank/404 | href `/about` tanpa BASE prefix | Ganti dengan `href={BASE + '/about'}` |
+| JS redirect ke halaman salah | `window.location.href = '/'` hardcoded | Ganti dengan `document.body.dataset.base ?? '/'` |
+| Build berhasil tapi site kosong | GitHub Pages Source belum diset ke "GitHub Actions" | Settings → Pages → Source → GitHub Actions |
+| Workflow gagal | Cek tab Actions di GitHub repo untuk error log | Biasanya `npm ci` gagal atau ada TypeScript error |
 
 ---
 
