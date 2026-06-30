@@ -1,27 +1,28 @@
 ---
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <footer class="footer">
   <div class="footer-grid">
     <div>
       <div class="footer-brand">
-        <img src="/SRC/logo inla sumut.png" alt="INLA" width="30" height="30" style="object-fit:contain;" />
+        <img src={BASE + '/SRC/logo inla sumut.png'} alt="INLA" width="30" height="30" style="object-fit:contain;" />
         <span class="footer-brand-name">INLA SUMUT</span>
       </div>
       <p class="footer-tagline">International Nature Loving Association Sumatera Utara — membangun harmoni manusia, alam & semesta.</p>
     </div>
     <div>
       <p class="footer-col-title">Navigasi</p>
-      <a href="/"           class="footer-link">Home</a>
-      <a href="/about"      class="footer-link">About Us</a>
-      <a href="/activities" class="footer-link">Kegiatan</a>
-      <a href="/karir"      class="footer-link">Bergabung</a>
+      <a href={BASE + '/'}           class="footer-link">Home</a>
+      <a href={BASE + '/about'}      class="footer-link">About Us</a>
+      <a href={BASE + '/activities'} class="footer-link">Kegiatan</a>
+      <a href={BASE + '/karir'}      class="footer-link">Bergabung</a>
     </div>
     <div>
       <p class="footer-col-title">Program</p>
-      <a href="/activities/igts"      class="footer-link">IGTS</a>
-      <a href="/activities/igt"       class="footer-link">IGT</a>
-      <a href="/activities/mvoh"      class="footer-link">MVOH</a>
-      <a href="/activities/pagelaran" class="footer-link">Pagelaran SKS</a>
+      <a href={BASE + '/activities/igts'}      class="footer-link">IGTS</a>
+      <a href={BASE + '/activities/igt'}       class="footer-link">IGT</a>
+      <a href={BASE + '/activities/mvoh'}      class="footer-link">MVOH</a>
+      <a href={BASE + '/activities/pagelaran'} class="footer-link">Pagelaran SKS</a>
     </div>
   </div>
   <div class="footer-bottom">

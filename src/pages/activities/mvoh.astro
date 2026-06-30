@@ -8,6 +8,7 @@ import HistorySidebar from '../../components/HistorySidebar.astro';
 import RelatedActivities from '../../components/RelatedActivities.astro';
 import Footer from '../../components/Footer.astro';
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 const stats = [
   { value: '300+',   label: 'Penampil' },
   { value: '2.000+', label: 'Penonton' },
@@ -61,9 +62,9 @@ const related = [
   <Navbar activePage="activities" />
 
   <div class="breadcrumb">
-    <a href="/">Home</a>
+    <a href={BASE + '/'}>Home</a>
     <span class="breadcrumb-sep">›</span>
-    <a href="/activities">Kegiatan</a>
+    <a href={BASE + '/activities'}>Kegiatan</a>
     <span class="breadcrumb-sep">›</span>
     <span class="breadcrumb-current">MVOH</span>
   </div>
@@ -162,7 +163,7 @@ const related = [
       <div class="sidebar-card">
         <p class="sidebar-title">Ikut MVOH Season 9</p>
         <p style="font-size:13px;color:#5a5a4a;line-height:1.7;margin-bottom:14px;">Pendaftaran MVOH Season 9 akan segera dibuka. Siapkan suara terbaikmu!</p>
-        <a href="/karir" class="btn-green" style="display:block;text-align:center;font-size:13px;">Daftar Sekarang</a>
+        <a href={BASE + '/karir'} class="btn-green" style="display:block;text-align:center;font-size:13px;">Daftar Sekarang</a>
       </div>
     </div>
   </div>

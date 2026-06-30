@@ -10,6 +10,7 @@ interface RelatedItem {
 }
 interface Props { items: RelatedItem[]; }
 const { items } = Astro.props;
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <section class="related-section">
   <h2 class="related-h2">Program Lainnya</h2>
@@ -18,7 +19,7 @@ const { items } = Astro.props;
       <div class="related-card">
         <div
           class:list={['related-img', item.image ? '' : item.bgClass]}
-          style={item.image ? `background-image:url('${item.image}');background-size:cover;background-position:center;` : ''}
+          style={item.image ? `background-image:url('${BASE}${item.image}');background-size:cover;background-position:center;` : ''}
         >
           {!item.image && <span>{item.emoji}</span>}
         </div>
@@ -26,7 +27,7 @@ const { items } = Astro.props;
           <span class="related-tag-badge">{item.tag}</span>
           <h3 class="related-title">{item.title}</h3>
           <p class="related-desc">{item.description}</p>
-          <a href={item.href} class="related-link">Lihat Selengkapnya <span class="arrow">→</span></a>
+          <a href={BASE + item.href} class="related-link">Lihat Selengkapnya <span class="arrow">→</span></a>
         </div>
       </div>
     ))}

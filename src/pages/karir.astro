@@ -147,7 +147,7 @@ import Footer from '../components/Footer.astro';
     const closeBtn = document.getElementById('modalClose');
 
     // ── Modal handlers ─────────────────────────────────────────
-    closeBtn?.addEventListener('click', () => { window.location.href = '/'; });
+    closeBtn?.addEventListener('click', () => { window.location.href = document.body.dataset.base ?? '/'; });
     overlay?.addEventListener('click', e => {
       if (e.target === overlay) overlay.classList.remove('show');
     });

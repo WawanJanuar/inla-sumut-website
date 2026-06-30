@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 const activityCards = [
   { id:'igts',      label:'IGTS',     thumb:'thumb-green',  title:'INLA Goes To School',        desc:'Program inspirasi ke sekolah-sekolah untuk membangun karakter anak.',       meta:'50+ Sekolah',    href:'/activities/igts',      image:'/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg' },
   { id:'igt',       label:'IGT',      thumb:'thumb-gold',   title:'INLA Got Talent',             desc:'Kompetisi bakat vokal, tari, dan pertunjukan dari seluruh kota.',           meta:'500+ Peserta',   href:'/activities/igt',       image:'/SRC/p06.jpg' },
@@ -62,8 +63,8 @@ const activityCards = [
         <a href="#semua" class="latest-see-all">Lihat Semua →</a>
       </div>
       <div class="latest-grid">
-        <a href="/activities/igts" class="latest-card-main" style="text-decoration:none;">
-          <div class="latest-main-bg" style="background-image:url('/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg');background-size:cover;background-position:center;"></div>
+        <a href={BASE + '/activities/igts'} class="latest-card-main" style="text-decoration:none;">
+          <div class="latest-main-bg" style={`background-image:url('${BASE}/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg');background-size:cover;background-position:center;`}></div>
           <div class="latest-main-overlay"></div>
           <span class="latest-main-deco">🌿</span>
           <div class="latest-main-body">
@@ -77,9 +78,9 @@ const activityCards = [
           </div>
         </a>
         <div class="latest-side">
-          <a href="/activities/igt" class="latest-card-side" style="text-decoration:none;">
+          <a href={BASE + '/activities/igt'} class="latest-card-side" style="text-decoration:none;">
             <div class="latest-side-thumb">
-              <div class="latest-side-bg" style="position:absolute;inset:0;background-image:url('/SRC/p06.jpg');background-size:cover;background-position:center;"></div>
+              <div class="latest-side-bg" style={`position:absolute;inset:0;background-image:url('${BASE}/SRC/p06.jpg');background-size:cover;background-position:center;`}></div>
             </div>
             <div class="latest-side-body">
               <div class="latest-side-label">IGT</div>
@@ -87,9 +88,9 @@ const activityCards = [
               <span class="latest-side-link">Lihat →</span>
             </div>
           </a>
-          <a href="/activities/mvoh" class="latest-card-side" style="text-decoration:none;">
+          <a href={BASE + '/activities/mvoh'} class="latest-card-side" style="text-decoration:none;">
             <div class="latest-side-thumb">
-              <div class="latest-side-bg" style="position:absolute;inset:0;background-image:url('/SRC/bg5.jpg');background-size:cover;background-position:center;"></div>
+              <div class="latest-side-bg" style={`position:absolute;inset:0;background-image:url('${BASE}/SRC/bg5.jpg');background-size:cover;background-position:center;`}></div>
             </div>
             <div class="latest-side-body">
               <div class="latest-side-label">MVOH</div>
@@ -97,9 +98,9 @@ const activityCards = [
               <span class="latest-side-link">Lihat →</span>
             </div>
           </a>
-          <a href="/activities/pagelaran" class="latest-card-side" style="text-decoration:none;">
+          <a href={BASE + '/activities/pagelaran'} class="latest-card-side" style="text-decoration:none;">
             <div class="latest-side-thumb">
-              <div class="latest-side-bg" style="position:absolute;inset:0;background-image:url('/SRC/bg3.jpg');background-size:cover;background-position:center;"></div>
+              <div class="latest-side-bg" style={`position:absolute;inset:0;background-image:url('${BASE}/SRC/bg3.jpg');background-size:cover;background-position:center;`}></div>
             </div>
             <div class="latest-side-body">
               <div class="latest-side-label">Pagelaran</div>
@@ -123,9 +124,9 @@ const activityCards = [
     </div>
     <div class="act-grid" id="actGrid">
       {activityCards.map(card => (
-        <a href={card.href} class="act-card" data-label={card.id} style="text-decoration:none;">
+        <a href={BASE + card.href} class="act-card" data-label={card.id} style="text-decoration:none;">
           <div class:list={['act-thumb', card.thumb]}>
-            <div class="act-thumb-bg" style={`background-image:url('${card.image}');`}></div>
+            <div class="act-thumb-bg" style={`background-image:url('${BASE}${card.image}');`}></div>
             <div class="act-thumb-overlay"></div>
             <div class="act-thumb-top">
               <span class="act-label-badge">{card.label}</span>
@@ -149,7 +150,7 @@ const activityCards = [
   <section class="cta-section">
     <h2 class="cta-h2">Ingin <em>Berpartisipasi</em>?</h2>
     <p class="cta-p">Daftarkan dirimu atau sekolahmu untuk bergabung dalam program-program INLA SUMUT berikutnya.</p>
-    <a href="/karir" class="btn-white">Daftar Sekarang</a>
+    <a href={BASE + '/karir'} class="btn-white">Daftar Sekarang</a>
   </section>
 
   <Footer />

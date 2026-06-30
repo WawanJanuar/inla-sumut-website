@@ -3,18 +3,19 @@ interface Props {
   activePage?: string;
 }
 const { activePage = '' } = Astro.props;
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <nav class="nav">
-  <a href="/" class="nav-brand">
-    <img src="/SRC/logo inla sumut.png" alt="INLA" width="34" height="34" style="object-fit:contain;" />
+  <a href={BASE + '/'} class="nav-brand">
+    <img src={BASE + '/SRC/logo inla sumut.png'} alt="INLA" width="34" height="34" style="object-fit:contain;" />
     <span class="nav-name">INLA SUMUT</span>
   </a>
 
   <div class="nav-links">
-    <a href="/"            class:list={['nav-link', { active: activePage === 'home' }]}>Home</a>
-    <a href="/about"       class:list={['nav-link', { active: activePage === 'about' }]}>About Us</a>
-    <a href="/activities"  class:list={['nav-link', { active: activePage === 'activities' }]}>Kegiatan</a>
-    <a href="/karir"       class:list={['nav-btn',  { active: activePage === 'karir' }]}>Bergabung</a>
+    <a href={BASE + '/'}            class:list={['nav-link', { active: activePage === 'home' }]}>Home</a>
+    <a href={BASE + '/about'}       class:list={['nav-link', { active: activePage === 'about' }]}>About Us</a>
+    <a href={BASE + '/activities'}  class:list={['nav-link', { active: activePage === 'activities' }]}>Kegiatan</a>
+    <a href={BASE + '/karir'}       class:list={['nav-btn',  { active: activePage === 'karir' }]}>Bergabung</a>
   </div>
 
   <button class="nav-hamburger" aria-label="Buka menu" type="button">
@@ -25,8 +26,8 @@ const { activePage = '' } = Astro.props;
 </nav>
 
 <div class="nav-drawer">
-  <a href="/"           class:list={['nav-link', { active: activePage === 'home' }]}>Home</a>
-  <a href="/about"      class:list={['nav-link', { active: activePage === 'about' }]}>About Us</a>
-  <a href="/activities" class:list={['nav-link', { active: activePage === 'activities' }]}>Kegiatan</a>
-  <a href="/karir"      class="nav-btn">Bergabung</a>
+  <a href={BASE + '/'}           class:list={['nav-link', { active: activePage === 'home' }]}>Home</a>
+  <a href={BASE + '/about'}      class:list={['nav-link', { active: activePage === 'about' }]}>About Us</a>
+  <a href={BASE + '/activities'} class:list={['nav-link', { active: activePage === 'activities' }]}>Kegiatan</a>
+  <a href={BASE + '/karir'}      class="nav-btn">Bergabung</a>
 </div>

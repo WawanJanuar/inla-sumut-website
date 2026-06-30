@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import { Image } from 'astro:assets';
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 import imgLogo        from '../assets/images/logo.png';
 import imgChildren    from '../assets/images/children-sunset.jpg';
 import imgDanceBali   from '../assets/images/dance-bali.jpg';
@@ -438,7 +439,7 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
   <section class="cta-section">
     <h2 class="cta-h2">Jadilah Bagian dari <em>Perjalanan Ini</em></h2>
     <p class="cta-p">Bergabunglah dengan ribuan anggota yang telah memilih untuk peduli terhadap alam dan sesama.</p>
-    <a href="/karir" class="btn-white">Bergabung Sekarang</a>
+    <a href={BASE + '/karir'} class="btn-white">Bergabung Sekarang</a>
   </section>
 
   <Footer />
