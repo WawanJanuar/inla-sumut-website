@@ -337,8 +337,25 @@ Konten resmi dari web F-INLA. Sections (urutan dari atas):
 
 - Nav items: Home `/`, About Us `/about`, Kegiatan `/activities`, Bergabung `/karir`
 - `activePage` prop menentukan item aktif
-- Hamburger toggle via `#navToggle` + `.nav-drawer` — **tidak ada Bootstrap collapse**
+- Hamburger toggle via `.nav-hamburger` + `.nav-drawer` — **tidak ada Bootstrap collapse**
 - Tidak ada `data-bs-toggle`
+
+### Hamburger drawer (mobile) — Apple-style floating glass card
+
+**Desain:** floating card 270px dari pojok kanan atas, **bukan** full-width panel.
+
+| Property | Nilai |
+|---|---|
+| Background | `rgba(18,32,18,0.86)` + `backdrop-filter: blur(40px) saturate(180%)` |
+| Border | `0.5px solid rgba(255,255,255,0.14)` + green glow `0 0 0 0.5px rgba(126,200,126,0.12)` |
+| Border radius | `18px` |
+| Entrance animation | `scale(0.88) → scale(1)` + `opacity 0→1`, `transform-origin: top right` |
+| Easing | `cubic-bezier(0.34,1.4,0.64,1)` (spring) |
+| Posisi | `top: 68px; right: 16px;` (480px: `top:62px; right:12px; width:250px`) |
+
+**Link items:** `padding: 12px 16px`, `border-radius: 12px`, divider antar item via `::before` (0.5px). Semua item — termasuk "Bergabung" — menggunakan style yang sama, tidak ada tombol hijau khusus di dalam drawer.
+
+**Hamburger button saat terbuka:** background hijau transparan + border hijau (`rgba(126,200,126,0.15/0.25)`).
 
 ---
 

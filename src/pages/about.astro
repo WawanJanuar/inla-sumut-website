@@ -561,6 +561,34 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
 
   /* TARGET — add 5th item support */
   .target-item:last-child { margin-bottom: 0; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    /* Sejarah image: stack below text, fade top→bottom */
+    .sejarah-img-col { min-height: 200px; }
+    .sejarah-photo {
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 45%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 45%);
+    }
+
+    /* Perkenalan */
+    .intro-wrap { padding: 0 16px; }
+    .intro-main-h2 { font-size: 1.8rem; }
+    .intro-tagline { font-size: 0.95rem; }
+    .finla-block { padding: 18px 20px; }
+    .finla-desc { font-size: 0.88rem; }
+
+    /* Misi promosi list */
+    .promosi-num { width: 28px; height: 28px; font-size: 0.75rem; }
+    .promosi-text { font-size: 0.88rem; }
+    .promosi-heading { font-size: 1rem; }
+  }
+
+  @media (max-width: 480px) {
+    .intro-main-h2 { font-size: 1.55rem; }
+    .sejarah-img-col { min-height: 160px; }
+    .promosi-list { gap: 12px; }
+  }
 </style>
 
 <script>
