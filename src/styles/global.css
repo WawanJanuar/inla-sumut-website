@@ -312,7 +312,7 @@ body {
   padding: 64px 40px; position: relative; overflow: hidden;
 }
 .sejarah-bg::before { content:''; position:absolute; top:-60px; right:-60px; width:240px; height:240px; border-radius:50%; background:rgba(120,200,120,0.12); }
-.sejarah-inner { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; position: relative; z-index: 1; }
+.sejarah-inner { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 0; align-items: center; position: relative; z-index: 1; }
 .sejarah-right { display: flex; flex-direction: column; gap: 10px; }
 .eyebrow-light { font-size: 11px; font-weight: 500; color: #a8e8a8; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
 .sec-h2-light { font-size: 28px; font-weight: 500; color: #fff; line-height: 1.35; margin-bottom: 16px; }
@@ -370,7 +370,7 @@ body {
 .meanings-inner { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
 .meanings-h2 { font-size: 28px; font-weight: 500; color: #fff; margin-bottom: 10px; }
 .meanings-p { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.8; max-width: 560px; margin-bottom: 28px; }
-.meanings-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.meanings-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
 .meaning-card { background: rgba(255,255,255,0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 0.5px solid rgba(255,255,255,0.14); border-radius: 14px; padding: 20px; transition: transform 0.2s; }
 .meaning-card:hover { transform: translateY(-3px); }
 .meaning-icon { font-size: 22px; margin-bottom: 10px; }
@@ -708,9 +708,9 @@ body {
 .breadcrumb-sep { color: #c8c8b8; }
 .breadcrumb-current { color: #5a5a4a; font-weight: 500; }
 
-.hero-detail { position: relative; min-height: 480px; display: flex; align-items: flex-end; overflow: hidden; }
+.hero-detail { position: relative; min-height: 540px; display: flex; align-items: center; overflow: hidden; }
 .hero-video-bg { position: absolute; inset: 0; z-index: 0; background: linear-gradient(135deg, #1c3a1c 0%, #3d7a3d 55%, #4a9e4a 100%); display: flex; align-items: center; justify-content: center; font-size: 120px; color: rgba(255,255,255,0.06); }
-.hero-detail-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(10,22,10,0.82) 0%, rgba(10,22,10,0.45) 50%, rgba(10,22,10,0.15) 100%); }
+.hero-detail-overlay { position: absolute; inset: 0; z-index: 1; }
 .hero-detail-content { position: relative; z-index: 2; padding: 56px 10% 56px; max-width: 700px; }
 .detail-eyebrow { font-size: 11px; font-weight: 600; color: #7ec87e; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; }
 .detail-h1 { font-size: 48px; font-weight: 300; color: #fff; line-height: 1.15; margin-bottom: 16px; }
@@ -862,7 +862,7 @@ body {
   .goals-grid { grid-template-columns: 1fr; }
   .target-grid { grid-template-columns: 1fr; gap: 24px; }
   .meanings-bg { padding: 48px 20px; }
-  .meanings-grid { grid-template-columns: 1fr; gap: 10px; }
+  .meanings-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
   .meanings-h2 { font-size: 22px; }
   .missions-grid { grid-template-columns: 1fr; gap: 24px; }
   .sec-h2 { font-size: 22px; }
@@ -1048,7 +1048,18 @@ body {
 
 /* --- Hero detail overlay (lighter for video) --- */
 .hero-detail-overlay {
-  background: linear-gradient(to top, rgba(10,22,10,0.55) 0%, rgba(10,22,10,0.05) 100%);
+  background:
+    linear-gradient(to right,
+      rgba(10,22,10,0.98) 0%,
+      rgba(10,22,10,0.93) 35%,
+      rgba(10,22,10,0.50) 55%,
+      rgba(10,22,10,0.10) 72%,
+      transparent 86%
+    ),
+    linear-gradient(to top,
+      rgba(10,22,10,0.6) 0%,
+      transparent 30%
+    );
 }
 
 /* --- Gallery grid images --- */

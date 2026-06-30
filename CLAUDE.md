@@ -284,6 +284,10 @@ Setiap halaman di `src/pages/activities/*.astro` menggunakan komponen:
 
 **Video di HeroDetail:** gunakan prop `videoId` (YouTube ID). Tombol "Tonton Video" hanya render jika `videoId` diberikan. Menggunakan `data-watch-video={videoId}` (bukan `data-video-id`).
 
+**Hero gradient mask fade:** `.hero-detail-overlay` menggunakan double gradient — kiri-ke-kanan (gelap 98% di kiri → transparan di kanan, video/bg terlihat penuh) + bawah-ke-atas (vignette tipis). Teks terbaca karena sisi kiri sangat gelap; video YouTube muncul jelas di sisi kanan. Konten teks (`hero-detail-content`) vertikal tengah (`align-items: center`).
+
+**Sidebar CTA cards dihapus** dari semua halaman detail — tidak ada lagi card "Daftarkan Sekolahmu", "Daftar sebagai Peserta", "Ikut MVOH Season 9", "Daftar untuk SKS XV" di sidebar. Sidebar hanya berisi `HistorySidebar`.
+
 **Lightbox GalleryGrid:** setiap item `data-gallery` harus punya nilai unik per halaman (`"igts"`, `"igt"`, `"mvoh"`, `"pagelaran"`). Lightbox dikelompokkan berdasarkan nilai ini.
 
 ---
@@ -302,11 +306,30 @@ Form bergabung dengan validasi client-side:
 
 ## Halaman About (`src/pages/about.astro`)
 
-Versi Astro dari About Us. Berisi:
-- Hero section
-- Konten tentang INLA
-- Section **Recent** — horizontal scroll 6 kartu konten Instagram (sama seperti di home, menggunakan logo Astro `<Image>`)
-- CTA bergabung
+Konten resmi dari web F-INLA. Sections (urutan dari atas):
+
+1. **Hero** — headline + deskripsi singkat
+2. **In-page nav** — anchor ke: Perkenalan, Sejarah, Tujuan, Target, Misi, Makna, Perjalanan. Aktif saat scroll via `IntersectionObserver`.
+3. **Perkenalan** (`#perkenalan`) — "Mari Kenali Kami": tagline resmi F-INLA + deskripsi organisasi nirlaba internasional. CSS scoped: `.intro-wrap`, `.intro-main-h2`, `.intro-divider`, `.intro-sub-heading`, `.intro-tagline`, `.finla-block`, `.finla-name`, `.finla-desc`.
+4. **Sejarah** (`#sejarah`, dark bg) — "Asal Mula Pendirian": 3 paragraf resmi (INLA 2006 HK, F-INLA 2015, Wang Ciguang sejak 2001). Layout **2 kolom**:
+   - Kiri: teks + stats (20+ negara, 2006) + kartu bendera 11 negara
+   - Kanan: foto `hongkong.jpg` dengan **CSS gradient mask** (`mask-image: linear-gradient(to right, transparent → black)`) — teks memudar ke foto
+5. **Tujuan** (`#tujuan`, krem) — Sepuluh Prinsip Bersama + tujuan global. CSS scoped: `.tujuan-block`.
+6. **Target** (`#target`, putih) — Lima Keharmonisan (pikiran/tubuh → keluarga → masyarakat → bangsa → dunia). 5 item numbered.
+7. **Misi & Tugas** (`#misi`, krem) — Paragraf misi resmi + **7 poin Promosi dan Praktik** bernomor. CSS scoped: `.misi-desc`, `.promosi-section`, `.promosi-list`, `.promosi-item`, `.promosi-num`, `.promosi-text`.
+8. **Makna INLA** (`#makna`, dark bg) — **4 kartu saja** (I, N, L, A) — grid 4 kolom. S dan U dihapus karena INLA hanya 4 huruf.
+9. **Closing** — 世界一家
+10. **Perjalanan** (`#perjalanan`) — Timeline mulai 2001 (bukan 2006).
+11. **Recent** — 6 kartu sosmed Instagram
+12. **CTA** — Bergabung Sekarang → `/karir`
+
+**CSS penting about:**
+- `.sejarah-inner` — grid 2 kolom (`1fr 1fr`, gap 0) untuk layout teks + foto
+- `.sejarah-img-col` / `.sejarah-photo` — foto kanan dengan mask fade (`mask-image` gradient)
+- `.meanings-grid` — `repeat(4,1fr)` (mobile: `repeat(2,1fr)`)
+- Semua CSS baru about ada di scoped `<style>` dalam file about.astro
+
+**Gambar sejarah:** `hongkong.jpg` dari `public/SRC/` (path via BASE prefix).
 
 ---
 
@@ -375,7 +398,7 @@ Gambar ini dipakai langsung via path `/SRC/...` (tidak diproses Astro):
 | `boy-running-through-wheat-field-...SBI-350099286.jpg` | Kartu Kegiatan Alam |
 | `bg2.jpg`, `bg3.jpg`, `p02.jpg`, `p03.jpg` | Gallery Pagelaran |
 | `About.jpg` | Legacy About Us hero |
-| `hongkong.jpg` | Legacy About origin strip |
+| `hongkong.jpg` | Foto kolom kanan section Sejarah di about.astro (gradient mask fade) |
 | `p01–p06.jpg` | Gallery activities legacy |
 | `WhatsApp Image 2026-03-25 at 13.53.59.jpeg` | Gallery (ada spasi — selalu quote path) |
 
