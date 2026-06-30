@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — INLA SUMUT</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ===== HERO SLIDER ===== */
+    .hero {
+      position: relative;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .hero-slides {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 300%; /* 3 slides */
+      transition: transform 0.8s cubic-bezier(0.77, 0, 0.18, 1);
+    }
+    .hero-slide {
+      flex: 0 0 33.333%;
+      background-size: cover;
+      background-position: center;
+    }
+    /* Slide 1 — alam hijau */
+    .hero-slide-1 { background: linear-gradient(135deg, #1c2e1c 0%, #2d4a2d 60%, #1c3a2a 100%); }
+    /* Slide 2 — pantai/biru */
+    .hero-slide-2 { background: linear-gradient(135deg, #0a1c3a 0%, #1a3a6a 60%, #0a2a4a 100%); }
+    /* Slide 3 — senja/earth */
+    .hero-slide-3 { background: linear-gradient(135deg, #3a1c08 0%, #6a3a10 60%, #4a2a0a 100%); }
+
+    .hero-mountains {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      width: 100%; height: 260px; z-index: 2; pointer-events: none;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: rgba(10,22,10,0.45);
+      z-index: 2;
+    }
+    .hero-body {
+      position: relative; z-index: 3;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 72px 40px 40px;
+      flex: 1;
+    }
+    .stats-bar {
+      position: relative; z-index: 3;
+      display: flex; justify-content: center;
+      border-top: 0.5px solid rgba(255,255,255,0.1);
+      background: rgba(10,22,10,0.35);
+    }
+
+    /* Slider dots */
+    .hero-dots {
+      position: absolute; bottom: 72px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 8px; z-index: 4;
+    }
+    .hero-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      cursor: pointer; transition: background 0.3s, transform 0.3s;
+    }
+    .hero-dot.active {
+      background: #6abf6a;
+      transform: scale(1.3);
+    }
+
+    /* ===== SOCIAL MEDIA SECTION ===== */
+    .socmed-section { padding: 64px 40px; background: #f5f2ec; }
+    .socmed-section .section-header { display: flex; align-items: flex-end; justify-content: space-between; max-width: 860px; margin: 0 auto 32px; }
+    .socmed-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 860px; margin: 0 auto; }
+    .socmed-card { background: #fff; border-radius: 12px; overflow: hidden; border: 0.5px solid #d8d4ca; }
+    .socmed-card-img { height: 140px; display: flex; align-items: flex-end; justify-content: flex-start; padding: 10px; position: relative; }
+    .socmed-card-img-1 { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
+    .socmed-card-img-2 { background: linear-gradient(135deg, #1877f2, #0a4fa8); }
+    .socmed-card-img-3 { background: linear-gradient(135deg, #ff0000, #cc0000); }
+    .socmed-icon { font-size: 40px; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); opacity: 0.18; color: #fff; }
+    .socmed-badge { font-size: 10px; font-weight: 600; color: #fff; background: rgba(0,0,0,0.3); border-radius: 4px; padding: 3px 8px; border: 0.5px solid rgba(255,255,255,0.3); position: relative; z-index: 1; }
+    .socmed-card-body { padding: 14px 16px; }
+    .socmed-handle { font-size: 14px; font-weight: 500; color: #1c2e1c; margin-bottom: 4px; }
+    .socmed-desc { font-size: 12px; color: #7a7a6a; line-height: 1.6; margin-bottom: 8px; }
+    .socmed-meta { font-size: 11px; color: #9a9a8a; }
+    .socmed-follow {
+      display: inline-block; font-size: 12px; font-weight: 500; color: #fff;
+      background: #3d7a3d; border-radius: 6px; padding: 6px 14px;
+      text-decoration: none; margin-top: 8px; transition: background 0.2s;
+    }
+    .socmed-follow:hover { background: #4a9e4a; }
+
+    /* ===== RESPONSIVE OVERRIDE (harus di sini karena inline style lebih prioritas) ===== */
+    @media (max-width: 768px) {
+      .socmed-section { padding: 40px 20px; }
+      .socmed-section .section-header { flex-direction: column; align-items: flex-start; gap: 6px; max-width: 100%; }
+      .socmed-cards { grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; }
+      .socmed-card-img { height: 130px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-icon">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 6.5 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6.5 9 2 9 2Z" fill="#fff" opacity="0.9"/></svg>
+      </div>
+      <span class="nav-name">INLA SUMUT</span>
+    </div>
+    <div class="nav-links">
+      <a class="nav-link active" href="dashboard.html">Home</a>
+      <a class="nav-link" href="about.html">About Us</a>
+      <a class="nav-link" href="activities.html">Activities</a>
+      <a class="nav-btn" href="karir.html">Karir</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE DRAWER -->
+  <div class="nav-drawer" id="navDrawer">
+    <a class="nav-link active" href="dashboard.html">Home</a>
+    <a class="nav-link" href="about.html">About Us</a>
+    <a class="nav-link" href="activities.html">Activities</a>
+    <a class="nav-btn" href="karir.html">Karir</a>
+  </div>
+
+  <!-- HERO WITH SLIDER -->
+  <section class="hero">
+    <!-- Sliding backgrounds -->
+    <div class="hero-slides" id="heroSlides">
+      <div class="hero-slide hero-slide-1"></div>
+      <div class="hero-slide hero-slide-2"></div>
+      <div class="hero-slide hero-slide-3"></div>
+    </div>
+
+    <svg class="hero-mountains" viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="0,260 0,180 170,100 340,160 550,60 720,130 890,70 1100,140 1270,90 1440,130 1440,260" fill="#2d4a2d" opacity="0.7"/>
+      <polygon points="0,260 0,220 210,170 420,200 630,140 840,180 1050,150 1260,190 1440,160 1440,260" fill="#1c3a1c" opacity="0.85"/>
+    </svg>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-body">
+      <div class="hero-tag">
+        <svg width="13" height="13" viewBox="0 0 18 18" fill="none" style="margin-right:4px;"><path d="M9 2C9 2 4 6.5 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6.5 9 2 9 2Z" fill="#a8d8a8"/></svg>
+        International Nature Loving Association
+      </div>
+      <h1 class="hero-h1">Harmoni Manusia,<br>Alam & <em>Semesta</em></h1>
+      <p class="hero-p">Menyatukan generasi muda lintas budaya melalui seni, nilai moral, dan etika — membangun dunia yang damai dan penuh kasih.</p>
+      <div class="cta-row">
+        <a class="btn-green" href="about.html">&#9825; Kenali INLA Lebih Dalam</a>
+        <a class="btn-ghost" href="activities.html">&#9654; Lihat Kegiatan Kami</a>
+      </div>
+    </div>
+
+    <!-- Slider dots -->
+    <div class="hero-dots">
+      <div class="hero-dot active" onclick="goToSlide(0)"></div>
+      <div class="hero-dot" onclick="goToSlide(1)"></div>
+      <div class="hero-dot" onclick="goToSlide(2)"></div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-n">20+</div><div class="stat-l">Negara anggota</div></div>
+      <div class="stat"><div class="stat-n">2005</div><div class="stat-l">Berdiri sejak</div></div>
+      <div class="stat"><div class="stat-n">1.000+</div><div class="stat-l">Anggota aktif</div></div>
+      <div class="stat"><div class="stat-n">50+</div><div class="stat-l">Program kegiatan</div></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="about-grid">
+      <div class="about-left">
+        <div class="section-eyebrow">Tentang Kami</div>
+        <h2 class="about-h2">Satu keluarga,<br><em>satu dunia</em></h2>
+        <p class="about-p">INLA (The International Loving Association) adalah organisasi nirlaba yang menyebarkan nilai moral dan etika melalui seni budaya. Berdiri sejak 2005 di Hong Kong, kini hadir di lebih dari 20 negara.</p>
+        <p class="about-p">Dengan mendampingi generasi muda, INLA membangun jembatan antara budaya dan bangsa menuju kehidupan yang damai dan harmonis.</p>
+        <a class="about-link" href="about.html">Baca selengkapnya &rarr;</a>
+      </div>
+      <div class="about-right">
+        <div class="pillar">
+          <div class="pillar-icon">&#128101;</div>
+          <div><div class="pillar-title">Komunitas Global</div><div class="pillar-desc">Menghubungkan anggota dari 20+ negara dalam satu visi damai dan harmoni.</div></div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">&#127925;</div>
+          <div><div class="pillar-title">Seni & Budaya</div><div class="pillar-desc">Mengekspresikan nilai moral melalui tarian, musik, dan pertunjukan budaya.</div></div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">&#127979;</div>
+          <div><div class="pillar-title">Pendidikan Karakter</div><div class="pillar-desc">Program pembinaan generasi muda lewat nilai etika dan kepedulian alam.</div></div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">&#127758;</div>
+          <div><div class="pillar-title">Misi Perdamaian</div><div class="pillar-desc">Membangun harmoni lintas batas melalui kegiatan bersama antar bangsa.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTIKEL (dulu Highlight Kegiatan) -->
+  <section class="activities-section">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">Konten Terbaru</div>
+        <h2 class="section-h2">Artikel</h2>
+      </div>
+      <a class="see-all" href="activities.html">Lihat semua &rarr;</a>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-img card-img-1">
+          <span class="card-tag">Pendidikan</span>
+          <div class="card-img-placeholder">&#127979;</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">IGTS — INLA Goes To School</div>
+          <div class="card-desc">Program kunjungan ke sekolah untuk menanamkan nilai moral dan kecintaan terhadap alam.</div>
+          <div class="card-meta">&#128197; Rutin bulanan</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img card-img-2">
+          <span class="card-tag">Seni Budaya</span>
+          <div class="card-img-placeholder">&#127925;</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Tarian Senam Kasih Semesta</div>
+          <div class="card-desc">Pertunjukan tarian dan senam massal yang menggabungkan seni tradisional lintas budaya.</div>
+          <div class="card-meta">&#128205; Taiwan & Indonesia</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img card-img-3">
+          <span class="card-tag">Pertunjukan</span>
+          <div class="card-img-placeholder">&#127908;</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Maitri Voice of Harmony</div>
+          <div class="card-desc">Konser paduan suara lintas budaya yang menyebarkan pesan perdamaian dan kasih sayang.</div>
+          <div class="card-meta">&#128101; Kolaborasi internasional</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOSIAL MEDIA -->
+  <section class="socmed-section">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">Ikuti Kami</div>
+        <h2 class="section-h2">Sosial Media</h2>
+      </div>
+      <a class="see-all" href="#">Lihat semua &rarr;</a>
+    </div>
+    <div class="socmed-cards">
+      <div class="socmed-card">
+        <div class="socmed-card-img socmed-card-img-1">
+          <div class="socmed-icon">&#128247;</div>
+          <span class="socmed-badge">Instagram</span>
+        </div>
+        <div class="socmed-card-body">
+          <div class="socmed-handle">@inlasumut</div>
+          <div class="socmed-desc">Update kegiatan, foto dokumentasi, dan inspirasi harian dari INLA SUMUT.</div>
+          <div class="socmed-meta">&#128101; 4.200+ Followers</div>
+          <a class="socmed-follow" href="#">Follow</a>
+        </div>
+      </div>
+      <div class="socmed-card">
+        <div class="socmed-card-img socmed-card-img-2">
+          <div class="socmed-icon">&#128218;</div>
+          <span class="socmed-badge">Facebook</span>
+        </div>
+        <div class="socmed-card-body">
+          <div class="socmed-handle">INLA SUMUT Official</div>
+          <div class="socmed-desc">Berita terkini, live streaming kegiatan, dan komunitas anggota INLA SUMUT.</div>
+          <div class="socmed-meta">&#128077; 8.500+ Likes</div>
+          <a class="socmed-follow" href="#">Like Page</a>
+        </div>
+      </div>
+      <div class="socmed-card">
+        <div class="socmed-card-img socmed-card-img-3">
+          <div class="socmed-icon">&#127909;</div>
+          <span class="socmed-badge">YouTube</span>
+        </div>
+        <div class="socmed-card-body">
+          <div class="socmed-handle">INLA SUMUT Channel</div>
+          <div class="socmed-desc">Video dokumentasi kegiatan, pagelaran, dan konten edukatif INLA SUMUT.</div>
+          <div class="socmed-meta">&#127381; 1.200+ Subscribers</div>
+          <a class="socmed-follow" href="#">Subscribe</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div class="nav-icon" style="width:28px;height:28px;">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 6.5 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6.5 9 2 9 2Z" fill="#fff" opacity="0.9"/></svg>
+          </div>
+          <span class="footer-brand-name">INLA SUMUT</span>
+        </div>
+        <p class="footer-tagline">Membangun harmoni antara manusia, alam, dan semesta — 世界一家</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigasi</div>
+        <a class="footer-link" href="dashboard.html">Home</a>
+        <a class="footer-link" href="about.html">About Us</a>
+        <a class="footer-link" href="activities.html">Activities</a>
+        <a class="footer-link" href="karir.html">Karir</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Kontak</div>
+        <a class="footer-link" href="mailto:info@inlasumut.org">&#9993; info@inlasumut.org</a>
+        <a class="footer-link" href="#">&#128241; WhatsApp</a>
+        <a class="footer-link" href="#">&#128247; Instagram</a>
+        <a class="footer-link" href="#">&#128179; Facebook</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">Copyright &copy; INLA SUMUT 2026</span>
+      <div class="socials">
+        <a class="social-btn" href="#">IG</a>
+        <a class="social-btn" href="#">FB</a>
+        <a class="social-btn" href="#">YT</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const btn = document.getElementById('hamburger');
+      const drawer = document.getElementById('navDrawer');
+      btn.classList.toggle('open');
+      drawer.classList.toggle('open');
+    }
+    // Close drawer on link click
+    document.querySelectorAll('.nav-drawer a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.getElementById('hamburger').classList.remove('open');
+        document.getElementById('navDrawer').classList.remove('open');
+      });
+    });
+  </script>
+
+  <!-- HERO SLIDER SCRIPT -->
+  <script>
+    let current = 0;
+    const total = 3;
+    const slides = document.getElementById('heroSlides');
+    const dots = document.querySelectorAll('.hero-dot');
+
+    function goToSlide(index) {
+      current = index;
+      slides.style.transform = 'translateX(-' + (100 / total * current) + '%)';
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    // Auto-slide setiap 3 detik
+    setInterval(() => {
+      goToSlide((current + 1) % total);
+    }, 3000);
+  </script>
+
+</body>
+</html>

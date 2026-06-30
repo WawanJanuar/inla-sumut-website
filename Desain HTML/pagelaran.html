@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagelaran Senam Kasih Semesta | INLA SUMUT</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .breadcrumb { padding: 14px 40px; background: #fff; border-bottom: 0.5px solid #d8d4ca; display: flex; align-items: center; gap: 6px; font-size: 12px; color: #9a9a8a; }
+    .breadcrumb a { color: #3d7a3d; text-decoration: none; }
+    .breadcrumb-sep { color: #c8c8b8; }
+    .breadcrumb-current { color: #5a5a4a; font-weight: 500; }
+
+    .hero-detail { position: relative; min-height: 480px; display: flex; align-items: flex-end; overflow: hidden; }
+    .hero-video-bg { position: absolute; inset: 0; z-index: 0; background: linear-gradient(135deg, #1c2e1c 0%, #3d7a3d 55%, #4a9e4a 100%); display: flex; align-items: center; justify-content: center; font-size: 120px; color: rgba(255,255,255,0.06); }
+    .hero-detail-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(10,22,10,0.82) 0%, rgba(10,22,10,0.45) 50%, rgba(10,22,10,0.15) 100%); }
+    .hero-detail-content { position: relative; z-index: 2; padding: 56px 10% 56px; max-width: 700px; }
+    .detail-eyebrow { font-size: 11px; font-weight: 600; color: #7ec87e; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; }
+    .detail-h1 { font-size: 48px; font-weight: 300; color: #fff; line-height: 1.15; margin-bottom: 16px; }
+    .detail-h1 em { color: #7ec87e; font-style: normal; font-weight: 600; }
+    .detail-hero-p { font-size: 15px; color: rgba(255,255,255,0.68); line-height: 1.8; margin-bottom: 24px; max-width: 520px; }
+    .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .detail-tag { font-size: 11px; font-weight: 500; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); border: 0.5px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 5px 13px; backdrop-filter: blur(6px); }
+
+    .stats-strip-detail { background: #1c2e1c; display: flex; justify-content: center; }
+    .strip-stat { padding: 18px 48px; text-align: center; border-right: 0.5px solid rgba(255,255,255,0.1); }
+    .strip-stat:last-child { border-right: none; }
+    .strip-n { font-size: 22px; font-weight: 500; color: #7ec87e; }
+    .strip-l { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    .gallery-wrap { padding: 40px 10% 0; background: #fff; }
+    .gallery-eyebrow { font-size: 11px; font-weight: 500; color: #3d7a3d; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
+    .gallery-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 150px 150px; gap: 8px; }
+    .g-main { grid-row: 1 / 3; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .g-thumb { border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
+    .g-more-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; }
+    .g-more-text { font-size: 20px; font-weight: 500; color: #fff; }
+    .g1 { background: linear-gradient(135deg, #2a0a3a, #6a2a9a); }
+    .g2 { background: linear-gradient(135deg, #3a0a5a, #9a2add); }
+    .g3 { background: linear-gradient(135deg, #1c2e1c, #3d7a3d); }
+    .g4 { background: linear-gradient(135deg, #3a2000, #8a5000); }
+    .g5 { background: linear-gradient(135deg, #0a1c3a, #1a4a8a); }
+    .g-placeholder { font-size: 48px; color: rgba(255,255,255,0.1); }
+
+    .detail-main { display: grid; grid-template-columns: 55% 45%; gap: 32px; padding: 40px 10%; background: #fff; }
+    .detail-left { display: flex; flex-direction: column; gap: 32px; }
+    .content-divider { height: 0.5px; background: #e8e4da; }
+    .sec-eyebrow { font-size: 11px; font-weight: 500; color: #3d7a3d; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+    .sec-h2 { font-size: 22px; font-weight: 500; color: #1c2e1c; margin-bottom: 12px; }
+    .sec-h2 em { color: #3d7a3d; font-style: normal; }
+    .sec-p { font-size: 14px; color: #5a5a4a; line-height: 1.8; margin-bottom: 10px; }
+
+    .feature-card {
+      background: linear-gradient(135deg, #1c2e1c, #2d4a2d);
+      border-radius: 16px; padding: 24px;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before { content:''; position:absolute; top:-30px; right:-30px; width:130px; height:130px; border-radius:50%; background:rgba(125,216,125,0.08); }
+    .feature-label { font-size: 10px; font-weight: 500; color: #7ec87e; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; position: relative; z-index: 1; }
+    .feature-title { font-size: 18px; font-weight: 500; color: #fff; margin-bottom: 8px; position: relative; z-index: 1; }
+    .feature-desc { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.8; position: relative; z-index: 1; }
+    .feature-items { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; position: relative; z-index: 1; }
+    .feature-item { background: rgba(255,255,255,0.07); border: 0.5px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 14px; }
+    .feature-item-icon { font-size: 18px; margin-bottom: 6px; }
+    .feature-item-title { font-size: 12px; font-weight: 500; color: #fff; margin-bottom: 2px; }
+    .feature-item-desc { font-size: 11px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+    .cat-row { display: flex; gap: 12px; }
+    .cat-card { flex: 1; background: #f5f2ec; border: 0.5px solid #d8d4ca; border-radius: 10px; padding: 16px; text-align: center; }
+    .cat-icon { font-size: 24px; margin-bottom: 6px; }
+    .cat-title { font-size: 14px; font-weight: 500; color: #1c2e1c; margin-bottom: 4px; }
+    .cat-desc { font-size: 12px; color: #7a7a6a; line-height: 1.5; }
+
+    .detail-sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .sidebar-card { background: #f5f2ec; border: 0.5px solid #d8d4ca; border-radius: 14px; padding: 20px; }
+    .sidebar-title { font-size: 13px; font-weight: 500; color: #1c2e1c; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 0.5px solid #d8d4ca; }
+    .history-list { display: flex; flex-direction: column; }
+    .history-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid #e8e4da; cursor: pointer; transition: opacity 0.15s; text-decoration: none; }
+    .history-item:hover { opacity: 0.75; }
+    .history-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .history-year-badge { width: 38px; height: 38px; border-radius: 9px; background: #e0eed8; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #3d7a3d; flex-shrink: 0; text-align: center; line-height: 1.3; }
+    .history-info { flex: 1; }
+    .history-title { font-size: 12px; font-weight: 500; color: #1c2e1c; margin-bottom: 2px; }
+    .history-meta { font-size: 10px; color: #9a9a8a; }
+    .history-arrow { font-size: 12px; color: #3d7a3d; }
+
+    .related-section { padding: 40px 10%; background: #f5f2ec; border-top: 0.5px solid #d8d4ca; }
+    .related-h2 { font-size: 22px; font-weight: 500; color: #1c2e1c; margin-bottom: 20px; }
+    .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .related-card { background: #fff; border: 0.5px solid #d8d4ca; border-radius: 12px; overflow: hidden; }
+    .related-img { height: 110px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: rgba(255,255,255,0.12); }
+    .ri1 { background: linear-gradient(135deg, #1c3a1c, #3d7a3d); }
+    .ri2 { background: linear-gradient(135deg, #4a2a00, #b88000); }
+    .ri3 { background: linear-gradient(135deg, #0a1c3a, #1a4a8a); }
+    .related-body { padding: 14px 16px; }
+    .related-tag-badge { font-size: 9px; font-weight: 500; background: #e0eed8; color: #3d7a3d; border-radius: 4px; padding: 2px 7px; margin-bottom: 7px; display: inline-block; }
+    .related-title { font-size: 14px; font-weight: 500; color: #1c2e1c; margin-bottom: 5px; }
+    .related-desc { font-size: 12px; color: #7a7a6a; line-height: 1.6; margin-bottom: 10px; }
+    .related-link { font-size: 12px; font-weight: 500; color: #3d7a3d; text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .breadcrumb { padding: 10px 20px; }
+      .hero-detail { min-height: 380px; }
+      .hero-detail-content { padding: 40px 20px; }
+      .detail-h1 { font-size: 32px; }
+      .stats-strip-detail { flex-wrap: wrap; }
+      .strip-stat { padding: 14px 24px; border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.1); }
+      .gallery-wrap { padding: 32px 20px 0; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .g-main { grid-row: auto; }
+      .detail-main { grid-template-columns: 1fr; padding: 32px 20px; }
+      .feature-items { grid-template-columns: 1fr; }
+      .cat-row { flex-direction: column; }
+      .related-section { padding: 32px 20px; }
+      .related-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-icon">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 6.5 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6.5 9 2 9 2Z" fill="#fff" opacity="0.9"/></svg>
+      </div>
+      <span class="nav-name">INLA SUMUT</span>
+    </div>
+    <div class="nav-links">
+      <a class="nav-link" href="dashboard.html">Home</a>
+      <a class="nav-link" href="about.html">About Us</a>
+      <a class="nav-link active" href="activities.html">Activities</a>
+      <a class="nav-btn" href="karir.html">Karir</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-drawer" id="navDrawer">
+    <a class="nav-link" href="dashboard.html">Home</a>
+    <a class="nav-link" href="about.html">About Us</a>
+    <a class="nav-link active" href="activities.html">Activities</a>
+    <a class="nav-btn" href="karir.html" style="margin-top:8px;text-align:center;">Karir</a>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="activities.html">Activities</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Pagelaran Senam Kasih Semesta</span>
+  </div>
+
+  <!-- HERO VIDEO OVERLAY -->
+  <div class="hero-detail">
+    <div class="hero-video-bg">🎪</div>
+    <div class="hero-detail-overlay"></div>
+    <div class="hero-detail-content">
+      <div class="detail-eyebrow">04 — Pagelaran Seni</div>
+      <h1 class="detail-h1">Pagelaran <em>Senam Kasih</em> Semesta</h1>
+      <p class="detail-hero-p">Pertunjukan seni budaya akbar INLA SUMUT yang menyatukan ribuan peserta senam dalam satu panggung megah, mempersembahkan harmoni gerakan dan nilai universal kepada seluruh Sumatera Utara.</p>
+      <div class="detail-tags">
+        <span class="detail-tag">Pagelaran Tahunan</span>
+        <span class="detail-tag">Ribuan Peserta</span>
+        <span class="detail-tag">Sumatera Utara</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip-detail">
+    <div class="strip-stat"><div class="strip-n">3.000+</div><div class="strip-l">Peserta senam</div></div>
+    <div class="strip-stat"><div class="strip-n">10.000+</div><div class="strip-l">Penonton hadir</div></div>
+    <div class="strip-stat"><div class="strip-n">2012</div><div class="strip-l">Tahun pertama</div></div>
+    <div class="strip-stat"><div class="strip-n">15+</div><div class="strip-l">Kota peserta</div></div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery-wrap">
+    <div class="gallery-eyebrow">Dokumentasi Kegiatan</div>
+    <div class="gallery-grid">
+      <div class="g-main g1"><span class="g-placeholder">🎪</span></div>
+      <div class="g-thumb g2"></div>
+      <div class="g-thumb g3"></div>
+      <div class="g-thumb g4"></div>
+      <div class="g-thumb g5">
+        <div class="g-more-overlay"><div class="g-more-text">+20</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="detail-main">
+
+    <div class="detail-left">
+
+      <div>
+        <div class="sec-eyebrow">Tentang Program</div>
+        <h2 class="sec-h2">Apa itu <em>Pagelaran SKS</em>?</h2>
+        <p class="sec-p">Pagelaran Senam Kasih Semesta adalah puncak tahunan dari seluruh program senam INLA SUMUT — sebuah pertunjukan massal yang mempertemukan ribuan peserta dari seluruh penjuru Sumatera Utara dalam satu panggung yang megah dan penuh makna.</p>
+        <p class="sec-p">Lebih dari sekadar penampilan senam, pagelaran ini adalah manifestasi nyata dari nilai "dunia satu keluarga" — di mana setiap gerakan menjadi bahasa universal yang melampaui batas budaya, usia, dan latar belakang.</p>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div class="feature-card">
+        <div class="feature-label">Keunggulan Pagelaran</div>
+        <div class="feature-title">Pesta Seni & Harmoni Terbesar INLA</div>
+        <div class="feature-desc">Pagelaran SKS menggabungkan seni pertunjukan, senam massal, dan pesan nilai kehidupan dalam satu acara spektakuler yang dinantikan setiap tahun.</div>
+        <div class="feature-items">
+          <div class="feature-item">
+            <div class="feature-item-icon">🏟️</div>
+            <div class="feature-item-title">Senam Massal</div>
+            <div class="feature-item-desc">Ribuan peserta bergerak dalam harmoni yang terkoordinasi.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">🎭</div>
+            <div class="feature-item-title">Pertunjukan Seni</div>
+            <div class="feature-item-desc">Tari, drama, dan seni budaya dari berbagai daerah Sumut.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">🌿</div>
+            <div class="feature-item-title">Pesan Nilai</div>
+            <div class="feature-item-desc">Setiap segmen mengandung makna harmoni alam dan semesta.</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-item-icon">🎆</div>
+            <div class="feature-item-title">Grand Finale</div>
+            <div class="feature-item-desc">Penutupan spektakuler yang selalu meninggalkan kesan mendalam.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <div>
+        <div class="sec-eyebrow">Segmen Pagelaran</div>
+        <h2 class="sec-h2">Tiga segmen <em>utama</em></h2>
+        <div class="cat-row">
+          <div class="cat-card">
+            <div class="cat-icon">🌅</div>
+            <div class="cat-title">Pembukaan</div>
+            <div class="cat-desc">Senam massal pembuka oleh seluruh peserta bersama-sama.</div>
+          </div>
+          <div class="cat-card">
+            <div class="cat-icon">🎪</div>
+            <div class="cat-title">Pementasan</div>
+            <div class="cat-desc">Penampilan seni dari tiap delegasi kota dan komunitas.</div>
+          </div>
+          <div class="cat-card">
+            <div class="cat-icon">✨</div>
+            <div class="cat-title">Penutupan</div>
+            <div class="cat-desc">Grand finale bersama seluruh peserta dan tamu undangan.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="detail-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-title">History Kegiatan</div>
+        <div class="history-list">
+          <a class="history-item" href="#">
+            <div class="history-year-badge">2025</div>
+            <div class="history-info">
+              <div class="history-title">Pagelaran SKS XIV</div>
+              <div class="history-meta">3.500 peserta · Lapangan Merdeka Medan</div>
+            </div>
+            <div class="history-arrow">→</div>
+          </a>
+          <a class="history-item" href="#">
+            <div class="history-year-badge">2024</div>
+            <div class="history-info">
+              <div class="history-title">Pagelaran SKS XIII</div>
+              <div class="history-meta">3.200 peserta · Stadion Teladan Medan</div>
+            </div>
+            <div class="history-arrow">→</div>
+          </a>
+          <a class="history-item" href="#">
+            <div class="history-year-badge">2023</div>
+            <div class="history-info">
+              <div class="history-title">Pagelaran SKS XII</div>
+              <div class="history-meta">3.000 peserta · GOR Serbaguna Sumut</div>
+            </div>
+            <div class="history-arrow">→</div>
+          </a>
+          <a class="history-item" href="#">
+            <div class="history-year-badge">2022</div>
+            <div class="history-info">
+              <div class="history-title">Pagelaran SKS XI</div>
+              <div class="history-meta">2.800 peserta · Lapangan Benteng</div>
+            </div>
+            <div class="history-arrow">→</div>
+          </a>
+          <a class="history-item" href="#">
+            <div class="history-year-badge">2021</div>
+            <div class="history-info">
+              <div class="history-title">Pagelaran SKS X</div>
+              <div class="history-meta">2.000 peserta · Format hybrid</div>
+            </div>
+            <div class="history-arrow">→</div>
+          </a>
+          <a class="history-item" href="#">
+            <div class="history-year-badge" style="font-size:9px;">2012–20</div>
+            <div class="history-info">
+              <div class="history-title">Pagelaran SKS I–IX</div>
+              <div class="history-meta">Perdana & pengembangan awal</div>
+            </div>
+            <div class="history-arrow">→</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RELATED -->
+  <div class="related-section">
+    <h2 class="related-h2">Kegiatan lainnya</h2>
+    <div class="related-grid">
+      <div class="related-card">
+        <div class="related-img ri1">🏫</div>
+        <div class="related-body">
+          <span class="related-tag-badge">Pendidikan</span>
+          <div class="related-title">IGTS — INLA Goes To School</div>
+          <div class="related-desc">INLA hadir ke sekolah membawa nilai moral dan semangat pagi.</div>
+          <a class="related-link" href="igts.html">Read more →</a>
+        </div>
+      </div>
+      <div class="related-card">
+        <div class="related-img ri2">🏆</div>
+        <div class="related-body">
+          <span class="related-tag-badge">Kompetisi</span>
+          <div class="related-title">IGT — INLA Got Talent</div>
+          <div class="related-desc">Ajang bakat terbesar untuk talenta muda Sumatera Utara.</div>
+          <a class="related-link" href="igt.html">Read more →</a>
+        </div>
+      </div>
+      <div class="related-card">
+        <div class="related-img ri3">🎙️</div>
+        <div class="related-body">
+          <span class="related-tag-badge">Konser</span>
+          <div class="related-title">Maitri Voice of Harmony</div>
+          <div class="related-desc">Panggung konser bergengsi bagi artis cilik Sumatera Utara.</div>
+          <a class="related-link" href="mvoh.html">Read more →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div class="nav-icon" style="width:28px;height:28px;">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 6.5 4 10.5C4 13.5 6.5 16 9 16C11.5 16 14 13.5 14 10.5C14 6.5 9 2 9 2Z" fill="#fff" opacity="0.9"/></svg>
+          </div>
+          <span class="footer-brand-name">INLA SUMUT</span>
+        </div>
+        <p class="footer-tagline">Membangun harmoni antara manusia, alam, dan semesta — 世界一家</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigasi</div>
+        <a class="footer-link" href="dashboard.html">Home</a>
+        <a class="footer-link" href="about.html">About Us</a>
+        <a class="footer-link" href="activities.html">Activities</a>
+        <a class="footer-link" href="karir.html">Karir</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Kontak</div>
+        <a class="footer-link" href="mailto:info@inlasumut.org">✉ info@inlasumut.org</a>
+        <a class="footer-link" href="#">📱 WhatsApp</a>
+        <a class="footer-link" href="#">📸 Instagram</a>
+        <a class="footer-link" href="#">📘 Facebook</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">Copyright &copy; INLA SUMUT 2026</span>
+      <div class="socials">
+        <a class="social-btn" href="#">IG</a>
+        <a class="social-btn" href="#">FB</a>
+        <a class="social-btn" href="#">YT</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('navDrawer').classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>
