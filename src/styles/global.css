@@ -117,47 +117,50 @@ body {
 
 /* ── Glass card ─────────────────────────────────────────────── */
 .hero-glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(4px) brightness(1.02);
-  -webkit-backdrop-filter: blur(4px) brightness(1.02);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-top-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(36px) saturate(200%);
+  -webkit-backdrop-filter: blur(36px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 24px;
   padding: 48px 56px;
   max-width: 640px;
   margin: 0 auto;
   text-align: center;
   box-shadow:
-    0 2px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    0 30px 70px rgba(28, 46, 28, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
   position: relative;
   z-index: 2;
+  overflow: hidden;
   animation: glassCardIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 .hero-glass-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 15%; right: 15%;
-  height: 1px;
+  top: 0; left: 0; right: 0;
+  height: 50%;
   background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255, 255, 255, 0.6) 30%,
-    rgba(255, 255, 255, 0.6) 70%,
-    transparent
+    to bottom,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 45%,
+    rgba(255, 255, 255, 0) 100%
   );
+  pointer-events: none;
 }
 .hero-glass-card::after {
   content: '';
   position: absolute;
-  bottom: -1px; left: 20%; right: 20%;
-  height: 1px;
+  top: -70%; left: -25%;
+  width: 55%; height: 240%;
   background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255, 255, 255, 0.15) 50%,
-    transparent
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.35) 45%,
+    rgba(255, 255, 255, 0) 90%
   );
+  transform: rotate(8deg);
+  filter: blur(2px);
+  pointer-events: none;
 }
 @keyframes glassCardIn {
   from { opacity: 0; transform: translateY(24px); }
@@ -185,6 +188,25 @@ body {
 .hero-h1 { font-size: 44px; font-weight: 500; color: #fff; line-height: 1.2; margin-bottom: 14px; }
 .hero-h1 em { color: #7dd87d; font-style: normal; }
 .hero-p { font-size: 15px; color: rgba(255,255,255,0.68); line-height: 1.8; max-width: 500px; margin: 0 auto 34px; }
+
+/* Teks di dalam hero-glass-card (background putih) butuh kontras gelap */
+.hero-glass-card { color: #1c2e1c; }
+.hero-glass-card .hero-tag {
+  position: relative; z-index: 1;
+  color: #2e6b2e;
+  background: rgba(61,122,61,0.1);
+  border-color: rgba(61,122,61,0.3);
+}
+.hero-glass-card .hero-h1 { position: relative; z-index: 1; color: #1c2e1c; }
+.hero-glass-card .hero-h1 em { color: #3d7a3d; }
+.hero-glass-card .hero-p { position: relative; z-index: 1; color: rgba(28,46,28,0.7); }
+.hero-glass-card .cta-row { position: relative; z-index: 1; }
+.hero-glass-card .btn-ghost {
+  color: #1c2e1c;
+  background: rgba(28,46,28,0.05);
+  border-color: rgba(28,46,28,0.2);
+}
+.hero-glass-card .btn-ghost:hover { background: rgba(28,46,28,0.1); }
 .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 .btn-green {
   font-size: 14px; font-weight: 500; color: #fff;
