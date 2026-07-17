@@ -1,0 +1,908 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Navbar from '../../../components/Navbar.astro';
+import Footer from '../../../components/Footer.astro';
+import AlbumHeroBackground from '../../../components/AlbumHeroBackground.astro';
+import { audioAlbums, formatDuration, formatTotalDuration, type AudioAlbum } from '../../../data/albums';
+import { getAlbumLyrics } from '../../../data/lyrics';
+
+export async function getStaticPaths() {
+  return audioAlbums.map((album) => ({
+    params: { slug: album.slug },
+    props: { album },
+  }));
+}
+
+interface Props {
+  album: AudioAlbum;
+}
+
+const { album } = Astro.props;
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const titleWords = album.title.trim().split(/\s+/);
+const titleLast = titleWords.length > 1 ? (titleWords.pop() as string) : '';
+const titleRest = titleWords.join(' ');
+
+const totalDurationSeconds = album.tracks.reduce((sum, t) => sum + t.durationSeconds, 0);
+const metaParts = [
+  album.language,
+  album.year ? String(album.year) : null,
+  `${album.tracks.length} Lagu`,
+  formatTotalDuration(totalDurationSeconds),
+].filter(Boolean);
+
+const trackLyrics = getAlbumLyrics(album.slug);
+---
+
+<Layout
+  title={`${album.title} — MV & Music — INLA SUMUT`}
+  description={`Dengarkan album ${album.title} — ${album.tracks.length} lagu, INLA SUMUT.`}
+  ogImage={album.thumbnail}
+>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400..800&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+  </Fragment>
+
+  <Navbar />
+
+  <div class="album-page">
+    <!-- HERO -->
+    <section class="audio-hero" id="audio-hero">
+      <AlbumHeroBackground heroId="audio-hero" />
+
+      <div class="audio-hero-inner">
+        <div class="disc-wrap">
+          <button
+            class="disc"
+            id="disc-btn"
+            type="button"
+            aria-label="Putar atau jeda album"
+            style={`background-image:url('${BASE}${album.thumbnail}')`}
+          >
+            <span class="disc-overlay" id="disc-overlay">▶ Putar</span>
+          </button>
+        </div>
+
+        <div class="hero-info">
+          <a href={`${BASE}/mv-music`} class="hero-back">← Kembali ke Koleksi Album</a>
+          <p class="hero-eyebrow">Koleksi Album · Audio</p>
+          <h1 class="hero-title">{titleRest} <em>{titleLast}</em></h1>
+          <p class="hero-meta">{metaParts.join(' · ')}</p>
+
+          <button class="play-all-btn" id="play-all-btn" type="button">
+            <span class="play-all-icon" id="play-all-icon">▶</span>
+            <span id="play-all-label">Putar Album</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="album-marquee" aria-hidden="true">
+      <div class="marquee-track">
+        {[0, 1].map(() => (
+          <div class="marquee-group">
+            {Array.from({ length: 8 }).map(() => (
+              <span class="marquee-item">
+                {album.title} <span class="marquee-dot">♪</span> {album.tracks.length} Lagu <span class="marquee-dot">♪</span>
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- DAFTAR LAGU -->
+    <section class="track-list-section">
+      <div class="track-list-header">
+        <h2>Daftar Lagu</h2>
+        <span class="track-list-count">{String(album.tracks.length).padStart(2, '0')} TRACKS</span>
+      </div>
+
+      <div class="track-list" id="track-list">
+        {album.tracks.map((track, i) => (
+          <div
+            class="track-row"
+            data-index={i}
+            data-title={track.title}
+            data-url={`${BASE}${track.url}`}
+            data-duration={track.durationSeconds}
+            data-lyrics={JSON.stringify(trackLyrics[track.title] ?? [])}
+            role="button"
+            tabindex="0"
+          >
+            <span class="track-num">
+              <span class="track-num-text">{String(i + 1).padStart(2, '0')}</span>
+              <span class="track-eq" aria-hidden="true"><span></span><span></span><span></span></span>
+            </span>
+
+            <div class="track-info">
+              <div class="track-title">{track.title}</div>
+              <div class="track-lang">{track.language}</div>
+            </div>
+
+            <span class="track-duration">{formatDuration(track.durationSeconds)}</span>
+
+            <button class="lyrics-btn" type="button" aria-label={`Lirik ${track.title}`}>Aa</button>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- STICKY PLAYER — WAJIB di dalam .album-page (bukan sibling setelahnya)
+         supaya custom property warna (--lime-400, --cream, dst) yang didefinisikan
+         di .album-page bisa di-inherit ke sini. Kalau dipindah ke luar, var(--...)
+         gak resolve ke apa-apa dan tombol/teks jatuh ke warna default site (#1c2e1c). -->
+    <div class="sticky-player" id="sticky-player">
+      <div class="sticky-player-inner">
+        <div class="sp-track-info">
+          <img src={`${BASE}${album.thumbnail}`} alt={album.title} class="sp-cover" />
+          <div class="sp-text">
+            <div class="sp-title" id="sp-title">{album.tracks[0]?.title}</div>
+            <div class="sp-album">{album.title}</div>
+          </div>
+        </div>
+
+        <div class="sp-controls">
+          <button class="sp-btn sp-btn-skip" id="sp-prev" type="button" aria-label="Lagu sebelumnya">⏮</button>
+          <button class="sp-btn sp-btn-play" id="sp-play" type="button" aria-label="Putar atau jeda">▶</button>
+          <button class="sp-btn sp-btn-skip" id="sp-next" type="button" aria-label="Lagu berikutnya">⏭</button>
+        </div>
+
+        <div class="sp-progress">
+          <span class="sp-time" id="sp-current">0:00</span>
+          <div class="sp-bar" id="sp-bar">
+            <div class="sp-bar-fill" id="sp-bar-fill"></div>
+            <div class="sp-bar-handle" id="sp-bar-handle"></div>
+          </div>
+          <span class="sp-time" id="sp-total">{formatDuration(album.tracks[0]?.durationSeconds ?? 0)}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LYRIC PANEL — bottom sheet, WAJIB di dalam .album-page (sama alasannya
+         dengan sticky player: butuh inherit var(--lime-400) dkk). -->
+    <div class="lyric-overlay" id="lyric-overlay">
+      <div class="lyric-panel" id="lyric-panel" data-album-title={album.title}>
+        <div class="lyric-handle" aria-hidden="true"></div>
+
+        <div class="lyric-header">
+          <div class="lyric-header-text">
+            <p class="lyric-track-title" id="lyric-track-title"></p>
+            <p class="lyric-label" id="lyric-label"></p>
+          </div>
+          <button class="lyric-close" id="lyric-close" type="button" aria-label="Tutup lirik">✕</button>
+        </div>
+
+        <div class="lyric-body" id="lyric-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <Footer />
+
+  <audio id="audio-el" preload="none"></audio>
+</Layout>
+
+<style>
+  .album-page {
+    --green-950: #0E2417;
+    --green-900: #14301F;
+    --green-800: #1F6E3D;
+    --lime-400: #7AC943;
+    --lime-300: #A3E06B;
+    --cream: #F4F1E6;
+    --cream-dim: #CFD6C9;
+    --gold: #E3B24F;
+    --line: rgba(244, 241, 230, 0.14);
+    --glass: rgba(244, 241, 230, 0.06);
+
+    background: var(--green-950);
+    padding-bottom: 88px; /* ruang biar konten terakhir gak ketutup sticky player */
+  }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .audio-hero {
+    position: relative;
+    min-height: 56vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 110px 10% 64px;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(122, 201, 67, 0.12) 0%, transparent 60%),
+      linear-gradient(180deg, var(--green-900) 0%, var(--green-950) 100%);
+  }
+
+  .audio-hero-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 56px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .disc-wrap { flex-shrink: 0; }
+
+  .disc {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 6px rgba(244, 241, 230, 0.06);
+    animation: discSpin 14s linear infinite;
+    animation-play-state: paused;
+  }
+  .disc.is-playing { animation-play-state: running; }
+
+  @keyframes discSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .disc-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(14, 36, 23, 0.55);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+  .disc:hover .disc-overlay { opacity: 1; }
+
+  .hero-info { min-width: 0; }
+
+  .hero-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cream-dim);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    margin-bottom: 24px;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .hero-back:hover { color: var(--cream); border-color: var(--lime-400); background: var(--glass); }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lime-300);
+    margin: 0 0 16px;
+  }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.08;
+    color: var(--cream);
+    margin: 0 0 16px;
+  }
+  .hero-title em { font-style: italic; color: var(--lime-400); }
+
+  .hero-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--cream-dim);
+    margin: 0 0 32px;
+  }
+
+  .play-all-btn {
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    background: var(--lime-400);
+    color: var(--green-950);
+    border: none;
+    padding: 16px 32px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .play-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(122, 201, 67, 0.35);
+  }
+  .play-all-icon { font-size: 12px; }
+  .play-all-btn.pulse::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2px solid var(--lime-400);
+    animation: pulseRing 0.65s ease-out;
+  }
+  @keyframes pulseRing {
+    from { opacity: 0.9; transform: scale(1); }
+    to   { opacity: 0; transform: scale(1.7); }
+  }
+
+  @media (max-width: 768px) {
+    .audio-hero { padding: 90px 20px 48px; min-height: auto; }
+    .audio-hero-inner { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 28px; }
+    .disc { width: 160px; height: 160px; }
+    .hero-title { font-size: clamp(28px, 8vw, 40px); }
+    .hero-meta { font-size: 13px; margin-bottom: 24px; }
+    .hero-back { margin-bottom: 18px; }
+    .play-all-btn { padding: 14px 28px; font-size: 14px; }
+  }
+
+  /* ============================================================
+     MARQUEE (pola sama dengan halaman video)
+     ============================================================ */
+  .album-marquee {
+    position: relative;
+    overflow: hidden;
+    background: var(--green-950);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  .marquee-track { display: flex; width: max-content; animation: marqueeScroll 60s linear infinite; }
+  .marquee-group { display: flex; flex-shrink: 0; }
+  .marquee-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: var(--cream-dim);
+    padding-right: 24px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .marquee-dot { color: var(--lime-400); padding: 0 12px; }
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (max-width: 768px) {
+    .marquee-item { font-size: 11px; }
+  }
+
+  /* ============================================================
+     DAFTAR LAGU
+     ============================================================ */
+  .track-list-section { max-width: 1000px; margin: 0 auto; padding: 72px 24px 96px; }
+
+  .track-list-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 18px;
+    margin-bottom: 8px;
+  }
+  .track-list-header h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 28px; color: var(--cream); margin: 0; }
+  .track-list-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: var(--cream-dim); }
+
+  .track-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 40px;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease, padding-left 0.2s ease;
+  }
+  .track-row:hover { background: var(--glass); padding-left: 20px; }
+  .track-row.is-playing { background: linear-gradient(90deg, rgba(122, 201, 67, 0.14), transparent 70%); }
+  .track-row.is-playing .track-title { color: var(--lime-300); }
+
+  .track-num { position: relative; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+  .track-num-text { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--cream-dim); opacity: 0.6; }
+
+  .track-eq { display: none; align-items: flex-end; gap: 3px; height: 16px; }
+  .track-eq span { width: 3px; background: var(--lime-400); border-radius: 1px; animation: eqBounce 0.9s ease-in-out infinite; }
+  .track-eq span:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .track-eq span:nth-child(2) { height: 14px; animation-delay: 0.15s; }
+  .track-eq span:nth-child(3) { height: 9px; animation-delay: 0.3s; }
+  @keyframes eqBounce {
+    0%, 100% { transform: scaleY(0.4); }
+    50%      { transform: scaleY(1); }
+  }
+  .track-row.is-playing .track-num-text { display: none; }
+  .track-row.is-playing .track-eq { display: flex; }
+
+  .track-info { min-width: 0; }
+  .track-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--cream);
+    line-height: 1.35;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .track-lang { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--cream-dim); margin-top: 3px; }
+
+  .track-duration { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--cream-dim); white-space: nowrap; }
+
+  .lyrics-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--cream-dim);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .lyrics-btn:hover { color: var(--cream); border-color: var(--lime-400); background: var(--glass); }
+
+  @media (max-width: 768px) {
+    .track-list-section { padding: 56px 16px 72px; }
+    .track-row { grid-template-columns: 28px 1fr auto 30px; gap: 12px; padding: 12px 8px; }
+    .track-row:hover { padding-left: 12px; }
+    .track-title { font-size: 15px; }
+    .lyrics-btn { width: 30px; height: 30px; font-size: 11px; }
+  }
+
+  /* ============================================================
+     STICKY PLAYER
+     ============================================================ */
+  .sticky-player {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 500;
+    background: rgba(14, 36, 23, 0.86);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-top: 1px solid var(--line);
+    padding: 12px 24px calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .sticky-player-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .sp-track-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .sp-cover { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; display: block; }
+  .sp-text { min-width: 0; }
+  .sp-title { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sp-album { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--cream-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .sp-controls { display: flex; align-items: center; gap: 14px; justify-content: center; }
+  .sp-btn {
+    background: none;
+    border: none;
+    color: var(--cream);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .sp-btn-skip { font-size: 18px; color: var(--cream-dim); }
+  .sp-btn-skip:hover { color: var(--cream); }
+  .sp-btn-play {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--lime-400);
+    color: var(--green-950);
+    font-size: 15px;
+  }
+  .sp-btn-play:hover { transform: scale(1.06); }
+
+  .sp-progress { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .sp-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--cream-dim); white-space: nowrap; }
+  .sp-bar {
+    position: relative;
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(244, 241, 230, 0.14);
+    cursor: pointer;
+  }
+  .sp-bar-fill {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 0%;
+    border-radius: 2px;
+    background: var(--lime-400);
+    pointer-events: none;
+  }
+  .sp-bar-handle {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--cream);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 3px rgba(122, 201, 67, 0.3);
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .sticky-player { padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); }
+    .sticky-player-inner { gap: 12px; }
+    .sp-cover { width: 36px; height: 36px; }
+    .sp-btn-play { width: 40px; height: 40px; }
+    .sp-album { display: none; }
+  }
+
+  @media (max-width: 360px) {
+    .sp-time { display: none; }
+  }
+
+  /* ============================================================
+     LYRIC PANEL (bottom sheet)
+     ============================================================ */
+  .lyric-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: rgba(4, 10, 7, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  .lyric-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lyric-panel {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    max-height: 80vh;
+    /* Solid, gak ada alpha sama sekali — panel dark-green sebelumnya (97-99% opacity)
+       ngeblend ke background halaman yang juga dark-green, jadi kerasa "transparan"
+       walau teknisnya udah nyaris opaque. Warna dinaikkan sedikit + border lebih
+       terang biar batas panel jelas kelihatan di atas overlay gelap. */
+    background: linear-gradient(180deg, #1c3d26 0%, #0d2116 100%);
+    border-radius: 28px 28px 0 0;
+    border: 1px solid rgba(244, 241, 230, 0.22);
+    border-bottom: none;
+    box-shadow: 0 -30px 80px -20px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(122, 201, 67, 0.08);
+    padding: 14px 28px 96px;
+    transform: translateY(100%);
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+  }
+  .lyric-overlay.open .lyric-panel {
+    transform: translateY(0);
+  }
+
+  .lyric-handle {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line);
+    margin: 0 auto 18px;
+    flex-shrink: 0;
+  }
+
+  .lyric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .lyric-track-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 19px;
+    color: var(--cream);
+    margin: 0 0 4px;
+  }
+  .lyric-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    margin: 0;
+  }
+  .lyric-close {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--cream-dim);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .lyric-close:hover { color: var(--lime-400); border-color: var(--lime-400); }
+
+  .lyric-body {
+    max-height: 46vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .lyric-body::-webkit-scrollbar { display: none; }
+
+  /* .lyric-line dan .lyric-empty dirender via innerHTML di JS (bukan ditulis di
+     template .astro), jadi gak pernah dapat atribut scope data-astro-cid-* —
+     WAJIB :global() di sini, sama seperti pola video-card di mv-music.astro
+     dan iframe dinamis di mv-music/[slug].astro (lihat CLAUDE.md).
+     Ditampilkan sebagai teks statis (tanpa highlight baris aktif — lihat
+     catatan di src/data/lyrics/kembali-terhubung-dengan-alam.ts kenapa). */
+  .lyric-body :global(.lyric-line) {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--cream);
+    opacity: 0.88;
+    padding-left: 16px;
+    margin: 0 0 6px;
+  }
+
+  .lyric-body :global(.lyric-empty) {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--cream-dim);
+    opacity: 0.6;
+    padding-left: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .lyric-panel {
+      max-width: 100%;
+      padding: 14px 20px calc(96px + env(safe-area-inset-bottom));
+    }
+    .lyric-body { max-height: 55vh; }
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const audio    = document.getElementById('audio-el') as HTMLAudioElement | null;
+    const disc     = document.getElementById('disc-btn') as HTMLElement | null;
+    const discOverlay = document.getElementById('disc-overlay');
+    const playAllBtn   = document.getElementById('play-all-btn');
+    const playAllIcon  = document.getElementById('play-all-icon');
+    const playAllLabel = document.getElementById('play-all-label');
+    const rows     = Array.from(document.querySelectorAll<HTMLElement>('.track-row'));
+
+    const spPlay    = document.getElementById('sp-play');
+    const spPrev    = document.getElementById('sp-prev');
+    const spNext    = document.getElementById('sp-next');
+    const spTitle   = document.getElementById('sp-title');
+    const spCurrent = document.getElementById('sp-current');
+    const spTotal   = document.getElementById('sp-total');
+    const spBar     = document.getElementById('sp-bar') as HTMLElement | null;
+    const spBarFill = document.getElementById('sp-bar-fill') as HTMLElement | null;
+    const spBarHandle = document.getElementById('sp-bar-handle') as HTMLElement | null;
+
+    const lyricOverlay    = document.getElementById('lyric-overlay');
+    const lyricPanel      = document.getElementById('lyric-panel');
+    const lyricClose      = document.getElementById('lyric-close');
+    const lyricBody       = document.getElementById('lyric-body');
+    const lyricTrackTitle = document.getElementById('lyric-track-title');
+    const lyricLabel      = document.getElementById('lyric-label');
+
+    if (!audio || rows.length === 0) return;
+
+    let currentIndex = 0;
+    let isDragging = false;
+
+    function escapeHtml(str: string): string {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function openLyricPanel(title: string, lines: string[]) {
+      if (!lyricOverlay) return;
+      if (lyricTrackTitle) lyricTrackTitle.textContent = title;
+      if (lyricLabel) lyricLabel.textContent = `Lirik · ${lyricPanel?.dataset.albumTitle ?? ''}`;
+
+      if (lyricBody) {
+        lyricBody.innerHTML = lines.length
+          ? lines.map((line) => `<p class="lyric-line">${escapeHtml(line)}</p>`).join('')
+          : '<p class="lyric-empty">Lirik belum tersedia untuk lagu ini.</p>';
+      }
+
+      lyricOverlay.classList.add('open');
+    }
+
+    function closeLyricPanel() {
+      lyricOverlay?.classList.remove('open');
+    }
+
+    lyricClose?.addEventListener('click', closeLyricPanel);
+    lyricOverlay?.addEventListener('click', (e) => {
+      if (e.target === lyricOverlay) closeLyricPanel();
+    });
+
+    function formatTime(seconds: number): string {
+      if (!isFinite(seconds) || seconds < 0) seconds = 0;
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}:${String(s).padStart(2, '0')}`;
+    }
+
+    function setPlayingUI(playing: boolean) {
+      disc?.classList.toggle('is-playing', playing);
+      if (discOverlay) discOverlay.textContent = playing ? '⏸ Jeda' : '▶ Putar';
+      if (spPlay) spPlay.textContent = playing ? '⏸' : '▶';
+      if (playAllIcon) playAllIcon.textContent = playing ? '⏸' : '▶';
+      if (playAllLabel) playAllLabel.textContent = playing ? 'Jeda' : 'Putar Album';
+    }
+
+    function loadTrack(index: number, autoplay: boolean) {
+      const row = rows[index];
+      if (!row || !audio) return;
+      currentIndex = index;
+
+      rows.forEach((r) => r.classList.remove('is-playing'));
+      row.classList.add('is-playing');
+
+      const url = row.dataset.url ?? '';
+      const title = row.dataset.title ?? '';
+      const duration = parseFloat(row.dataset.duration ?? '0');
+
+      audio.src = url;
+      if (spTitle) spTitle.textContent = title;
+      if (spTotal) spTotal.textContent = formatTime(duration);
+      if (spCurrent) spCurrent.textContent = '0:00';
+      if (spBarFill) spBarFill.style.width = '0%';
+      if (spBarHandle) spBarHandle.style.left = '0%';
+
+      if (autoplay) audio.play().catch(() => {});
+    }
+
+    function togglePlay() {
+      if (!audio) return;
+      if (audio.paused) audio.play().catch(() => {});
+      else audio.pause();
+    }
+
+    audio.addEventListener('play', () => setPlayingUI(true));
+    audio.addEventListener('pause', () => setPlayingUI(false));
+    audio.addEventListener('ended', () => {
+      const next = currentIndex + 1;
+      if (next < rows.length) loadTrack(next, true);
+      else setPlayingUI(false);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      if (!audio || !audio.duration || isDragging) return;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      if (spBarFill) spBarFill.style.width = `${pct}%`;
+      if (spBarHandle) spBarHandle.style.left = `${pct}%`;
+      if (spCurrent) spCurrent.textContent = formatTime(audio.currentTime);
+    });
+
+    disc?.addEventListener('click', togglePlay);
+    spPlay?.addEventListener('click', togglePlay);
+    playAllBtn?.addEventListener('click', () => {
+      playAllBtn.classList.add('pulse');
+      setTimeout(() => playAllBtn.classList.remove('pulse'), 650);
+      togglePlay();
+    });
+
+    spPrev?.addEventListener('click', () => {
+      loadTrack(Math.max(0, currentIndex - 1), true);
+    });
+    spNext?.addEventListener('click', () => {
+      loadTrack(Math.min(rows.length - 1, currentIndex + 1), true);
+    });
+
+    rows.forEach((row, i) => {
+      function activate() { loadTrack(i, true); }
+
+      row.addEventListener('click', activate);
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activate();
+        }
+      });
+
+      // Tombol "Aa" buka panel lirik baris ini — stopPropagation supaya klik
+      // "Aa" gak ikut memicu klik baris (yang mengganti now-playing).
+      const lyricsBtn = row.querySelector<HTMLButtonElement>('.lyrics-btn');
+      lyricsBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const title = row.dataset.title ?? '';
+        let lines: string[] = [];
+        try {
+          lines = JSON.parse(row.dataset.lyrics ?? '[]');
+        } catch {
+          lines = [];
+        }
+        openLyricPanel(title, lines);
+      });
+    });
+
+    // ── Progress bar draggable (mouse) ───────────────────────────────
+    function updateFromClientX(clientX: number) {
+      if (!spBar || !audio) return;
+      const rect = spBar.getBoundingClientRect();
+      const pct = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+      if (spBarFill) spBarFill.style.width = `${pct * 100}%`;
+      if (spBarHandle) spBarHandle.style.left = `${pct * 100}%`;
+      if (audio.duration) {
+        audio.currentTime = pct * audio.duration;
+        if (spCurrent) spCurrent.textContent = formatTime(audio.currentTime);
+      }
+    }
+
+    spBar?.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      updateFromClientX(e.clientX);
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) updateFromClientX(e.clientX);
+    });
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    // Tampilkan lagu pertama di sticky player sejak awal (belum autoplay)
+    loadTrack(0, false);
+  });
+</script>

@@ -1,0 +1,161 @@
+---
+import { Image } from 'astro:assets';
+
+interface ContentItem {
+  label: string;
+  href: string;
+  image: ImageMetadata;
+  active: boolean;
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  titleHighlight: string;
+  items: ContentItem[];
+}
+
+const { eyebrow, title, titleHighlight, items } = Astro.props;
+---
+<section class="cg-section">
+  <div class="cg-header">
+    <span class="cg-eyebrow">{eyebrow}</span>
+    <h2 class="cg-title">{title} <em>{titleHighlight}</em></h2>
+  </div>
+
+  <div class="cg-grid">
+    {items.map((item) => (
+      <a
+        href={item.active ? item.href : '#'}
+        class="cg-item"
+        data-inactive={!item.active}
+      >
+        <Image src={item.image} alt={item.label} class="cg-img" width={500} />
+        <div class="cg-overlay"></div>
+        <div class="cg-label">
+          <span>{item.label}</span>
+          <span class="cg-arrow">↗</span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLAnchorElement>('.cg-item[data-inactive="true"]').forEach((el) => {
+      el.addEventListener('click', (e) => e.preventDefault());
+    });
+  });
+</script>
+
+<style>
+  .cg-section {
+    padding: 80px 10%;
+    background: #fff;
+  }
+
+  .cg-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .cg-eyebrow {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3d7a3d;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .cg-title {
+    font-size: 32px;
+    font-weight: 500;
+    color: #1c2e1c;
+  }
+  .cg-title em {
+    color: #3d7a3d;
+    font-style: normal;
+  }
+
+  .cg-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .cg-item {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .cg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.85);
+    transform: scale(1);
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+  .cg-item:hover .cg-img {
+    transform: scale(1.05);
+    filter: saturate(1);
+  }
+
+  .cg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 60%);
+    transition: background 0.4s ease;
+    pointer-events: none;
+  }
+  .cg-item:hover .cg-overlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 60%);
+  }
+
+  .cg-label {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .cg-item:hover .cg-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .cg-arrow {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-left: 6px;
+  }
+
+  @media (max-width: 768px) {
+    .cg-section { padding: 56px 20px; }
+    .cg-header { margin-bottom: 28px; }
+    .cg-title { font-size: 24px; }
+    .cg-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .cg-label { left: 12px; right: 12px; bottom: 12px; font-size: 1rem; }
+  }
+
+  @media (max-width: 480px) {
+    .cg-section { padding: 40px 16px; }
+    .cg-grid { gap: 8px; }
+    .cg-label { font-size: 0.9rem; }
+    .cg-arrow { font-size: 0.7rem; }
+  }
+</style>

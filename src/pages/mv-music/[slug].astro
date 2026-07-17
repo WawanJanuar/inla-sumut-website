@@ -1,0 +1,711 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import AlbumHeroBackground from '../../components/AlbumHeroBackground.astro';
+import { getChannelAlbums, type PlaylistAlbum } from '../../utils/youtube';
+
+export async function getStaticPaths() {
+  const albums = await getChannelAlbums('inlasumut');
+  return albums.map((album) => ({
+    params: { slug: album.slug },
+    props: { album },
+  }));
+}
+
+interface Props {
+  album: PlaylistAlbum;
+}
+
+const { album } = Astro.props;
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const titleWords = album.title.trim().split(/\s+/);
+const titleLast = titleWords.length > 1 ? (titleWords.pop() as string) : '';
+const titleRest = titleWords.join(' ');
+
+function formatViews(n: number): string {
+  return new Intl.NumberFormat('id-ID').format(n);
+}
+---
+
+<Layout
+  title={`${album.title} — MV & Music — INLA SUMUT`}
+  description={album.description ? album.description.slice(0, 160) : `Koleksi ${album.videoCount} video dari album ${album.title} — INLA SUMUT.`}
+  ogImage={album.thumbnail}
+>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400..800&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+  </Fragment>
+
+  <Navbar />
+
+  <div class="album-page">
+    <!-- HERO -->
+    <section class="album-hero" id="album-hero">
+      <AlbumHeroBackground heroId="album-hero" />
+
+      <div class="hero-content">
+        <a href={`${BASE}/mv-music`} class="hero-back">← Kembali ke Koleksi Album</a>
+        <p class="hero-eyebrow">Koleksi Album · Video</p>
+        <h1 class="hero-title">{titleRest} <em>{titleLast}</em></h1>
+        <p class="hero-meta">{album.videoCount} video · {album.totalDurationLabel}</p>
+        <button class="play-all-btn" id="play-all-btn" type="button">
+          <span class="play-all-icon">▶</span> Putar Semua
+        </button>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="album-marquee" aria-hidden="true">
+      <div class="marquee-track">
+        {[0, 1].map(() => (
+          <div class="marquee-group">
+            {Array.from({ length: 8 }).map(() => (
+              <span class="marquee-item">
+                {album.title} <span class="marquee-dot">●</span> Koleksi Video INLA SUMUT <span class="marquee-dot">●</span>
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- DAFTAR VIDEO -->
+    <section class="video-list-section">
+      <div class="video-list-header">
+        <h2>Daftar Video</h2>
+        <span class="video-list-count">{String(album.videoCount).padStart(2, '0')} TRACKS</span>
+      </div>
+
+      <div class="video-list" id="video-list">
+        {album.videos.map((video, i) => (
+          <div
+            class="video-row"
+            class:list={[{ 'is-restricted': !video.embeddable }]}
+            data-video-id={video.id}
+            data-aspect={video.aspectRatio}
+            data-embeddable={video.embeddable ? 'true' : 'false'}
+            role="button"
+            tabindex="0"
+          >
+            <span class="video-row-num">{String(i + 1).padStart(2, '0')}</span>
+
+            <div class="video-row-thumb-wrap">
+              <img src={video.thumbnail} alt={video.title} class="video-row-thumb" loading="lazy" />
+              <span class="video-row-duration">{video.durationLabel}</span>
+              <div class="video-row-play">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="10" cy="10" r="10" fill="rgba(244,241,230,0.92)" />
+                  <path d="M8 6.5L14 10L8 13.5V6.5Z" fill="#0E2417" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="video-row-info">
+              <div class="video-row-title">{video.title}</div>
+              <div class="video-row-subtitle">{video.embeddable ? 'Video' : 'Video · Diputar di YouTube ↗'}</div>
+            </div>
+
+            <div class="video-row-views">
+              {video.viewCount != null ? `${formatViews(video.viewCount)}x ditonton` : ''}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <Footer />
+
+  <div id="album-video-modal" class="modal-backdrop" aria-modal="true" role="dialog">
+    <div class="modal-content">
+      <div class="glow-outer"></div>
+      <div class="glow-ring"></div>
+      <div class="iframe-wrapper">
+        <div id="album-video-iframe"></div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .album-page {
+    --green-950: #0E2417;
+    --green-900: #14301F;
+    --green-800: #1F6E3D;
+    --lime-400: #7AC943;
+    --lime-300: #A3E06B;
+    --cream: #F4F1E6;
+    --cream-dim: #CFD6C9;
+    --gold: #E3B24F;
+    --line: rgba(244, 241, 230, 0.14);
+    --glass: rgba(244, 241, 230, 0.06);
+
+    background: var(--green-950);
+  }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .album-hero {
+    position: relative;
+    min-height: 78vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(122, 201, 67, 0.12) 0%, transparent 60%),
+      linear-gradient(180deg, var(--green-900) 0%, var(--green-950) 100%);
+  }
+
+  /* CSS blob/noise/spotlight sudah pindah ke src/components/AlbumHeroBackground.astro */
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 760px;
+    padding: 0 24px;
+  }
+
+  .hero-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cream-dim);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    margin-bottom: 32px;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .hero-back:hover {
+    color: var(--cream);
+    border-color: var(--lime-400);
+    background: var(--glass);
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lime-300);
+    margin: 0 0 20px;
+  }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(40px, 7vw, 76px);
+    line-height: 1.05;
+    color: var(--cream);
+    margin: 0 0 24px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--lime-400);
+  }
+
+  .hero-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--cream-dim);
+    margin: 0 0 36px;
+  }
+
+  .play-all-btn {
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    background: var(--lime-400);
+    color: var(--green-950);
+    border: none;
+    padding: 16px 32px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .play-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(122, 201, 67, 0.35);
+  }
+  .play-all-icon { font-size: 12px; }
+  .play-all-btn.pulse::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2px solid var(--lime-400);
+    animation: pulseRing 0.65s ease-out;
+  }
+  @keyframes pulseRing {
+    from { opacity: 0.9; transform: scale(1); }
+    to   { opacity: 0; transform: scale(1.7); }
+  }
+
+  /* ============================================================
+     MARQUEE
+     ============================================================ */
+  .album-marquee {
+    position: relative;
+    overflow: hidden;
+    background: var(--green-950);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marqueeScroll 60s linear infinite;
+  }
+  .marquee-group { display: flex; flex-shrink: 0; }
+  .marquee-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: var(--cream-dim);
+    padding-right: 24px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .marquee-dot { color: var(--lime-400); padding: 0 12px; }
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ============================================================
+     DAFTAR VIDEO
+     ============================================================ */
+  .video-list-section {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 72px 24px 96px;
+  }
+
+  .video-list-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 18px;
+    margin-bottom: 8px;
+  }
+  .video-list-header h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 28px;
+    color: var(--cream);
+    margin: 0;
+  }
+  .video-list-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--cream-dim);
+  }
+
+  .video-row {
+    display: grid;
+    grid-template-columns: 44px 200px 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease, padding-left 0.2s ease;
+  }
+  .video-row:hover {
+    background: var(--glass);
+    padding-left: 20px;
+  }
+  .video-row.is-playing {
+    background: linear-gradient(90deg, rgba(122, 201, 67, 0.14), transparent 70%);
+  }
+  .video-row.is-playing .video-row-num { color: var(--lime-400); }
+
+  /* Video yang embed-nya dimatikan pemilik di YouTube Studio — klik buka tab baru, bukan modal */
+  .video-row.is-restricted .video-row-thumb-wrap { opacity: 0.55; }
+  .video-row.is-restricted .video-row-subtitle { color: var(--lime-300); }
+
+  .video-row-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--cream-dim);
+    opacity: 0.6;
+    transition: color 0.2s ease;
+  }
+
+  .video-row-thumb-wrap {
+    position: relative;
+    width: 200px;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #081810;
+    transition: transform 0.25s ease;
+    will-change: transform;
+  }
+  .video-row-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .video-row-duration {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(14, 36, 23, 0.82);
+    color: var(--cream);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .video-row-play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(14, 36, 23, 0.35);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .video-row-thumb-wrap:hover .video-row-play { opacity: 1; }
+
+  .video-row-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--cream);
+    line-height: 1.35;
+  }
+  .video-row-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--cream-dim);
+    margin-top: 4px;
+  }
+
+  .video-row-views {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--cream-dim);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .video-row { grid-template-columns: 28px 120px 1fr; gap: 12px; }
+    .video-row-thumb-wrap { width: 120px; }
+    .video-row-views { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .video-list-section { padding: 56px 16px 64px; }
+    .video-row { grid-template-columns: 24px 96px 1fr; gap: 10px; padding: 12px 8px; }
+    .video-row:hover { padding-left: 12px; }
+    .video-row-thumb-wrap { width: 96px; }
+    .video-row-title { font-size: 14px; }
+  }
+
+  /* ============================================================
+     VIDEO MODAL (pola sama seperti mv-music.astro)
+     ============================================================ */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.92);
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop.active {
+    display: flex;
+    flex-direction: column;
+    animation: backdropFadeIn 0.35s ease;
+  }
+  @keyframes backdropFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .modal-content {
+    --video-ar: 16 / 9;
+    position: relative;
+    width: min(72%, 860px);
+    animation: modalIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: width 0.35s ease;
+  }
+  .modal-content.is-vertical { width: min(26%, 380px); }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.92) translateY(16px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .iframe-wrapper {
+    position: relative;
+    z-index: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: var(--video-ar);
+  }
+  /* :global() wajib di sini — iframe-nya di-inject runtime oleh YT.Player(),
+     bukan elemen <iframe> yang ditulis di template ini, jadi gak pernah dapat
+     atribut scope data-astro-cid-* dan CSS scoped biasa gak akan pernah match. */
+  .iframe-wrapper :global(iframe) { width: 100%; height: 100%; display: block; }
+
+  .glow-ring {
+    position: absolute;
+    inset: -2px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(122, 201, 67, 0.55), rgba(163, 224, 107, 0.45), rgba(30, 158, 90, 0.5), rgba(122, 201, 67, 0.55));
+    background-size: 300% 300%;
+    animation: ringRotate 4s ease infinite;
+    z-index: 0;
+    filter: blur(1px);
+  }
+  @keyframes ringRotate {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .glow-outer {
+    position: absolute;
+    inset: -12px;
+    border-radius: 18px;
+    z-index: 0;
+    pointer-events: none;
+    animation: glowPulse 4s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% {
+      box-shadow:
+        0 0 15px 3px rgba(122, 201, 67, 0.30),
+        0 0 45px 8px rgba(163, 224, 107, 0.14),
+        0 0 80px 18px rgba(122, 201, 67, 0.06);
+    }
+    50% {
+      box-shadow:
+        0 0 22px 5px rgba(163, 224, 107, 0.38),
+        0 0 60px 14px rgba(122, 201, 67, 0.20),
+        0 0 100px 26px rgba(163, 224, 107, 0.09);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .modal-content { width: 92%; }
+    .modal-content.is-vertical { width: 60%; }
+    .album-hero { min-height: 66vh; }
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    // Hero cursor spotlight + blob/noise sekarang ditangani AlbumHeroBackground.astro
+
+    // ── Video modal + antrian putar (YouTube IFrame Player API) ─────
+    // Player API (bukan iframe src biasa) dipakai supaya bisa: (1) deteksi video
+    // selesai lalu otomatis lanjut ke video berikutnya, (2) deteksi video error/
+    // "playback disabled by owner" lalu skip otomatis, bukan macet nampilin
+    // kartu error YouTube di dalam modal.
+    const modal        = document.getElementById('album-video-modal') as HTMLDivElement | null;
+    const modalContent = modal?.querySelector<HTMLElement>('.modal-content');
+    const rows          = Array.from(document.querySelectorAll<HTMLElement>('.video-row'));
+
+    interface QueueItem { row: HTMLElement; id: string; aspect: number; embeddable: boolean }
+    const queue: QueueItem[] = rows.map((row) => ({
+      row,
+      id: row.dataset.videoId ?? '',
+      aspect: parseFloat(row.dataset.aspect ?? '1.7778'),
+      embeddable: row.dataset.embeddable !== 'false',
+    }));
+
+    let player: any = null;
+    let playerReady = false;
+    let currentIndex = -1;
+    let pendingIndex: number | null = null;
+
+    function nextPlayableIndex(fromIndex: number): number {
+      for (let i = fromIndex + 1; i < queue.length; i++) {
+        if (queue[i].embeddable) return i;
+      }
+      return -1;
+    }
+
+    function setPlayingRow(index: number) {
+      rows.forEach((r) => r.classList.remove('is-playing'));
+      queue[index]?.row.classList.add('is-playing');
+    }
+
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+      if (player?.stopVideo) player.stopVideo();
+    }
+
+    function createPlayer(initialId: string) {
+      const YT = (window as any).YT;
+      player = new YT.Player('album-video-iframe', {
+        videoId: initialId,
+        playerVars: { autoplay: 1, rel: 0 },
+        events: {
+          onReady: () => {
+            playerReady = true;
+            if (pendingIndex !== null) {
+              const idx = pendingIndex;
+              pendingIndex = null;
+              if (queue[idx]?.id !== initialId) player.loadVideoById(queue[idx].id);
+            }
+          },
+          onStateChange: (e: any) => {
+            if (e.data === YT.PlayerState.ENDED) playNextOrClose();
+          },
+          onError: () => playNextOrClose(),
+        },
+      });
+    }
+
+    function playIndex(index: number) {
+      const item = queue[index];
+      if (!item) { closeModal(); return; }
+
+      // Video yang embed-nya dimatikan pemilik — buka di tab YouTube baru, jangan buka modal.
+      if (!item.embeddable) {
+        window.open(`https://youtu.be/${item.id}`, '_blank', 'noopener');
+        return;
+      }
+
+      currentIndex = index;
+      setPlayingRow(index);
+      modalContent?.classList.toggle('is-vertical', item.aspect < 1);
+      modalContent?.style.setProperty('--video-ar', String(item.aspect));
+
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      if (player) {
+        if (playerReady) player.loadVideoById(item.id);
+        else pendingIndex = index; // player masih proses onReady dari klik sebelumnya
+        return;
+      }
+
+      // Construct player SINKRON di sini (bukan di dalam Promise/await) — autoplay
+      // tanpa mute cuma diizinkan browser kalau masih dalam alur event klik asli
+      // (trusted user gesture). Kalau construct-nya ditunda lewat `await` dulu,
+      // browser udah nganggep gesture-nya basi dan video macet buffering di 0:00.
+      const w = window as any;
+      if (w.YT?.Player) {
+        createPlayer(item.id);
+      } else {
+        // Edge case: API belum sempat kemuat sama sekali pas klik pertama.
+        pendingIndex = index;
+        const prevCallback = w.onYouTubeIframeAPIReady;
+        w.onYouTubeIframeAPIReady = () => {
+          prevCallback?.();
+          if (pendingIndex !== null) {
+            const idx = pendingIndex;
+            pendingIndex = null;
+            createPlayer(queue[idx].id);
+          }
+        };
+      }
+    }
+
+    function playNextOrClose() {
+      const next = nextPlayableIndex(currentIndex);
+      if (next === -1) { closeModal(); return; }
+      playIndex(next);
+    }
+
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal?.classList.contains('active')) closeModal();
+    });
+
+    // ── Video rows: klik untuk mainkan, tilt 3D thumbnail ────────────
+    rows.forEach((row, i) => {
+      function activate() { playIndex(i); }
+
+      row.addEventListener('click', activate);
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activate();
+        }
+      });
+
+      const thumbWrap = row.querySelector<HTMLElement>('.video-row-thumb-wrap');
+      if (thumbWrap) {
+        thumbWrap.addEventListener('mousemove', (e) => {
+          const rect = thumbWrap.getBoundingClientRect();
+          const px = (e.clientX - rect.left) / rect.width - 0.5;
+          const py = (e.clientY - rect.top) / rect.height - 0.5;
+          thumbWrap.style.transform = `perspective(400px) rotateX(${(-py * 10).toFixed(2)}deg) rotateY(${(px * 10).toFixed(2)}deg) scale(1.03)`;
+        });
+        thumbWrap.addEventListener('mouseleave', () => {
+          thumbWrap.style.transform = '';
+        });
+      }
+    });
+
+    // ── Putar Semua — mulai dari video pertama yang embed-nya aktif ──
+    const playAllBtn = document.getElementById('play-all-btn');
+    playAllBtn?.addEventListener('click', () => {
+      playAllBtn.classList.add('pulse');
+      setTimeout(() => playAllBtn.classList.remove('pulse'), 650);
+      const first = nextPlayableIndex(-1);
+      if (first !== -1) playIndex(first);
+    });
+
+    // ── Preload script IFrame API — ditunda ke waktu idle, bukan blocking ──
+    // Cuma load library-nya (`window.YT` jadi tersedia), BELUM bikin player apapun
+    // — jadi aman walau modal masih display:none. Tujuannya supaya pas user klik
+    // video, `window.YT.Player` sudah siap dan `createPlayer()` bisa construct
+    // SINKRON di dalam handler klik (lihat playIndex) tanpa nunggu (await) apa-apa,
+    // karena autoplay tanpa mute cuma diizinkan browser selama masih dalam alur
+    // event klik asli. Dipanggil lewat requestIdleCallback (bukan langsung) supaya
+    // request ~15KB ini gak ikut rebutan bandwidth/main-thread sama render awal
+    // halaman (font, CSS, gambar hero) — user hampir pasti belum sempat klik play
+    // secepat itu (masih scroll baca hero/marquee dulu).
+    function preloadYouTubeApi() {
+      if ((window as any).YT?.Player || document.getElementById('youtube-iframe-api')) return;
+      const tag = document.createElement('script');
+      tag.id = 'youtube-iframe-api';
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    }
+
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(preloadYouTubeApi, { timeout: 2000 });
+    } else {
+      setTimeout(preloadYouTubeApi, 1000);
+    }
+  });
+</script>

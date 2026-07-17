@@ -25,3 +25,7 @@ dist/
 # Python bytecode cache (uipro skill scripts)
 __pycache__/
 *.pyc
+
+# Env vars (YouTube Data API key, dll — jangan commit)
+.env
+.env.*

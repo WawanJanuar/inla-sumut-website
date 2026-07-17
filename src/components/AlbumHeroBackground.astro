@@ -1,0 +1,82 @@
+---
+// Background dekoratif hero halaman album (video & audio) — blob mengambang +
+// noise texture + cursor spotlight. Di-extract dari mv-music/[slug].astro supaya
+// bisa dipakai bareng mv-music/audio/[slug].astro tanpa duplikasi CSS/JS.
+// Parent WAJIB kasih section pembungkus `position:relative; overflow:hidden;`
+// dengan id={heroId} — komponen ini cuma render layer dekoratifnya.
+interface Props {
+  heroId: string;
+}
+
+const { heroId } = Astro.props;
+const spotlightId = `${heroId}-spotlight`;
+---
+
+<div class="hero-noise" aria-hidden="true"></div>
+<div class="hero-blob hero-blob-lime" aria-hidden="true"></div>
+<div class="hero-blob hero-blob-gold" aria-hidden="true"></div>
+<div class="hero-spotlight" id={spotlightId} aria-hidden="true"></div>
+
+<style>
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .hero-blob {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.35;
+    pointer-events: none;
+    animation: blobFloat 12s ease-in-out infinite;
+  }
+  .hero-blob-lime { background: #7AC943; top: -100px; left: -100px; }
+  .hero-blob-gold { background: #E3B24F; bottom: -100px; right: -100px; animation-delay: -6s; }
+  @keyframes blobFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-24px); }
+  }
+
+  .hero-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: radial-gradient(520px circle at var(--x, 50%) var(--y, 50%), rgba(122, 201, 67, 0.16), transparent 70%);
+    filter: blur(6px);
+  }
+
+  @media (max-width: 768px) {
+    .hero-blob { width: 220px; height: 220px; opacity: 0.22; }
+  }
+</style>
+
+<script define:vars={{ heroId, spotlightId }}>
+  document.addEventListener('astro:page-load', () => {
+    const hero = document.getElementById(heroId);
+    const spotlight = document.getElementById(spotlightId);
+    if (!hero || !spotlight) return;
+
+    // Spotlight ngikutin mouse cuma masuk akal di perangkat dengan mouse asli —
+    // dimatikan di mobile/touch (gak ada "hover" beneran di situ).
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!canHover) return;
+
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      spotlight.style.setProperty('--x', `${e.clientX - rect.left}px`);
+      spotlight.style.setProperty('--y', `${e.clientY - rect.top}px`);
+      spotlight.style.opacity = '1';
+    });
+    hero.addEventListener('mouseleave', () => {
+      spotlight.style.opacity = '0';
+    });
+  });
+</script>

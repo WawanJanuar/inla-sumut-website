@@ -1,12 +1,31 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import { getImage } from 'astro:assets';
 import '../styles/global.css';
+import ogDefaultImage from '../assets/images/Landingpage(main).png';
 
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string | ImageMetadata;
+  ogUrl?: string;
 }
-const { title, description = 'INLA SUMUT — International Nature Loving Association Sumatera Utara' } = Astro.props;
+
+const {
+  title,
+  description = 'INLA SUMUT — International Nature Loving Association Sumatera Utara. Membangun harmoni manusia, alam, dan semesta.',
+  ogImage = ogDefaultImage,
+  ogUrl,
+} = Astro.props;
+
+const ORIGIN = 'https://wawanjanuar.github.io';
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const fullOgImage = typeof ogImage === 'string'
+  ? (ogImage.startsWith('http') ? ogImage : `${ORIGIN}${BASE}${ogImage}`)
+  : `${ORIGIN}${(await getImage({ src: ogImage, width: 1200 })).src}`;
+
+const fullOgUrl = ogUrl ?? Astro.url.href;
 ---
 <!DOCTYPE html>
 <html lang="id">
@@ -15,7 +34,24 @@ const { title, description = 'INLA SUMUT — International Nature Loving Associa
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
   <title>{title}</title>
-  <link rel="icon" type="image/png" href={import.meta.env.BASE_URL + 'SRC/logo%20inla%20sumut.png'} />
+  <link rel="icon" type="image/png" href={import.meta.env.BASE_URL + '/SRC/logo-inla-sumut.png'} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="INLA SUMUT" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={fullOgImage} />
+  <meta property="og:url" content={fullOgUrl} />
+
+  <!-- Twitter Card (juga dipakai WhatsApp untuk fallback) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={fullOgImage} />
+
+  <slot name="head" />
+
   <ClientRouter />
 </head>
 <body data-base={import.meta.env.BASE_URL}>
@@ -26,17 +62,77 @@ const { title, description = 'INLA SUMUT — International Nature Loving Associa
     <button id="lb-close" style="position:absolute;top:20px;right:24px;z-index:10001;font-size:36px;color:#fff;background:none;border:none;cursor:pointer;padding:8px;line-height:1;opacity:0.85;">×</button>
     <button id="lb-prev" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);z-index:10001;font-size:40px;color:#fff;background:rgba(255,255,255,0.12);border:none;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.8;">‹</button>
     <button id="lb-next" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:10001;font-size:40px;color:#fff;background:rgba(255,255,255,0.12);border:none;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.8;">›</button>
-    <img id="lb-img" src="" alt="" style="max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px;z-index:10000;transition:opacity 0.15s ease;" />
+    <div class="glow-media-wrap" style="position:relative; z-index:10000; max-width:90vw; max-height:85vh;">
+      <div class="glow-outer" aria-hidden="true"></div>
+      <div class="glow-ring" aria-hidden="true"></div>
+      <img id="lb-img" src="" alt="" style="position:relative; z-index:1; max-width:90vw; max-height:85vh; object-fit:contain; border-radius:8px; display:block; transition:opacity 0.15s ease;" />
+    </div>
     <div id="lb-counter" style="position:absolute;bottom:20px;color:rgba(255,255,255,0.6);font-size:13px;z-index:10001;letter-spacing:0.05em;"></div>
   </div>
 
   <!-- VIDEO MODAL -->
   <div id="videoModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.92); align-items:center; justify-content:center;">
     <button id="videoModalClose" style="position:absolute;top:20px;right:24px;z-index:10001;font-size:36px;color:#fff;background:none;border:none;cursor:pointer;line-height:1;padding:8px;opacity:0.85;">×</button>
-    <div style="position:relative; width:90vw; max-width:960px; aspect-ratio:16/9; z-index:10000;">
-      <iframe id="videoModalFrame" src="" style="width:100%; height:100%; border:none; border-radius:12px;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="glow-media-wrap" style="position:relative; width:90vw; max-width:960px; aspect-ratio:16/9; z-index:10000;">
+      <div class="glow-outer" aria-hidden="true"></div>
+      <div class="glow-ring" aria-hidden="true"></div>
+      <div style="position:relative; z-index:1; width:100%; height:100%; border-radius:12px; overflow:hidden;">
+        <iframe id="videoModalFrame" src="" style="width:100%; height:100%; border:none; display:block;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
+
+  <style>
+    /* Glow neon dipakai lightbox foto & video modal global — pola & warna sama
+       persis dengan modal video di mv-music.astro/mv-music/[slug].astro (dipakai
+       eksplisit di luar palet resmi atas permintaan user, lihat CLAUDE.md bagian
+       "Sistem Warna"). z-index glow (0, relatif dalam .glow-media-wrap) TIDAK
+       menyentuh tier 9999/10000/10001 yang wajib tetap inline. */
+    .glow-ring {
+      position: absolute;
+      inset: -2px;
+      border-radius: 14px;
+      background: linear-gradient(
+        135deg,
+        rgba(0, 255, 136, 0.55),
+        rgba(74, 222, 128, 0.45),
+        rgba(0, 204, 102, 0.50),
+        rgba(0, 255, 136, 0.55)
+      );
+      background-size: 300% 300%;
+      animation: ringRotate 4s ease infinite;
+      z-index: 0;
+      filter: blur(1px);
+    }
+    @keyframes ringRotate {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .glow-outer {
+      position: absolute;
+      inset: -12px;
+      border-radius: 18px;
+      z-index: 0;
+      pointer-events: none;
+      animation: glowPulse 4s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% {
+        box-shadow:
+          0 0 15px 3px rgba(0, 255, 136, 0.30),
+          0 0 45px 8px rgba(74, 222, 128, 0.14),
+          0 0 80px 18px rgba(0, 255, 136, 0.06);
+      }
+      50% {
+        box-shadow:
+          0 0 22px 5px rgba(74, 222, 128, 0.38),
+          0 0 60px 14px rgba(0, 255, 136, 0.20),
+          0 0 100px 26px rgba(74, 222, 128, 0.09);
+      }
+    }
+  </style>
 
   <script>
     document.addEventListener('astro:page-load', () => {

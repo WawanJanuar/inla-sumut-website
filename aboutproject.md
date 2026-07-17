@@ -42,7 +42,7 @@ Project Web INLA/
     ├── flowers watercolor wallpaper backgrounds...                    ⚠️ tidak terpakai di HTML manapun
     ├── hongkong.jpg                                                  (272K)
     ├── light-soft-white-marble-texture-SBI-303742593.jpg             (188K)
-    ├── logo inla sumut.png                                          (300K)
+    ├── logo-inla-sumut.png                                          (300K)
     ├── p01.jpg / p02.jpg / p03.jpg / p05.jpg / p06.jpg               (48K–128K)
     ├── realistic-earth-closeup-render-SBI-301825525.jpg              (508K)
     └── silhouette-group-of-happy-children...SBI-300996172.jpg        (304K)

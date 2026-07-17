@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import ContentGrid from '../components/ContentGrid.astro';
 import { Image } from 'astro:assets';
 import { getHighlights } from '../data/activities';
 
@@ -16,9 +17,20 @@ import imgDanceKimono  from '../assets/images/dance-kimono.jpg';
 import imgFestival     from '../assets/images/festival-stage.jpg';
 import imgMountain     from '../assets/images/hero-mountain.jpg';
 import imgWheat        from '../assets/images/wheat-field.jpg';
+
+const contentGridItems = [
+  { label: 'Kegiatan & Acara', href: BASE + '/activities', image: imgFestival,    active: true },
+  { label: 'MV & Music',       href: BASE + '/mv-music',  image: imgDanceKimono, active: true },
+  { label: 'Penampilan',       href: '#',                  image: imgDanceBali,   active: false },
+  { label: 'Artikel',          href: '#',                  image: imgMountain,    active: false },
+];
 ---
 
-<Layout title="INLA SUMUT — Home">
+<Layout
+  title="INLA SUMUT — Harmoni Manusia, Alam & Semesta"
+  description="INLA SUMUT adalah cabang International Nature Loving Association di Sumatera Utara. Bergabung dalam perjalanan membangun kepedulian alam melalui pendidikan, seni, dan budaya lintas bangsa."
+  ogImage={slideMain}
+>
   <Navbar activePage="home" />
 
   <!-- HERO -->
@@ -236,6 +248,14 @@ import imgWheat        from '../assets/images/wheat-field.jpg';
       </a>
     </div>
   </section>
+
+  <!-- KENALI KEGIATAN KAMI -->
+  <ContentGrid
+    eyebrow="🌿 Konten"
+    title="Kenali"
+    titleHighlight="Kegiatan Kami"
+    items={contentGridItems}
+  />
 
   <Footer />
 </Layout>
