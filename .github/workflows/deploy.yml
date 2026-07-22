@@ -4,6 +4,13 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Jam 00:00 WIB (UTC+7) = 17:00 UTC hari sebelumnya. Rebuild harian ini
+    # supaya konten baru dari channel YouTube (upload video) otomatis ke-fetch
+    # ulang dan muncul di situs — YouTube gak punya mekanisme webhook praktis
+    # (butuh server penerima yang selalu online), jadi rebuild terjadwal
+    # adalah cara paling realistis untuk keep video tetap update.
+    - cron: '0 17 * * *'
 
 permissions:
   contents: read
