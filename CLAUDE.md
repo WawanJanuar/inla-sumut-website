@@ -8,8 +8,6 @@ Panduan untuk Claude Code saat bekerja di repo ini. File ini adalah **sumber keb
 
 Website **INLA SUMUT** (International Nature Loving Association — Sumatera Utara). Seluruh halaman kini dibangun dengan **Astro 7**, termasuk halaman detail kegiatan, About, dan Bergabung. Legacy static HTML (`public/Page/`) masih ada tapi hanya sebagai fallback — pengembangan aktif dilakukan di stack Astro.
 
-> `aboutproject.md` (repo root) adalah snapshot dokumentasi lama sebelum migrasi Astro. Sudah **kadaluarsa** — gunakan file ini sebagai referensi.
-
 ---
 
 ## Cara Menjalankan
@@ -47,7 +45,9 @@ YOUTUBE_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 **URL publik:** `https://wawanjanuar.github.io/inla-sumut-website`
 
-**Cara kerja:** `.github/workflows/deploy.yml` dijalankan otomatis setiap push ke `main`. Workflow: checkout → `npm ci` → `npm run build` → upload `dist/` → deploy ke GitHub Pages.
+**Cara kerja:** `.github/workflows/deploy.yml` dijalankan otomatis setiap push ke `main`, manual via `workflow_dispatch`, atau otomatis lewat rebuild terjadwal harian (lihat di bawah). Workflow: checkout → `npm ci` → `npm run build` → upload `dist/` → deploy ke GitHub Pages.
+
+**Rebuild terjadwal harian (`schedule: cron: '0 17 * * *'`)** — jam 00:00 WIB (UTC+7) tiap hari. **Alasan:** situs ini statis, cuma fetch data YouTube (`src/utils/youtube.ts`) saat proses build — video baru yang di-upload ke channel `@inlasumut` gak otomatis muncul di situs live sampai ada rebuild. YouTube gak punya mekanisme notifikasi upload yang praktis dipakai di sini (butuh server penerima yang selalu online buat nangkep webhook-nya, kita gak punya itu) — jadi rebuild terjadwal adalah solusi paling realistis. **Dampak:** video baru butuh waktu sampai ~24 jam buat muncul di situs live (tergantung kapan upload-nya relatif ke jam 00:00 WIB), beda dengan `npm run dev`/localhost yang selalu fetch fresh langsung dari YouTube API. Kalau butuh video baru muncul LEBIH cepat dari jadwal ini, trigger manual lewat GitHub repo → Actions → "Deploy to GitHub Pages" → "Run workflow".
 
 **Aktivasi pertama kali (manual, sekali saja):**
 1. Buka GitHub repo → Settings → Pages
@@ -164,10 +164,6 @@ src/
     RelatedActivities.astro      — Kartu kegiatan terkait di bawah halaman detail
     ContentGrid.astro            — 4 kotak editorial grid di akhir Home ("Kenali Kegiatan Kami")
     AlbumHeroBackground.astro    — Blob mengambang + noise + cursor spotlight, shared antara mv-music/[slug].astro (video) dan mv-music/audio/[slug].astro (audio)
-    Hero.astro                   — (legacy, tidak aktif digunakan)
-    AboutGlimpse.astro           — (legacy, tidak aktif digunakan)
-    ActivitiesGlimpse.astro      — (legacy, tidak aktif digunakan)
-    ConnectBand.astro            — (legacy, tidak aktif digunakan)
   data/
     activities.ts                — Sumber data kegiatan (digunakan home + bisa dikembangkan)
     albums.ts                    — Sumber data album "Full Audio" (judul, tagline, tracks[]) — penyimpanan sementara sebelum database, lihat bagian "Halaman Detail Album — Full Audio"
