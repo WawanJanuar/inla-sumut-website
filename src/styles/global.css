@@ -14,6 +14,32 @@ body {
 }
 
 /* ============================================================
+   SCROLL REVEAL
+   Diletakkan di awal file (sebelum semua style komponen) supaya
+   aturan hover transform milik komponen (mis. .card:hover,
+   .tl-card:hover) yang datang belakangan tetap menang atas
+   [data-reveal].revealed di cascade — keduanya sama-sama
+   specificity (0,2,0), CSS pakai urutan sumber sebagai tie-break.
+   Kalau blok ini pernah dipindah ke bawah lagi, transform hover
+   pada elemen yang sudah revealed akan diam-diam tidak jalan.
+   ============================================================ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-reveal-delay="1"] { transition-delay: 0.1s; }
+[data-reveal-delay="2"] { transition-delay: 0.2s; }
+[data-reveal-delay="3"] { transition-delay: 0.3s; }
+[data-reveal-delay="4"] { transition-delay: 0.4s; }
+[data-reveal-delay="5"] { transition-delay: 0.5s; }
+[data-reveal-delay="6"] { transition-delay: 0.6s; }
+
+/* ============================================================
    NAVBAR
    ============================================================ */
 .nav {
@@ -421,8 +447,8 @@ body {
 .timeline::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; transform: translateX(-50%); width: 2px; background: #c8d8c0; }
 .tl-item { display: grid; grid-template-columns: 1fr 48px 1fr; align-items: start; margin-bottom: 40px; position: relative; }
 .tl-dot { width: 16px; height: 16px; border-radius: 50%; background: #3d7a3d; border: 3px solid #f5f2ec; box-shadow: 0 0 0 1.5px #3d7a3d; margin: 0 auto; margin-top: 6px; position: relative; z-index: 1; }
-.tl-card { background: #fff; border-radius: 14px; padding: 20px 22px; border: 0.5px solid #d8d4ca; box-shadow: 0 2px 12px rgba(28,46,28,0.06); transition: transform 0.2s, box-shadow 0.2s; }
-.tl-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(28,46,28,0.1); }
+.tl-card { background: #fff; border-radius: 14px; padding: 20px 22px; border: 0.5px solid #d8d4ca; box-shadow: 0 2px 12px rgba(28,46,28,0.06); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
+.tl-card:hover { transform: translateY(-2px); border-color: #7ec87e; box-shadow: 0 8px 24px rgba(28,46,28,0.1), 0 0 0 1px rgba(126,200,126,0.35), 0 0 24px rgba(126,200,126,0.35); }
 .tl-year { font-size: 11px; font-weight: 700; color: #3d7a3d; letter-spacing: 0.08em; margin-bottom: 6px; text-transform: uppercase; }
 .tl-title { font-size: 14px; font-weight: 600; color: #1c2e1c; margin-bottom: 6px; }
 .tl-desc { font-size: 13px; color: #5a5a4a; line-height: 1.7; }
@@ -892,23 +918,6 @@ body {
 .related-desc { font-size: 12px; color: #7a7a6a; line-height: 1.6; margin-bottom: 10px; }
 .related-link { font-size: 12px; font-weight: 500; color: #3d7a3d; text-decoration: none; }
 .related-link:hover { color: #1c2e1c; }
-
-/* ============================================================
-   SCROLL REVEAL
-   ============================================================ */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-}
-[data-reveal].revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-[data-reveal-delay="1"] { transition-delay: 0.1s; }
-[data-reveal-delay="2"] { transition-delay: 0.2s; }
-[data-reveal-delay="3"] { transition-delay: 0.3s; }
-[data-reveal-delay="4"] { transition-delay: 0.4s; }
 
 /* ============================================================
    RESPONSIVE — MOBILE (≤ 768px)

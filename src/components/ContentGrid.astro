@@ -18,17 +18,19 @@ interface Props {
 const { eyebrow, title, titleHighlight, items } = Astro.props;
 ---
 <section class="cg-section">
-  <div class="cg-header">
+  <div class="cg-header" data-reveal>
     <span class="cg-eyebrow">{eyebrow}</span>
     <h2 class="cg-title">{title} <em>{titleHighlight}</em></h2>
   </div>
 
   <div class="cg-grid">
-    {items.map((item) => (
+    {items.map((item, i) => (
       <a
         href={item.active ? item.href : '#'}
         class="cg-item"
         data-inactive={!item.active}
+        data-reveal
+        data-reveal-delay={Math.min(i, 4) || undefined}
       >
         <Image src={item.image} alt={item.label} class="cg-img" width={500} />
         <div class="cg-overlay"></div>

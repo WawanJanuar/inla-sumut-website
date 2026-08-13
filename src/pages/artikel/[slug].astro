@@ -1,0 +1,177 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import { getAllArticles, type Article } from '../../utils/wordpress';
+
+export async function getStaticPaths() {
+  const articles = await getAllArticles();
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+---
+
+<Layout
+  title={`${article.title} — Artikel — INLA SUMUT`}
+  description={article.excerpt.slice(0, 160)}
+  ogImage={article.featuredImage ?? undefined}
+>
+  <Navbar />
+
+  <div class="breadcrumb">
+    <a href={BASE + '/'}>Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href={BASE + '/artikel'}>Artikel</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">{article.title}</span>
+  </div>
+
+  <article class="artikel-detail">
+    <header class="artikel-detail-header">
+      {article.categories.length > 0 && (
+        <div class="artikel-detail-tags">
+          {article.categories.map((cat) => <span class="artikel-tag">{cat}</span>)}
+        </div>
+      )}
+      <h1 class="artikel-detail-title">{article.title}</h1>
+      <div class="artikel-detail-meta">
+        <span>{formatDate(article.publishedAt)}</span>
+        <span class="dot">·</span>
+        <span>{article.author}</span>
+      </div>
+    </header>
+
+    {article.featuredImage && (
+      <img src={article.featuredImage} alt={article.title} class="artikel-detail-cover" />
+    )}
+
+    <div class="wp-prose" set:html={article.contentHtml} />
+  </article>
+
+  <Footer />
+</Layout>
+
+<style>
+  .artikel-detail {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  .artikel-detail-header { margin-bottom: 28px; }
+
+  .artikel-detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .artikel-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #3d7a3d;
+    background: rgba(61, 122, 61, 0.1);
+    padding: 3px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .artikel-detail-title {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 600;
+    color: #1c2e1c;
+    line-height: 1.25;
+    margin: 0 0 16px;
+  }
+
+  .artikel-detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #9a9a8a;
+  }
+  .artikel-detail-meta .dot { color: #c8c8b8; }
+
+  .artikel-detail-cover {
+    width: 100%;
+    max-height: 440px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin: 28px 0 8px;
+    display: block;
+  }
+
+  /* .wp-prose merender content.rendered dari WordPress lewat set:html — elemen di
+     dalamnya TIDAK ditulis di template, jadi gak pernah dapat atribut scope
+     data-astro-cid-*. Semua selector WAJIB :global() — pola yang sama dipakai untuk
+     .video-card (mv-music.astro), iframe dinamis (mv-music/[slug].astro), dan
+     .lyric-line (mv-music/audio/[slug].astro). */
+  .wp-prose {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #3a3a2a;
+    margin-top: 32px;
+  }
+  .wp-prose :global(h2) { font-size: 26px; font-weight: 600; color: #1c2e1c; margin: 40px 0 16px; }
+  .wp-prose :global(h3) { font-size: 20px; font-weight: 600; color: #1c2e1c; margin: 32px 0 12px; }
+  .wp-prose :global(h4) { font-size: 17px; font-weight: 600; color: #1c2e1c; margin: 28px 0 10px; }
+  .wp-prose :global(p) { margin: 0 0 20px; }
+  .wp-prose :global(a) { color: #3d7a3d; text-decoration: underline; text-underline-offset: 2px; }
+  .wp-prose :global(a:hover) { color: #4a9e4a; }
+  .wp-prose :global(strong), .wp-prose :global(b) { color: #1c2e1c; font-weight: 700; }
+  .wp-prose :global(ul), .wp-prose :global(ol) { margin: 0 0 20px; padding-left: 24px; }
+  .wp-prose :global(li) { margin-bottom: 8px; }
+  .wp-prose :global(blockquote) {
+    margin: 28px 0;
+    padding: 16px 24px;
+    border-left: 3px solid #3d7a3d;
+    background: #f5f2ec;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: #5a5a4a;
+  }
+  .wp-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+    margin: 24px auto;
+  }
+  .wp-prose :global(figure) { margin: 24px 0; }
+  .wp-prose :global(figcaption) { text-align: center; font-size: 12px; color: #9a9a8a; margin-top: 8px; }
+  .wp-prose :global(iframe) { max-width: 100%; }
+  .wp-prose :global(.wp-block-embed) { position: relative; margin: 28px 0; }
+  .wp-prose :global(hr) { border: none; border-top: 1px solid #d8d4ca; margin: 40px 0; }
+  .wp-prose :global(table) { width: 100%; border-collapse: collapse; margin: 24px 0; }
+  .wp-prose :global(table td), .wp-prose :global(table th) { border: 1px solid #d8d4ca; padding: 8px 12px; text-align: left; }
+  .wp-prose :global(code) {
+    background: #f5f2ec;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  .wp-prose :global(pre) {
+    background: #1c2e1c;
+    color: #f5f2ec;
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 24px 0;
+  }
+  .wp-prose :global(pre) :global(code) { background: none; padding: 0; }
+
+  @media (max-width: 768px) {
+    .artikel-detail { padding: 40px 20px 72px; }
+    .artikel-detail-cover { max-height: 280px; }
+  }
+</style>

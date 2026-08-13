@@ -272,7 +272,7 @@ Jangan gunakan `DOMContentLoaded` atau `astro:after-swap`. `astro:page-load` dip
 
 | Fitur | Cara Kerja |
 |---|---|
-| Scroll reveal | `[data-reveal]` + `IntersectionObserver`, delay via `data-reveal-delay` |
+| Scroll reveal | `[data-reveal]` + `IntersectionObserver` (threshold 0.12, one-time — `unobserve` setelah `.revealed` ditambahkan), delay via `data-reveal-delay="1"`–`"6"` (`transition-delay` 0.1s–0.6s). Diterapkan menyeluruh di 3 halaman utama (`index.astro`, `about.astro`, `activities/index.astro`) plus komponen `ContentGrid.astro` yang mereka pakai — tiap section header dapat `data-reveal` polos, tiap card/list berulang dapat `data-reveal` + delay staggered (biasanya `Math.min(i, 4) \|\| undefined` di `.map()` supaya delay maksimal 0.4s dan atribut kosong di-omit untuk index 0). Hero tiap halaman **sengaja tidak** diberi reveal (selalu full-visible saat load, konsisten di semua halaman). Kartu di container horizontal-scroll (`.cards`, `.sosmed-grid`) juga otomatis kena efek ini — `IntersectionObserver` menghormati clipping dari ancestor `overflow-x:auto`, jadi kartu yang belum discroll ke area terlihat baru revealed begitu discroll masuk (bukan bug, perilaku wajar). |
 | Magnetic buttons | `[data-magnetic]` — mouse tracking offset |
 | Counter animasi | `[data-counter]` / `[data-suffix]` — ease-out cubic count-up |
 | Cursor glow | `div#cursor-glow` mengikuti posisi mouse |
@@ -302,8 +302,12 @@ Kedua overlay ini (`#lightbox`, `#videoModal`) punya efek cahaya neon hijau berg
 1. **Hero** — 2-slide slideshow (fade 1.2s, interval 5s, Ken Burns `scale(1→1.06)`). Gambar: `Landingpage(main).png` + `Landinpage (Event).jpg`. Di atas slides ada glassmorphism card (`hero-glass-card`: `background: rgba(255,255,255,0.78)`, `backdrop-filter: blur(36px) saturate(200%)`, border+inset highlight terang di atas, shadow besar `0 30px 70px rgba(28,46,28,0.28)` untuk kesan melayang). Refleksi cahaya dibuat via `::before` (highlight atas, opacity puncak 0.45, fade panjang) dan `::after` (garis diagonal tipis, opacity 0.35, `filter: blur(2px)`). Karena background sekarang terang, teks di dalam card di-override jadi warna gelap (`.hero-glass-card .hero-h1/.hero-p/.hero-tag/.btn-ghost` — scoped khusus, tidak memengaruhi hero page lain yang punya selector sendiri seperti `.hero-karir .hero-h1`).
 2. **About** — Grid 2 kolom: teks + 4 pillar icon.
 3. **Highlight Kegiatan** (`#aktivitas`) — Horizontal scroll 6 kartu. Data diambil dari `src/data/activities.ts`, di-sort by `publishedAt` terbaru. Di akhir scroll ada tombol bulat `→` link ke `/activities`.
-4. **Konten Media Sosial** — Horizontal scroll 6 kartu Instagram. Logo INLA muncul saat hover via `<Image src={imgLogo}>`. Tombol bawah: "Follow" → Instagram.
+4. **Konten Media Sosial** — Horizontal scroll 6 kartu Instagram. Logo INLA muncul saat hover via `<Image src={imgLogo}>`. Tombol bawah: "Follow" → Instagram. **Konten kartu masih hardcode/placeholder** (caption + gambar lokal `src/assets/images/`, bukan data asli dari Instagram) — tiap kartu ada komentar `<!-- TODO: ganti dengan link post spesifik -->`. Semua href sudah benar mengarah ke `https://www.instagram.com/inla_sumut/` (lihat catatan username di bawah). Pola sama dipakai di `about.astro` section "Recent" (6 kartu identik).
 5. **Kenali Kegiatan Kami** — Komponen `ContentGrid` (lihat bagian "Komponen ContentGrid" di bawah). 4 kotak editorial grid, satu-satunya yang aktif saat ini adalah "Kegiatan & Acara" (→ `/activities`) dan "MV & Music" (→ `/mv-music`); "Penampilan" dan "Artikel" masih `active: false` (belum ada halaman tujuan).
+
+**⚠️ Username Instagram resmi: `inla_sumut` (pakai underscore).** Sebelumnya seluruh link Instagram di codebase (`Footer.astro`, `index.astro`, `about.astro` — 15 kemunculan) salah ketik `instagram.com/inlasumut/` (tanpa underscore) yang mengarah ke profil yang **tidak ada sama sekali** — sudah diperbaiki (2026-07-22). Akun ini sudah terdaftar sebagai Business/Creator (kategori "Nonprofit organization" muncul di profil publik), jadi kalau nanti lanjut ke fitur auto-fetch postingan Instagram (lihat status di bawah), syarat akun sudah terpenuhi.
+
+**Status fitur auto-fetch Instagram (belum diimplementasi):** User minta section "Konten Media Sosial" nanti auto-ambil 7 postingan Instagram terbaru (mirip pola YouTube di `mv-music.astro`), dengan klik kartu langsung ke Instagram (bukan buka di web). Sudah dianalisis dua opsi: **Instagram Graph API resmi** (butuh akun Business ✓ sudah, + Facebook Page terhubung, + Meta Developer App, + access token yang harus di-refresh tiap ~60 hari — beda dari `YOUTUBE_API_KEY` yang permanen) vs **widget pihak ketiga** (setup cepat tanpa login, tapi tampilan tidak akan pernah 100% sama dengan desain kartu custom situs ini meski berbayar). User condong ke Graph API supaya desain custom tetap terjaga, tapi **implementasi tertunda** — terhenti di langkah akses admin ke Facebook Page organisasi (`facebook.com/INLASUMUT/`, bukan F-INLA pusat Taiwan yang beda organisasi). Detail progres ada di memory Claude Code (`project_instagram_account.md`), bukan di sini karena statusnya masih berubah-ubah.
 
 ### Navbar nav item: "Home" (bukan "Dashboard" — sudah direname semua)
 
@@ -399,7 +403,7 @@ Konten resmi dari web F-INLA. Sections (urutan dari atas):
 7. **Misi & Tugas** (`#misi`, krem) — Paragraf misi resmi + **7 poin Promosi dan Praktik** bernomor. CSS scoped: `.misi-desc`, `.promosi-section`, `.promosi-list`, `.promosi-item`, `.promosi-num`, `.promosi-text`.
 8. **Makna INLA** (`#makna`, dark bg) — **4 kartu saja** (I, N, L, A) — grid 4 kolom. S dan U dihapus karena INLA hanya 4 huruf.
 9. **Closing** — 世界一家
-10. **Perjalanan** (`#perjalanan`) — Timeline mulai 2001 (bukan 2006).
+10. **Perjalanan** (`#perjalanan`) — Timeline 12 tonggak sejarah resmi F-INLA, 2006–2025 (bukan generik/placeholder). Konten diberikan langsung oleh user (2026-07-22), diambil dari dokumentasi resmi organisasi. Beberapa entri menggabungkan rentang tahun (`2009-2010`, `2011-2012`, `2019-2020`) karena mencakup lebih dari satu peristiwa berdekatan. `tl-desc` di sini jauh lebih panjang dari card timeline generik biasanya (bisa 60-100+ kata per entri, beberapa peristiwa per tahun) — `.tl-desc` di `global.css` tidak punya batas tinggi/line-clamp, jadi card otomatis menyesuaikan tinggi, tidak perlu diringkas paksa. **Hover effect `.tl-card`** (2026-07-22, permintaan eksplisit user): border berubah jadi hijau muda `#7ec87e` (warna resmi palet) + glow lembut (`box-shadow` rgba hijau muda, bukan neon `#00ff88` seperti modal video mv-music) saat di-hover, dikombinasikan dengan efek `translateY(-2px)` yang sudah ada. Pola hover-glow ini scoped khusus `.tl-card` — jangan disamakan/dicampur dengan neon glow modal video yang beda warna & beda konteks.
 11. **Recent** — 6 kartu sosmed Instagram
 12. **CTA** — Bergabung Sekarang → `/karir`
 
@@ -664,6 +668,8 @@ Satu file untuk semua CSS Astro. Tidak ada Tailwind utility classes.
 - `@keyframes fadeIn` — fade in umum
 - `[data-reveal]` + `IntersectionObserver` — scroll reveal (bukan AOS)
 
+**⚠️ Blok CSS `[data-reveal]`/`.revealed`/`[data-reveal-delay]` WAJIB tetap di paling atas `global.css`** (tepat setelah blok `body{}`, sebelum semua style komponen) — **jangan pindah ke bawah lagi.** Alasan: banyak kartu (`.card`, `.act-card`, `.sosmed-card`, `.tl-card`, `.pillar`, dll) punya `:hover { transform: translateY(...) }` sendiri. Selector `.foo:hover` dan `[data-reveal].revealed` sama-sama specificity (0,2,0) — kalau seri, CSS menang berdasarkan urutan sumber, BUKAN spesifisitas. Kalau blok reveal ada DI BAWAH (setelah) rule hover komponen, `[data-reveal].revealed { transform: translateY(0); }` diam-diam MENIMPA transform hover begitu elemen sudah revealed — hover jadi kelihatan "mati" (box-shadow tetap jalan, tapi efek naik/lift hilang). Taruh di atas supaya rule hover komponen (yang datang belakangan) selalu menang di cascade.
+
 ---
 
 ## Gambar — Astro Pages (`src/assets/images/`)
@@ -733,3 +739,4 @@ Libraries legacy (CDN):
 - ❌ Ubah z-index tombol modal/lightbox di bawah 10001
 - ❌ Gunakan `ViewTransitions` — sudah diganti `ClientRouter` dari `astro:transitions`
 - ❌ Tambah tombol CTA ke halaman detail di dalam section konten home (navigasi ke detail hanya via navbar dan footer)
+- ❌ Pindah blok CSS `[data-reveal]`/`.revealed` di `global.css` ke bawah (keluar dari posisi awal file) — akan diam-diam mematikan efek hover `translateY` di semua kartu yang sudah revealed (lihat bagian "Animasi" di atas)

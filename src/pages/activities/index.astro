@@ -59,7 +59,7 @@ const activityCards = [
   <!-- ACARA TERBARU -->
   <section class="latest-section">
     <div class="latest-inner">
-      <div class="latest-header">
+      <div class="latest-header" data-reveal>
         <div>
           <p class="latest-eyebrow">Acara Terbaru</p>
           <h2 class="latest-title">Sorotan <em>Kegiatan Terkini</em></h2>
@@ -67,7 +67,7 @@ const activityCards = [
         <a href="#semua" class="latest-see-all">Lihat Semua →</a>
       </div>
       <div class="latest-grid">
-        <a href={BASE + '/activities/igts'} class="latest-card-main" style="text-decoration:none;">
+        <a href={BASE + '/activities/igts'} class="latest-card-main" style="text-decoration:none;" data-reveal>
           <div class="latest-main-bg" style={`background-image:url('${BASE}/SRC/silhouette-group-of-happy-children-playing-on-meadow-sunset-summertime-SBI-300996172.jpg');background-size:cover;background-position:center;`}></div>
           <div class="latest-main-overlay"></div>
           <span class="latest-main-deco">🌿</span>
@@ -82,7 +82,7 @@ const activityCards = [
           </div>
         </a>
         <div class="latest-side">
-          <a href={BASE + '/activities/igt'} class="latest-card-side" style="text-decoration:none;">
+          <a href={BASE + '/activities/igt'} class="latest-card-side" style="text-decoration:none;" data-reveal>
             <div class="latest-side-thumb">
               <div class="latest-side-bg" style={`position:absolute;inset:0;background-image:url('${BASE}/SRC/p06.jpg');background-size:cover;background-position:center;`}></div>
             </div>
@@ -92,7 +92,7 @@ const activityCards = [
               <span class="latest-side-link">Lihat →</span>
             </div>
           </a>
-          <a href={BASE + '/activities/mvoh'} class="latest-card-side" style="text-decoration:none;">
+          <a href={BASE + '/activities/mvoh'} class="latest-card-side" style="text-decoration:none;" data-reveal data-reveal-delay="1">
             <div class="latest-side-thumb">
               <div class="latest-side-bg" style={`position:absolute;inset:0;background-image:url('${BASE}/SRC/bg5.jpg');background-size:cover;background-position:center;`}></div>
             </div>
@@ -102,7 +102,7 @@ const activityCards = [
               <span class="latest-side-link">Lihat →</span>
             </div>
           </a>
-          <a href={BASE + '/activities/pagelaran'} class="latest-card-side" style="text-decoration:none;">
+          <a href={BASE + '/activities/pagelaran'} class="latest-card-side" style="text-decoration:none;" data-reveal data-reveal-delay="2">
             <div class="latest-side-thumb">
               <div class="latest-side-bg" style={`position:absolute;inset:0;background-image:url('${BASE}/SRC/bg3.jpg');background-size:cover;background-position:center;`}></div>
             </div>
@@ -119,7 +119,7 @@ const activityCards = [
 
   <!-- GALLERY GRID -->
   <section class="grid-section" id="semua">
-    <div class="grid-header">
+    <div class="grid-header" data-reveal>
       <div>
         <p class="grid-eyebrow">Semua Program</p>
         <h2 class="grid-title">Jelajahi <em>Kegiatan Kami</em></h2>
@@ -127,8 +127,8 @@ const activityCards = [
       <span class="grid-count" id="gridCount">12 program</span>
     </div>
     <div class="act-grid" id="actGrid">
-      {activityCards.map(card => (
-        <a href={BASE + card.href} class="act-card" data-label={card.id} style="text-decoration:none;">
+      {activityCards.map((card, i) => (
+        <a href={BASE + card.href} class="act-card" data-label={card.id} style="text-decoration:none;" data-reveal data-reveal-delay={Math.min(i % 4, 4) || undefined}>
           <div class:list={['act-thumb', card.thumb]}>
             <div class="act-thumb-bg" style={`background-image:url('${BASE}${card.image}');`}></div>
             <div class="act-thumb-overlay"></div>
@@ -151,7 +151,7 @@ const activityCards = [
   </section>
 
   <!-- CTA -->
-  <section class="cta-section">
+  <section class="cta-section" data-reveal>
     <h2 class="cta-h2">Ingin <em>Berpartisipasi</em>?</h2>
     <p class="cta-p">Daftarkan dirimu atau sekolahmu untuk bergabung dalam program-program INLA SUMUT berikutnya.</p>
     <a href={BASE + '/karir'} class="btn-white">Daftar Sekarang</a>
