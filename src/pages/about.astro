@@ -2,15 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import { Image } from 'astro:assets';
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
-import imgLogo        from '../assets/images/logo.png';
-import imgChildren    from '../assets/images/children-sunset.jpg';
-import imgDanceBali   from '../assets/images/dance-bali.jpg';
-import imgDanceKimono from '../assets/images/dance-kimono.jpg';
-import imgFestival    from '../assets/images/festival-stage.jpg';
 import imgMountain    from '../assets/images/hero-mountain.jpg';
-import imgWheat       from '../assets/images/wheat-field.jpg';
 ---
 
 <Layout
@@ -28,7 +21,7 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
   </section>
 
   <!-- IN-PAGE NAV -->
-  <nav class="page-nav" aria-label="Navigasi halaman">
+  <nav class="page-nav" id="pageNav" aria-label="Navigasi halaman">
     <a href="#perkenalan"  class="page-nav-item active">Perkenalan</a>
     <a href="#sejarah"     class="page-nav-item">Sejarah</a>
     <a href="#tujuan"      class="page-nav-item">Tujuan</a>
@@ -37,6 +30,27 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
     <a href="#makna"       class="page-nav-item">Makna</a>
     <a href="#perjalanan"  class="page-nav-item">Perjalanan</a>
   </nav>
+
+  <!-- PAGE-NAV FAB — cuma muncul setelah #pageNav discroll lewat
+       (gak keliatan lagi), jalan pintas biar user gak perlu scroll balik
+       ke atas buat pindah section. Item di panel pakai class page-nav-item
+       yang sama supaya ikut ke-highlight otomatis oleh initAbout() di
+       bawah — bukan logic active terpisah. -->
+  <button class="filter-fab" id="pageNavFab" aria-label="Buka navigasi halaman" aria-expanded="false">
+    <span class="filter-fab-icon" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </span>
+  </button>
+  <div class="filter-panel" id="pageNavPanel">
+    <p class="filter-panel-title">Navigasi</p>
+    <a href="#perkenalan"  class="page-nav-item filter-item active">Perkenalan</a>
+    <a href="#sejarah"     class="page-nav-item filter-item">Sejarah</a>
+    <a href="#tujuan"      class="page-nav-item filter-item">Tujuan</a>
+    <a href="#target"      class="page-nav-item filter-item">Target</a>
+    <a href="#misi"        class="page-nav-item filter-item">Misi</a>
+    <a href="#makna"       class="page-nav-item filter-item">Makna</a>
+    <a href="#perjalanan"  class="page-nav-item filter-item">Perjalanan</a>
+  </div>
 
   <!-- PERKENALAN -->
   <section id="perkenalan" class="bg-cream">
@@ -100,9 +114,9 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
     <div data-reveal>
       <p class="eyebrow">02 — Tujuan</p>
       <h2 class="sec-h2">Tujuan <em>F-INLA</em></h2>
-      <div class="tujuan-block">
+      <div class="tujuan-block section-card">
         <p class="sec-p">Untuk bersama-sama menciptakan budaya baru, peradaban baru, moralitas baru, dan nilai-nilai baru bagi seluruh umat manusia, dan untuk bersama-sama mempraktikkan semangat Sepuluh Prinsip Bersama (hidup berdampingan, kemakmuran bersama, kekayaan bersama, kebahagiaan bersama, ketenangan bersama, kesadaran bersama, keuntungan bersama, berkah bersama, kepemilikan bersama, dan prestasi bersama), serta untuk menampilkan estetika "keindahan manusia," untuk mencapai kelangsungan hidup umat manusia yang berkelanjutan, dan agar setiap orang memiliki visi dan konsep keluarga global.</p>
-        <p class="sec-p" style="margin-top:16px;">Dengan mempromosikan budaya alam secara global, kita dapat mendorong setiap orang untuk menumbuhkan kecintaan terhadap alam dan membantu dunia menjadi satu keluarga secepat mungkin.</p>
+        <p class="sec-p" style="margin-top:16px;margin-bottom:0;">Dengan mempromosikan budaya alam secara global, kita dapat mendorong setiap orang untuk menumbuhkan kecintaan terhadap alam dan membantu dunia menjadi satu keluarga secepat mungkin.</p>
       </div>
     </div>
   </section>
@@ -116,24 +130,24 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
           <h2 class="sec-h2">Lima <em>Keharmonisan</em></h2>
           <p class="sec-p">Program kami diarahkan untuk membangun keharmonisan di setiap lapisan kehidupan — dari diri sendiri hingga seluruh dunia.</p>
         </div>
-        <div class="target-list">
-          <div class="target-item" data-reveal>
+        <div class="target-list section-card" data-reveal data-reveal-delay="1">
+          <div class="target-item">
             <div class="target-num">1</div>
             <div class="target-text">Membangun keharmonisan pikiran dan tubuh antara manusia dan alam.</div>
           </div>
-          <div class="target-item" data-reveal data-reveal-delay="1">
+          <div class="target-item">
             <div class="target-num">2</div>
             <div class="target-text">Membangun keharmonisan keluarga antara manusia dan alam.</div>
           </div>
-          <div class="target-item" data-reveal data-reveal-delay="2">
+          <div class="target-item">
             <div class="target-num">3</div>
             <div class="target-text">Membangun keharmonisan masyarakat antara manusia dan alam.</div>
           </div>
-          <div class="target-item" data-reveal data-reveal-delay="3">
+          <div class="target-item">
             <div class="target-num">4</div>
             <div class="target-text">Membangun keharmonisan bangsa antara manusia dan alam.</div>
           </div>
-          <div class="target-item" data-reveal data-reveal-delay="4">
+          <div class="target-item">
             <div class="target-num">5</div>
             <div class="target-text">Membangun keharmonisan dunia antara manusia dan alam.</div>
           </div>
@@ -149,8 +163,8 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
       <h2 class="sec-h2" data-reveal>Misi dan <em>Tugas Kami</em></h2>
       <p class="sec-p misi-desc" data-reveal>Kami menganjurkan agar setiap orang menghormati martabat semua kehidupan! Kami mempromosikan pendidikan kehidupan yang menekankan "melindungi kehidupan sendiri dan melindungi kehidupan orang lain; mencintai kehidupan sendiri dan mencintai kehidupan orang lain; memuliakan kehidupan sendiri dan memuliakan kehidupan orang lain." Kami juga menganjurkan pendidikan karakter moral yang baik, pendidikan literasi budaya, pendidikan etika lingkungan, dan pendidikan kesehatan, mendorong setiap orang untuk kembali ke jati diri mereka yang sebenarnya dan terhubung dengan dunia alam. Hal ini akan memungkinkan kita, sebagai individu, keluarga, masyarakat, bangsa, dunia, dan seluruh alam untuk mencapai harmoni, perdamaian, dan kebahagiaan, yang pada akhirnya memungkinkan setiap orang untuk menyadari keindahan hakiki kemanusiaan dan menikmati kehidupan yang indah, keberadaan yang indah!</p>
 
-      <div class="promosi-section">
-        <h3 class="promosi-heading" data-reveal>Promosi dan Praktik</h3>
+      <div class="promosi-section section-card" data-reveal>
+        <h3 class="promosi-heading">Promosi dan Praktik</h3>
         <div class="promosi-list">
           <div class="promosi-item" data-reveal>
             <div class="promosi-num">1</div>
@@ -343,84 +357,6 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
     </div>
   </section>
 
-  <!-- KONTEN TERBARU -->
-  <section class="sosmed-section">
-    <div class="sosmed-header" data-reveal>
-      <span class="sosmed-eyebrow">Recent</span>
-      <h2 class="sosmed-title">Konten Terbaru <em>INLA SUMUT</em></h2>
-      <p class="sosmed-subtitle">Momen dan kegiatan terkini dari perjalanan kami bersama alam.</p>
-    </div>
-
-    <div class="sosmed-grid">
-      <div class="sosmed-card" data-reveal>
-        <div class="sosmed-img-wrap">
-          <Image src={imgChildren} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Mengasihi alam adalah cara kita mengasihi sesama 🌿</p>
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-      <div class="sosmed-card" data-reveal data-reveal-delay="1">
-        <div class="sosmed-img-wrap">
-          <Image src={imgMountain} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Bersama alam, kita temukan kedamaian sejati 🌄</p>
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-      <div class="sosmed-card" data-reveal data-reveal-delay="2">
-        <div class="sosmed-img-wrap">
-          <Image src={imgWheat} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Generasi muda INLA siap menjaga bumi 🌍</p>
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-      <div class="sosmed-card" data-reveal data-reveal-delay="3">
-        <div class="sosmed-img-wrap">
-          <Image src={imgDanceBali} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Seni dan budaya sebagai jembatan antar bangsa 🎭</p>
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-      <div class="sosmed-card" data-reveal data-reveal-delay="4">
-        <div class="sosmed-img-wrap">
-          <Image src={imgDanceKimono} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Setiap langkah kecil memberi dampak besar 🌱</p>
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-      <div class="sosmed-card" data-reveal data-reveal-delay="4">
-        <div class="sosmed-img-wrap">
-          <Image src={imgFestival} alt="Konten INLA" class="sosmed-img" width={400} height={160} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Harmoni manusia dan semesta dimulai dari diri kita ✨</p>
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="sosmed-footer-cta">
-      <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-follow-btn">
-        Follow
-      </a>
-    </div>
-  </section>
-
   <!-- CTA -->
   <section class="cta-section" data-reveal>
     <h2 class="cta-h2">Jadilah Bagian dari <em>Perjalanan Ini</em></h2>
@@ -512,27 +448,27 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
     max-width: 800px;
     margin-bottom: 36px;
   }
-  .promosi-section {
-    border-top: 1px solid #d4e4d4;
-    padding-top: 32px;
-  }
   .promosi-heading {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #1c2e1c;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     letter-spacing: 0.02em;
   }
   .promosi-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    max-width: 800px;
   }
   .promosi-item {
     display: flex;
     gap: 16px;
     align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid #ece8dc;
+  }
+  .promosi-item:last-child {
+    border-bottom: none;
+    padding-bottom: 4px;
   }
   .promosi-num {
     flex-shrink: 0;
@@ -595,12 +531,15 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
     .promosi-num { width: 28px; height: 28px; font-size: 0.75rem; }
     .promosi-text { font-size: 0.88rem; }
     .promosi-heading { font-size: 1rem; }
+
+    /* Rounded card container — tighter padding on mobile */
+    .section-card { padding: 24px 20px; border-radius: 20px; }
   }
 
   @media (max-width: 480px) {
     .intro-main-h2 { font-size: 1.55rem; }
     .sejarah-img-col { min-height: 160px; }
-    .promosi-list { gap: 12px; }
+    .section-card { padding: 20px 16px; }
   }
 </style>
 
@@ -625,6 +564,69 @@ import imgWheat       from '../assets/images/wheat-field.jpg';
     });
   }
 
+  // ── Page-nav FAB — buka/tutup panel navigasi ────────────────────
+  function closePageNavPanel() {
+    const fab = document.getElementById('pageNavFab');
+    const panel = document.getElementById('pageNavPanel');
+    if (!fab || !panel) return;
+    panel.classList.remove('open');
+    fab.classList.remove('open');
+    fab.setAttribute('aria-expanded', 'false');
+  }
+
+  function initPageNavFab() {
+    const fab = document.getElementById('pageNavFab');
+    const panel = document.getElementById('pageNavPanel');
+    if (!fab || !panel) return;
+
+    fab.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const willOpen = !panel.classList.contains('open');
+      panel.classList.toggle('open', willOpen);
+      fab.classList.toggle('open', willOpen);
+      fab.setAttribute('aria-expanded', String(willOpen));
+    });
+
+    panel.querySelectorAll<HTMLAnchorElement>('.filter-item').forEach(link => {
+      link.addEventListener('click', () => closePageNavPanel());
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!panel.classList.contains('open')) return;
+      const target = e.target as Node;
+      if (panel.contains(target) || fab.contains(target)) return;
+      closePageNavPanel();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePageNavPanel();
+    });
+  }
+
+  // ── FAB hanya muncul setelah #pageNav discroll lewat (gak keliatan
+  //    lagi di viewport) — dipantau via IntersectionObserver, sama
+  //    pola dengan filter FAB di halaman activities.
+  let pageNavObserver: IntersectionObserver | null = null;
+  function initPageNavFabVisibility() {
+    const bar = document.getElementById('pageNav');
+    const fab = document.getElementById('pageNavFab');
+    if (!bar || !fab) return;
+
+    pageNavObserver?.disconnect();
+    pageNavObserver = new IntersectionObserver(
+      ([entry]) => {
+        fab.classList.toggle('visible', !entry.isIntersecting);
+        if (entry.isIntersecting) closePageNavPanel();
+      },
+      { threshold: 0 }
+    );
+    pageNavObserver.observe(bar);
+  }
+
   initAbout();
+  initPageNavFab();
+  initPageNavFabVisibility();
   document.addEventListener('astro:after-swap', initAbout);
+  document.addEventListener('astro:after-swap', initPageNavFab);
+  document.addEventListener('astro:after-swap', initPageNavFabVisibility);
 </script>

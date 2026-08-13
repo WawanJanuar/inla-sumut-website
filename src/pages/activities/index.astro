@@ -34,8 +34,40 @@ const activityCards = [
     <p class="hero-p">Jelajahi seluruh program dan kegiatan kami — dari pendidikan karakter, kompetisi bakat, hingga pagelaran seni budaya berskala internasional.</p>
   </section>
 
-  <!-- FILTER BAR -->
+  <!-- FILTER BAR — tetap tampil normal di alur halaman (relative,
+       bukan sticky, jadi gak akan pernah nabrak navbar pill). -->
   <div class="filter-bar" id="filterBar">
+    <button class="filter-item active" data-filter="all">
+      <span class="filter-dot" style="background:#3d7a3d;"></span>Semua
+    </button>
+    <button class="filter-item" data-filter="igts">
+      <span class="filter-dot" style="background:#4a9e4a;"></span>IGTS
+    </button>
+    <button class="filter-item" data-filter="igt">
+      <span class="filter-dot" style="background:#b88000;"></span>IGT
+    </button>
+    <button class="filter-item" data-filter="mvoh">
+      <span class="filter-dot" style="background:#1a4a8a;"></span>MVOH
+    </button>
+    <button class="filter-item" data-filter="pagelaran">
+      <span class="filter-dot" style="background:#6a3a9e;"></span>Pagelaran
+    </button>
+    <button class="filter-item" data-filter="senam">
+      <span class="filter-dot" style="background:#8a5020;"></span>Senam/SKS
+    </button>
+  </div>
+
+  <!-- FILTER FAB — cuma muncul setelah filter-bar di atas discroll
+       lewat (gak keliatan lagi), sebagai jalan pintas biar user gak
+       perlu scroll balik ke atas buat ganti kategori. Terkontrol lewat
+       IntersectionObserver di script bawah, bukan sticky. -->
+  <button class="filter-fab" id="filterFab" aria-label="Buka filter kategori" aria-expanded="false">
+    <span class="filter-fab-icon" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </span>
+  </button>
+  <div class="filter-panel" id="filterPanel">
+    <p class="filter-panel-title">Kategori</p>
     <button class="filter-item active" data-filter="all">
       <span class="filter-dot" style="background:#3d7a3d;"></span>Semua
     </button>
@@ -169,9 +201,11 @@ const activityCards = [
 
     btns.forEach(btn => {
       btn.addEventListener('click', () => {
-        btns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
         const filter = btn.dataset.filter ?? 'all';
+        // Ada dua set tombol (filter-bar + panel FAB) yang berbagi
+        // data-filter yang sama — sinkronkan status active di KEDUANYA,
+        // bukan cuma tombol yang diklik, supaya dua UI ini gak beda state.
+        btns.forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
         let visible = 0;
         cards.forEach(card => {
           const show = filter === 'all' || card.dataset.label === filter;
@@ -180,10 +214,71 @@ const activityCards = [
         });
         if (count) count.textContent = `${visible} program`;
         if (empty) empty.classList.toggle('show', visible === 0);
+        closeFilterPanel();
       });
     });
   }
 
+  // ── Filter FAB — buka/tutup panel kategori ──────────────────────
+  function closeFilterPanel() {
+    const fab = document.getElementById('filterFab');
+    const panel = document.getElementById('filterPanel');
+    if (!fab || !panel) return;
+    panel.classList.remove('open');
+    fab.classList.remove('open');
+    fab.setAttribute('aria-expanded', 'false');
+  }
+
+  function initFilterFab() {
+    const fab = document.getElementById('filterFab');
+    const panel = document.getElementById('filterPanel');
+    if (!fab || !panel) return;
+
+    fab.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const willOpen = !panel.classList.contains('open');
+      panel.classList.toggle('open', willOpen);
+      fab.classList.toggle('open', willOpen);
+      fab.setAttribute('aria-expanded', String(willOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!panel.classList.contains('open')) return;
+      const target = e.target as Node;
+      if (panel.contains(target) || fab.contains(target)) return;
+      closeFilterPanel();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeFilterPanel();
+    });
+  }
+
+  // ── FAB hanya muncul setelah filter-bar aslinya discroll lewat
+  //    (gak keliatan lagi di viewport) — dipantau via IntersectionObserver,
+  //    bukan hitung scrollY manual, supaya otomatis benar walau tinggi
+  //    hero/filter-bar beda-beda per breakpoint.
+  let filterBarObserver: IntersectionObserver | null = null;
+  function initFilterFabVisibility() {
+    const bar = document.getElementById('filterBar');
+    const fab = document.getElementById('filterFab');
+    if (!bar || !fab) return;
+
+    filterBarObserver?.disconnect();
+    filterBarObserver = new IntersectionObserver(
+      ([entry]) => {
+        fab.classList.toggle('visible', !entry.isIntersecting);
+        if (entry.isIntersecting) closeFilterPanel();
+      },
+      { threshold: 0 }
+    );
+    filterBarObserver.observe(bar);
+  }
+
   initFilter();
+  initFilterFab();
+  initFilterFabVisibility();
   document.addEventListener('astro:after-swap', initFilter);
+  document.addEventListener('astro:after-swap', initFilterFabVisibility);
+  document.addEventListener('astro:after-swap', initFilterFab);
 </script>

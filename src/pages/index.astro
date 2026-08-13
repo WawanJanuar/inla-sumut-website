@@ -10,13 +10,10 @@ const highlighted = getHighlights(6);
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 import slideMain       from '../assets/images/Landingpage(main).png';
 import slideEvent      from '../assets/images/Landinpage (Event).jpg';
-import imgLogo         from '../assets/images/logo.png';
-import imgChildren     from '../assets/images/children-sunset.jpg';
 import imgDanceBali    from '../assets/images/dance-bali.jpg';
 import imgDanceKimono  from '../assets/images/dance-kimono.jpg';
 import imgFestival     from '../assets/images/festival-stage.jpg';
 import imgMountain     from '../assets/images/hero-mountain.jpg';
-import imgWheat        from '../assets/images/wheat-field.jpg';
 
 const contentGridItems = [
   { label: 'Kegiatan & Acara', href: BASE + '/activities', image: imgFestival,    active: true },
@@ -155,97 +152,6 @@ const contentGridItems = [
       <div class="cards-see-all">
         <a href={BASE + '/activities'} class="cards-see-all-btn" title="Lihat semua kegiatan">→</a>
       </div>
-    </div>
-  </section>
-
-  <!-- KONTEN INSTAGRAM -->
-  <section class="sosmed-section">
-    <div class="sosmed-header" data-reveal>
-      <span class="sosmed-eyebrow">📸 Media Sosial</span>
-      <h2 class="sosmed-title">Ikuti Perjalanan <em>INLA SUMUT</em></h2>
-      <p class="sosmed-subtitle">Konten terbaru dari kegiatan dan momen bersama alam kami.</p>
-    </div>
-
-    <div class="sosmed-grid">
-
-      <div class="sosmed-card" data-reveal>
-        <div class="sosmed-img-wrap">
-          <Image src={imgChildren} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Mengasihi alam adalah cara kita mengasihi sesama 🌿</p>
-          <!-- TODO: ganti dengan link post spesifik -->
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-
-      <div class="sosmed-card" data-reveal data-reveal-delay="1">
-        <div class="sosmed-img-wrap">
-          <Image src={imgMountain} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Bersama alam, kita temukan kedamaian sejati 🌄</p>
-          <!-- TODO: ganti dengan link post spesifik -->
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-
-      <div class="sosmed-card" data-reveal data-reveal-delay="2">
-        <div class="sosmed-img-wrap">
-          <Image src={imgWheat} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Generasi muda INLA siap menjaga bumi 🌍</p>
-          <!-- TODO: ganti dengan link post spesifik -->
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-
-      <div class="sosmed-card" data-reveal data-reveal-delay="3">
-        <div class="sosmed-img-wrap">
-          <Image src={imgDanceBali} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Seni dan budaya sebagai jembatan antar bangsa 🎭</p>
-          <!-- TODO: ganti dengan link post spesifik -->
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-
-      <div class="sosmed-card" data-reveal data-reveal-delay="4">
-        <div class="sosmed-img-wrap">
-          <Image src={imgDanceKimono} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Setiap langkah kecil memberi dampak besar 🌱</p>
-          <!-- TODO: ganti dengan link post spesifik -->
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-
-      <div class="sosmed-card" data-reveal data-reveal-delay="4">
-        <div class="sosmed-img-wrap">
-          <Image src={imgFestival} alt="Konten INLA" class="sosmed-img" width={600} height={600} />
-          <div class="sosmed-img-overlay"><Image src={imgLogo} alt="INLA" class="sosmed-overlay-logo" width={44} height={44} /></div>
-        </div>
-        <div class="sosmed-body">
-          <p class="sosmed-caption">Harmoni manusia dan semesta dimulai dari diri kita ✨</p>
-          <!-- TODO: ganti dengan link post spesifik -->
-          <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-btn">Lihat di Instagram →</a>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="sosmed-footer-cta">
-      <a href="https://www.instagram.com/inla_sumut/" target="_blank" rel="noopener" class="sosmed-follow-btn">
-        Follow
-      </a>
     </div>
   </section>
 

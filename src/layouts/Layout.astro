@@ -136,10 +136,38 @@ const fullOgUrl = ogUrl ?? Astro.url.href;
 
   <script>
     document.addEventListener('astro:page-load', () => {
+      // ── Nav indicator: pill yang meluncur ke link aktif ─────────────
+      // Posisi dihitung via JS (bounding box link .active), lalu perpindahan
+      // halus antar halaman terjadi otomatis lewat View Transitions API
+      // (astro:transitions ClientRouter) karena elemen ini dikasih
+      // view-transition-name yang sama di setiap halaman — browser
+      // meng-interpolate geometri lama → baru saat navigasi.
+      const navLinksWrap = document.querySelector<HTMLElement>('.nav-links');
+      const navIndicator = document.getElementById('nav-indicator');
+      const positionNavIndicator = () => {
+        if (!navLinksWrap || !navIndicator) return;
+        const activeLink = navLinksWrap.querySelector<HTMLElement>('.nav-link.active');
+        if (!activeLink) {
+          navIndicator.style.opacity = '0';
+          navIndicator.style.width = '0px';
+          return;
+        }
+        const wrapRect = navLinksWrap.getBoundingClientRect();
+        const linkRect = activeLink.getBoundingClientRect();
+        navIndicator.style.width = `${linkRect.width}px`;
+        navIndicator.style.transform = `translateX(${linkRect.left - wrapRect.left}px)`;
+        navIndicator.style.opacity = '1';
+      };
+      positionNavIndicator();
+      window.addEventListener('resize', positionNavIndicator);
+
       // ── Sticky navbar ──────────────────────────────────────────────
-      const nav = document.querySelector('.nav');
-      if (nav) {
-        const onScroll = () => nav.classList.toggle('nav-scrolled', window.scrollY > 60);
+      const navEl = document.querySelector('.nav');
+      if (navEl) {
+        const onScroll = () => {
+          navEl.classList.toggle('nav-scrolled', window.scrollY > 60);
+          positionNavIndicator();
+        };
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
       }

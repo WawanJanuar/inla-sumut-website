@@ -272,7 +272,7 @@ Jangan gunakan `DOMContentLoaded` atau `astro:after-swap`. `astro:page-load` dip
 
 | Fitur | Cara Kerja |
 |---|---|
-| Scroll reveal | `[data-reveal]` + `IntersectionObserver` (threshold 0.12, one-time — `unobserve` setelah `.revealed` ditambahkan), delay via `data-reveal-delay="1"`–`"6"` (`transition-delay` 0.1s–0.6s). Diterapkan menyeluruh di 3 halaman utama (`index.astro`, `about.astro`, `activities/index.astro`) plus komponen `ContentGrid.astro` yang mereka pakai — tiap section header dapat `data-reveal` polos, tiap card/list berulang dapat `data-reveal` + delay staggered (biasanya `Math.min(i, 4) \|\| undefined` di `.map()` supaya delay maksimal 0.4s dan atribut kosong di-omit untuk index 0). Hero tiap halaman **sengaja tidak** diberi reveal (selalu full-visible saat load, konsisten di semua halaman). Kartu di container horizontal-scroll (`.cards`, `.sosmed-grid`) juga otomatis kena efek ini — `IntersectionObserver` menghormati clipping dari ancestor `overflow-x:auto`, jadi kartu yang belum discroll ke area terlihat baru revealed begitu discroll masuk (bukan bug, perilaku wajar). |
+| Scroll reveal | `[data-reveal]` + `IntersectionObserver` (threshold 0.12, one-time — `unobserve` setelah `.revealed` ditambahkan), delay via `data-reveal-delay="1"`–`"6"` (`transition-delay` 0.1s–0.6s). Diterapkan menyeluruh di 3 halaman utama (`index.astro`, `about.astro`, `activities/index.astro`) plus komponen `ContentGrid.astro` yang mereka pakai — tiap section header dapat `data-reveal` polos, tiap card/list berulang dapat `data-reveal` + delay staggered (biasanya `Math.min(i, 4) \|\| undefined` di `.map()` supaya delay maksimal 0.4s dan atribut kosong di-omit untuk index 0). Hero tiap halaman **sengaja tidak** diberi reveal (selalu full-visible saat load, konsisten di semua halaman). Kartu di container horizontal-scroll (`.cards`) juga otomatis kena efek ini — `IntersectionObserver` menghormati clipping dari ancestor `overflow-x:auto`, jadi kartu yang belum discroll ke area terlihat baru revealed begitu discroll masuk (bukan bug, perilaku wajar). |
 | Magnetic buttons | `[data-magnetic]` — mouse tracking offset |
 | Counter animasi | `[data-counter]` / `[data-suffix]` — ease-out cubic count-up |
 | Cursor glow | `div#cursor-glow` mengikuti posisi mouse |
@@ -299,15 +299,12 @@ Kedua overlay ini (`#lightbox`, `#videoModal`) punya efek cahaya neon hijau berg
 ## Halaman Home (`src/pages/index.astro`)
 
 ### Sections (urutan dari atas):
-1. **Hero** — 2-slide slideshow (fade 1.2s, interval 5s, Ken Burns `scale(1→1.06)`). Gambar: `Landingpage(main).png` + `Landinpage (Event).jpg`. Di atas slides ada glassmorphism card (`hero-glass-card`: `background: rgba(255,255,255,0.78)`, `backdrop-filter: blur(36px) saturate(200%)`, border+inset highlight terang di atas, shadow besar `0 30px 70px rgba(28,46,28,0.28)` untuk kesan melayang). Refleksi cahaya dibuat via `::before` (highlight atas, opacity puncak 0.45, fade panjang) dan `::after` (garis diagonal tipis, opacity 0.35, `filter: blur(2px)`). Karena background sekarang terang, teks di dalam card di-override jadi warna gelap (`.hero-glass-card .hero-h1/.hero-p/.hero-tag/.btn-ghost` — scoped khusus, tidak memengaruhi hero page lain yang punya selector sendiri seperti `.hero-karir .hero-h1`).
+1. **Hero** — 2-slide slideshow (fade 1.2s, interval 5s, Ken Burns `scale(1→1.06)`). Gambar: `Landingpage(main).png` + `Landinpage (Event).jpg`. Di atas slides ada glassmorphism card (`hero-glass-card`: `background: rgba(255,255,255,0.78)`, `backdrop-filter: blur(36px) saturate(200%)`, border+inset highlight terang di atas, shadow besar `0 30px 70px rgba(28,46,28,0.28)` untuk kesan melayang). Refleksi cahaya dibuat via `::before` (highlight atas, opacity puncak 0.45, fade panjang) dan `::after` (garis diagonal tipis, opacity 0.35, `filter: blur(2px)`). Karena background sekarang terang, teks di dalam card di-override jadi warna gelap (`.hero-glass-card .hero-h1/.hero-p/.hero-tag/.btn-ghost` — scoped khusus, tidak memengaruhi hero page lain yang punya selector sendiri seperti `.hero-karir .hero-h1`). **Tinggi hero `min-height: 85vh`** (mobile juga `85vh`) — awalnya `520px` tetap lalu naik bertahap (`1050px` → `75vh` → **`85vh`** final) atas permintaan user langsung, supaya hero menutupi sampai ke section "Tentang Kami" di bawahnya (2026-08-13).
 2. **About** — Grid 2 kolom: teks + 4 pillar icon.
 3. **Highlight Kegiatan** (`#aktivitas`) — Horizontal scroll 6 kartu. Data diambil dari `src/data/activities.ts`, di-sort by `publishedAt` terbaru. Di akhir scroll ada tombol bulat `→` link ke `/activities`.
-4. **Konten Media Sosial** — Horizontal scroll 6 kartu Instagram. Logo INLA muncul saat hover via `<Image src={imgLogo}>`. Tombol bawah: "Follow" → Instagram. **Konten kartu masih hardcode/placeholder** (caption + gambar lokal `src/assets/images/`, bukan data asli dari Instagram) — tiap kartu ada komentar `<!-- TODO: ganti dengan link post spesifik -->`. Semua href sudah benar mengarah ke `https://www.instagram.com/inla_sumut/` (lihat catatan username di bawah). Pola sama dipakai di `about.astro` section "Recent" (6 kartu identik).
-5. **Kenali Kegiatan Kami** — Komponen `ContentGrid` (lihat bagian "Komponen ContentGrid" di bawah). 4 kotak editorial grid, satu-satunya yang aktif saat ini adalah "Kegiatan & Acara" (→ `/activities`) dan "MV & Music" (→ `/mv-music`); "Penampilan" dan "Artikel" masih `active: false` (belum ada halaman tujuan).
+4. **Kenali Kegiatan Kami** — Komponen `ContentGrid` (lihat bagian "Komponen ContentGrid" di bawah). 4 kotak editorial grid, satu-satunya yang aktif saat ini adalah "Kegiatan & Acara" (→ `/activities`) dan "MV & Music" (→ `/mv-music`); "Penampilan" dan "Artikel" masih `active: false` (belum ada halaman tujuan).
 
-**⚠️ Username Instagram resmi: `inla_sumut` (pakai underscore).** Sebelumnya seluruh link Instagram di codebase (`Footer.astro`, `index.astro`, `about.astro` — 15 kemunculan) salah ketik `instagram.com/inlasumut/` (tanpa underscore) yang mengarah ke profil yang **tidak ada sama sekali** — sudah diperbaiki (2026-07-22). Akun ini sudah terdaftar sebagai Business/Creator (kategori "Nonprofit organization" muncul di profil publik), jadi kalau nanti lanjut ke fitur auto-fetch postingan Instagram (lihat status di bawah), syarat akun sudah terpenuhi.
-
-**Status fitur auto-fetch Instagram (belum diimplementasi):** User minta section "Konten Media Sosial" nanti auto-ambil 7 postingan Instagram terbaru (mirip pola YouTube di `mv-music.astro`), dengan klik kartu langsung ke Instagram (bukan buka di web). Sudah dianalisis dua opsi: **Instagram Graph API resmi** (butuh akun Business ✓ sudah, + Facebook Page terhubung, + Meta Developer App, + access token yang harus di-refresh tiap ~60 hari — beda dari `YOUTUBE_API_KEY` yang permanen) vs **widget pihak ketiga** (setup cepat tanpa login, tapi tampilan tidak akan pernah 100% sama dengan desain kartu custom situs ini meski berbayar). User condong ke Graph API supaya desain custom tetap terjaga, tapi **implementasi tertunda** — terhenti di langkah akses admin ke Facebook Page organisasi (`facebook.com/INLASUMUT/`, bukan F-INLA pusat Taiwan yang beda organisasi). Detail progres ada di memory Claude Code (`project_instagram_account.md`), bukan di sini karena statusnya masih berubah-ubah.
+**⚠️ SEMUA FITUR INSTAGRAM SUDAH DIHAPUS PERMANEN (2026-08-13), atas permintaan eksplisit user ("semua fitur instagram hapus permanen").** Section "Konten Media Sosial" (dulu section ke-4 di Home, judulnya sama dengan section "Recent" di About) sudah dihapus total dari `index.astro` dan `about.astro` — begitu juga tombol Instagram di `Footer.astro` (`.socials`, dulu ada 3 tombol FB/IG/YT, sekarang cuma FB+YT). Semua CSS terkait (`.sosmed-section`, `.sosmed-header`, `.sosmed-eyebrow/-title/-subtitle/-grid/-card/-img*/-body/-caption/-btn/-footer-cta/-follow-btn` + versi mobile-nya) juga sudah dibuang dari `global.css`, termasuk CSS legacy `.socmed-*` (beda ejaan, dead code lama yang sudah gak dipakai di mana pun sejak sebelumnya — sekalian dibuang saat pembersihan ini). Import gambar yang cuma dipakai section ini (`imgLogo`, `imgChildren`, `imgWheat` di `index.astro`; `imgLogo`, `imgChildren`, `imgDanceBali`, `imgDanceKimono`, `imgFestival`, `imgWheat`, plus import `Image` dari `astro:assets` itu sendiri di `about.astro`) juga sudah dibersihkan. **Kalau nanti fitur Instagram mau dihidupkan lagi, ini bukan "un-delete" sederhana** — perlu dibangun ulang dari nol (markup + CSS + data), bukan cuma uncomment, karena semuanya sudah beneran dibuang dari kode.
 
 ### Navbar nav item: "Home" (bukan "Dashboard" — sudah direname semua)
 
@@ -376,6 +373,20 @@ Setiap halaman di `src/pages/activities/*.astro` menggunakan komponen:
 
 ---
 
+## Halaman Semua Kegiatan (`src/pages/activities/index.astro`)
+
+Route `/activities`. Header hero + filter kategori + grid semua kegiatan.
+
+**Filter kategori (`.filter-bar`, `id="filterBar"`):** tombol `.filter-item[data-filter]` (`all`/`igts`/`igt`/`mvoh`/`pagelaran`/`senam`), klik toggle `.active` di semua tombol yang share `data-filter` sama (lihat bagian FAB di bawah) + filter `.act-card[data-label]` via `classList.toggle('hidden', ...)`.
+
+**⚠️ `.filter-bar` (dan `.page-nav` di about.astro) WAJIB `position: relative`, BUKAN `position: sticky`.** Awalnya `sticky; top: 82px` — begitu discroll, dia bertabrakan/tumpang-tindih dengan pill navbar mengambang yang juga `position: fixed` (lihat "Komponen Navbar" di bawah), soalnya keduanya jadi rebutan area yang sama pas discroll bareng. **Fix (2026-08-13):** diganti `position: relative` biasa (scroll normal ikut alur halaman, hilang begitu discroll lewat) — override `top` di breakpoint mobile juga dihapus karena gak relevan lagi. Kalau nanti butuh filter-bar/page-nav "nempel" lagi pas discroll, JANGAN pakai `sticky` langsung — pertimbangkan FAB pattern di bawah ini dulu (fungsinya sama tapi gak akan tabrakan dengan navbar).
+
+**Filter FAB (`#filterFab` + `#filterPanel`)** — tombol bulat mengambang pojok kanan-bawah, jalan pintas ganti kategori tanpa scroll balik ke atas. **Cuma muncul setelah `.filter-bar` discroll lewat (gak keliatan lagi di viewport)** — dipantau via `IntersectionObserver({threshold:0})` yang observe `#filterBar`, toggle class `.visible` di `#filterFab` berdasarkan `!entry.isIntersecting`. Klik FAB toggle `.filter-panel` (isi kategori yang sama, `data-filter` identik dengan filter-bar asli — klik tombol mana pun otomatis sinkron status `.active` di KEDUA set tombol sekaligus, bukan cuma yang diklik). Panel/FAB ditutup lewat: klik salah satu item filter, klik di luar panel (`document` click listener + `.contains()` check), atau `Escape`. **Card panel utamanya (`.filter-panel`) punya cincin cahaya hijau berputar mengelilingi seluruh card** (teknik persis sama dengan `.nav-cta` tombol Bergabung — `::before` conic-gradient raksasa 220% diputar `navCtaSpin` 3.5s infinite, `::after` lapisan solid putih inset 1.5px nyisain garis tipis sebagai cincin cahayanya; `isolation:isolate` + `overflow:hidden` di `.filter-panel` supaya conic-gradient raksasa ke-clip rapi ke bentuk rounded card-nya) — item filter DI DALAM panel (`.filter-item.active`) TETAP pakai style solid biasa (bg gelap `#1c2e1c`), efek cincin cahayanya cuma di card pembungkusnya, bukan di item yang di-klik (2026-08-13, iterasi dari permintaan user — awalnya sempat dicoba di item aktif dulu, lalu dipindah ke card utama atas revisi user). Pola FAB + glow-ring card ini di-reuse persis sama di `about.astro` untuk page-nav (lihat bagian "Halaman About" di bawah).
+
+Ini section "Sorotan Kegiatan Terkini" + grid semua kegiatan (`.act-grid`, 4 kolom) di bawah filter — kartu sama style dengan `.card` di Home tapi versi grid, bukan horizontal-scroll.
+
+---
+
 ## Halaman Karir (`src/pages/karir.astro`)
 
 Form bergabung dengan validasi client-side:
@@ -390,30 +401,56 @@ Form bergabung dengan validasi client-side:
 
 ## Halaman About (`src/pages/about.astro`)
 
-Konten resmi dari web F-INLA. Sections (urutan dari atas):
+Konten resmi dari web F-INLA. **Isi/teks tiap section TIDAK PERNAH diubah** (lihat catatan redesain di bawah) — cuma layout/visual yang berubah dari waktu ke waktu. Sections (urutan dari atas):
 
-1. **Hero** — headline + deskripsi singkat
-2. **In-page nav** — anchor ke: Perkenalan, Sejarah, Tujuan, Target, Misi, Makna, Perjalanan. Aktif saat scroll via `IntersectionObserver`.
+1. **Hero** (`.hero-about`) — headline + deskripsi singkat
+2. **In-page nav** (`.page-nav`, `id="pageNav"`) — anchor ke: Perkenalan, Sejarah, Tujuan, Target, Misi, Makna, Perjalanan. Aktif saat scroll via `IntersectionObserver`. Sekarang berbentuk **pill mengambang** (`border-radius:999px`, floating card putih dengan `margin-top:-28px` nutupin dikit ke hero di atasnya, `box-shadow` besar) — bukan lagi bar penuh dengan underline tab seperti sebelumnya (lihat "Redesain About Us" di bawah).
 3. **Perkenalan** (`#perkenalan`) — "Mari Kenali Kami": tagline resmi F-INLA + deskripsi organisasi nirlaba internasional. CSS scoped: `.intro-wrap`, `.intro-main-h2`, `.intro-divider`, `.intro-sub-heading`, `.intro-tagline`, `.finla-block`, `.finla-name`, `.finla-desc`.
 4. **Sejarah** (`#sejarah`, dark bg) — "Asal Mula Pendirian": 3 paragraf resmi (INLA 2006 HK, F-INLA 2015, Wang Ciguang sejak 2001). Layout **2 kolom**:
    - Kiri: teks + stats (20+ negara, 2006) + kartu bendera 11 negara
    - Kanan: foto `hongkong.jpg` dengan **CSS gradient mask** (`mask-image: linear-gradient(to right, transparent → black)`) — teks memudar ke foto
-5. **Tujuan** (`#tujuan`, krem) — Sepuluh Prinsip Bersama + tujuan global. CSS scoped: `.tujuan-block`.
-6. **Target** (`#target`, putih) — Lima Keharmonisan (pikiran/tubuh → keluarga → masyarakat → bangsa → dunia). 5 item numbered.
-7. **Misi & Tugas** (`#misi`, krem) — Paragraf misi resmi + **7 poin Promosi dan Praktik** bernomor. CSS scoped: `.misi-desc`, `.promosi-section`, `.promosi-list`, `.promosi-item`, `.promosi-num`, `.promosi-text`.
+5. **Tujuan** (`#tujuan`, krem) — Sepuluh Prinsip Bersama + tujuan global. Teks dibungkus `.tujuan-block.section-card` (lihat `.section-card` di "Redesain About Us" di bawah).
+6. **Target** (`#target`, putih) — Lima Keharmonisan (pikiran/tubuh → keluarga → masyarakat → bangsa → dunia). 5 item numbered, sekarang dalam SATU `.target-list.section-card` (rounded card putih) dengan tiap `.target-item` dipisah hairline divider (`border-bottom`), bukan lagi 5 box kartu terpisah-pisah.
+7. **Misi & Tugas** (`#misi`, krem) — Paragraf misi resmi + **7 poin Promosi dan Praktik** bernomor, sekarang dalam SATU `.promosi-section.section-card`, tiap `.promosi-item` dipisah hairline divider (pola sama dengan Target di atas — konsisten setelah redesain).
 8. **Makna INLA** (`#makna`, dark bg) — **4 kartu saja** (I, N, L, A) — grid 4 kolom. S dan U dihapus karena INLA hanya 4 huruf.
 9. **Closing** — 世界一家
-10. **Perjalanan** (`#perjalanan`) — Timeline 12 tonggak sejarah resmi F-INLA, 2006–2025 (bukan generik/placeholder). Konten diberikan langsung oleh user (2026-07-22), diambil dari dokumentasi resmi organisasi. Beberapa entri menggabungkan rentang tahun (`2009-2010`, `2011-2012`, `2019-2020`) karena mencakup lebih dari satu peristiwa berdekatan. `tl-desc` di sini jauh lebih panjang dari card timeline generik biasanya (bisa 60-100+ kata per entri, beberapa peristiwa per tahun) — `.tl-desc` di `global.css` tidak punya batas tinggi/line-clamp, jadi card otomatis menyesuaikan tinggi, tidak perlu diringkas paksa. **Hover effect `.tl-card`** (2026-07-22, permintaan eksplisit user): border berubah jadi hijau muda `#7ec87e` (warna resmi palet) + glow lembut (`box-shadow` rgba hijau muda, bukan neon `#00ff88` seperti modal video mv-music) saat di-hover, dikombinasikan dengan efek `translateY(-2px)` yang sudah ada. Pola hover-glow ini scoped khusus `.tl-card` — jangan disamakan/dicampur dengan neon glow modal video yang beda warna & beda konteks.
-11. **Recent** — 6 kartu sosmed Instagram
-12. **CTA** — Bergabung Sekarang → `/karir`
+10. **Perjalanan** (`#perjalanan`) — Timeline 12 tonggak sejarah resmi F-INLA, 2006–2025 (bukan generik/placeholder). Konten diberikan langsung oleh user (2026-07-22), diambil dari dokumentasi resmi organisasi. Beberapa entri menggabungkan rentang tahun (`2009-2010`, `2011-2012`, `2019-2020`) karena mencakup lebih dari satu peristiwa berdekatan. `tl-desc` di sini jauh lebih panjang dari card timeline generik biasanya (bisa 60-100+ kata per entri, beberapa peristiwa per tahun) — `.tl-desc` di `global.css` tidak punya batas tinggi/line-clamp, jadi card otomatis menyesuaikan tinggi, tidak perlu diringkas paksa. **Hover effect `.tl-card`**: border berubah jadi hijau muda `#7ec87e` (warna resmi palet) + glow lembut (`box-shadow` rgba hijau muda, bukan neon `#00ff88` seperti modal video mv-music) saat di-hover, dikombinasikan dengan efek `translateY(-2px)`. Pola hover-glow ini scoped khusus `.tl-card` — jangan disamakan/dicampur dengan neon glow modal video yang beda warna & beda konteks.
+11. **CTA** (`.cta-section`) — "Jadilah Bagian dari Perjalanan Ini" → `/karir`. Sekarang berbentuk **card rounded mengambang** (`max-width:1160px; margin:56px auto; border-radius:32px`), bukan full-bleed section — tombol `.btn-white` dapat glow pill (`box-shadow` ganda, ring putih + glow hijau).
 
-**CSS penting about:**
-- `.sejarah-inner` — grid 2 kolom (`1fr 1fr`, gap 0) untuk layout teks + foto
-- `.sejarah-img-col` / `.sejarah-photo` — foto kanan dengan mask fade (`mask-image` gradient)
-- `.meanings-grid` — `repeat(4,1fr)` (mobile: `repeat(2,1fr)`)
-- Semua CSS baru about ada di scoped `<style>` dalam file about.astro
+> Section "Recent" (6 kartu sosmed Instagram) yang dulu ada di sini **sudah dihapus permanen** (2026-08-13) — lihat catatan Instagram di bagian "Halaman Home" di atas, penghapusannya barengan dengan Home.
 
 **Gambar sejarah:** `hongkong.jpg` dari `public/SRC/` (path via BASE prefix).
+
+---
+
+### Redesain About Us — terinspirasi wealthclub.id (2026-08-13)
+
+User minta redesain visual/layout total halaman About meniru **tata letak & UI/UX** situs [wealthclub.id](https://wealthclub.id/) (diriset langsung via `mcp__claude-in-chrome` — sandbox cloud gak punya akses internet umum jadi gak bisa Playwright langsung ke situs eksternal, cuma bisa ke browser asli user), TAPI **palet warna INLA sendiri tetap dipakai** (bukan tema gelap/hitam wealthclub) dan **isi/makna tiap paragraf sejarah TIDAK BOLEH berubah** — cuma boleh polesan kata yang sangat minor kalau perlu, intinya harus tetap sama persis.
+
+**Backup sebelum redesain (WAJIB dicek dulu kalau mau revert):** versi `about.astro` sebelum redesain ini (post-penghapusan-Instagram, sebelum perubahan visual) disimpan di 3 tempat:
+1. Dikirim langsung ke user lewat chat (file `about.astro`)
+2. Disimpan di Claude Project "INLA SUMUT (The International Loving Asocatiation) WEB" sebagai `claude/about-astro-backup-before-wealthclub-redesign.astro`
+3. (Kalau masih ada) copy lokal di sesi Claude yang mengerjakan redesain ini
+
+Kalau redesain ini mau di-revert total, ambil dari salah satu backup di atas, bukan ditulis ulang manual dari nol.
+
+**Pola desain yang diadopsi dari wealthclub.id (semua di `global.css`, scoped ke class-class yang sudah ada di about.astro — TIDAK ada file/komponen baru):**
+- **`.section-card`** — class baru, container rounded besar (`border-radius:28px`, `border:1px solid #e4e0d4`, `box-shadow` lembut, `padding:36px 40px`, mobile turun ke `24px 20px`/`20px 16px`) — dipakai buat bungkus blok Tujuan (`.tujuan-block`), Target (`.target-list`), dan Misi (`.promosi-section`). ini elemen inti dari "gaya wealthclub" — mereka bungkus tiap grup konten dalam card besar rounded, bukan section polos.
+- **List bernomor pakai hairline divider**, bukan box per-item — `.target-item` dan `.promosi-item` sekarang `border-bottom:1px solid #ece8dc` antar-item (item terakhir `border-bottom:none`) di dalam satu `.section-card`, meniru pola numbered-feature-list wealthclub ("01 Report Business...", dst).
+- **Heading section (`.sec-h2`, `.sec-h2-light`, `.meanings-h2`, `.journey-h2`) dibikin lebih besar & bold** — dari `font-size:28px; font-weight:500` jadi `font-size: clamp(26px, 3.6vw, 38px); font-weight:700; letter-spacing:-0.01em`. Eyebrow label (`.eyebrow`, `.eyebrow-light`) juga dipertebal (`font-weight:600`, `letter-spacing:0.12em`).
+- **`.page-nav` jadi pill mengambang** — lihat poin 2 di daftar section atas. Item aktif (`.page-nav-item.active`) solid dark fill `#1c2e1c`, bukan lagi underline tab.
+- **`.hero-about`** — heading naik ke `clamp(34px, 6vw, 58px)`, `font-weight:700`, padding vertikal ditambah, eyebrow jadi pill kecil dengan border (`display:inline-block; border-radius:999px; padding:7px 16px`) alih-alih teks polos.
+- Border-radius kartu-kartu lain (`.glass-card`, `.meaning-card`, `.tl-card`) dinaikkan dikit (14px/14px→20px/20px) biar konsisten sama rounded card besar yang baru.
+
+**Verifikasi:** di-tes penuh (desktop 1400px & mobile 390px, scroll dari hero sampai footer) pakai Playwright + Chromium di sandbox lokal (bukan situs live) sebelum dikirim ke device user — semua section render benar, konten utuh, navbar (`<Navbar activePage="about" />`) sama sekali tidak disentuh.
+
+### Page-nav FAB (`#pageNavFab` + `#pageNavPanel`)
+
+Sama persis pola **Filter FAB** di `activities/index.astro` (lihat bagian "Halaman Semua Kegiatan" di atas) — cuma di-reuse untuk page-nav About, ditambahkan 2026-08-13 atas permintaan user ("pas discroll ke atas sampai gak keliatan, muncul tombol hamburger pojok kanan bawah"). Detail:
+- `#pageNav` (nav pill di atas) diobservasi via `IntersectionObserver({threshold:0})` — begitu `!entry.isIntersecting` (udah discroll lewat, gak keliatan lagi), `#pageNavFab` dapat class `.visible`.
+- Klik FAB toggle `#pageNavPanel` — isinya 7 link section yang sama (`<a class="page-nav-item filter-item">`), reuse class `page-nav-item` yang sama dengan pill nav asli supaya **status aktifnya otomatis ke-sinkron** oleh `initAbout()` (script yang sama yang nge-highlight pill nav berdasarkan `IntersectionObserver` per section) — TIDAK ada logic active terpisah buat panel ini.
+- Klik salah satu link di panel → auto `closePageNavPanel()`. Klik di luar panel / `Escape` juga nutup, sama seperti Filter FAB.
+- `.filter-panel` (card pembungkus panel) dapat efek **cincin cahaya hijau berputar** di sekeliling card-nya (reuse `::before`/`::after` + `@keyframes navCtaSpin` yang sama dengan tombol Bergabung) — item link di dalamnya TETAP style biasa, efeknya cuma di card-nya, BUKAN di item yang lagi aktif (lihat detail teknis lengkap di bagian "Halaman Semua Kegiatan").
 
 ---
 
@@ -626,9 +663,20 @@ Yang **berhasil** diverifikasi (gak butuh audio beneran nyala): render hero/disc
 - Hamburger toggle via `.nav-hamburger` + `.nav-drawer` — **tidak ada Bootstrap collapse**
 - Tidak ada `data-bs-toggle`
 
+### Tombol mobile — "Menu" / "Tutup" (2026-08-13, redesain dari icon hamburger 3-garis)
+
+Sebelumnya di mode HP (`≤768px`), `.nav-actions` berisi 3 elemen: tombol hijau "Bergabung" (`.nav-cta`) + tombol bulat icon hamburger 3-garis (`.nav-hamburger`) di sebelahnya. Atas permintaan eksplisit user, ini disederhanakan jadi **1 tombol pill teks** yang menggantikan fungsi keduanya:
+
+- **`.nav-cta` (Bergabung) disembunyikan total di mobile** (`display:none` di breakpoint `≤768px`) — link "Bergabung" TETAP ada, cuma dipindah jadi item terakhir di dalam `.nav-drawer` (drawer-nya sendiri gak berubah, lihat bagian di bawah).
+- **`.nav-hamburger` diubah dari icon 3-garis jadi pill teks hijau** — markup-nya sekarang 2 `<span>` (`.nav-hamburger-label-open` isinya teks "Menu", `.nav-hamburger-label-close` isinya teks "Tutup"), di-toggle visibility via CSS (`.nav-hamburger.open .nav-hamburger-label-open{display:none}` dst) — jadi teks tombolnya otomatis ganti "Menu" ⇄ "Tutup" sesuai state buka/tutup drawer, TANPA logic JS tambahan (JS toggle `.open` class-nya udah ada dari sebelumnya, cuma CSS yang baru).
+- **Style tombolnya di-samain persis dengan `.nav-cta`** — termasuk animasi cincin cahaya berputar (`::before` conic-gradient + `@keyframes navCtaSpin` 3.5s infinite, `::after` lapisan solid hijau `linear-gradient(160deg, #97dd97, #6fc06f)` inset 1.5px), atas permintaan user "tambahin style seperti menu bergabung". Klik `.nav-hamburger` **fungsinya TIDAK berubah** — tetap toggle `.nav-drawer` yang sama seperti sebelumnya (lihat `Layout.astro`, listener `.nav-hamburger` click), cuma tampilannya yang berubah total dari icon ke pill teks hijau ber-glow.
+- Breakpoint mobile: `.nav-hamburger { display:flex; padding:9px 18px; font-size:12.5px; }` (ukuran disamakan sama `.nav-cta` mobile).
+
+**⚠️ Kalau nanti mau ubah lagi salah satu dari dua tombol ini (Bergabung / Menu), inget mereka sekarang saling terkait secara visual (sama-sama pakai teknik glow-ring `navCtaSpin`) — perubahan warna/animasi di satu tombol sebaiknya dicek juga dampaknya ke tombol satunya biar tetap konsisten.**
+
 ### Hamburger drawer (mobile) — Apple-style floating glass card
 
-**Desain:** floating card 270px dari pojok kanan atas, **bukan** full-width panel.
+**Desain:** floating card 270px dari pojok kanan atas, **bukan** full-width panel. Dibuka lewat tombol "Menu" (lihat di atas) — bukan lagi icon hamburger.
 
 | Property | Nilai |
 |---|---|
@@ -639,9 +687,9 @@ Yang **berhasil** diverifikasi (gak butuh audio beneran nyala): render hero/disc
 | Easing | `cubic-bezier(0.34,1.4,0.64,1)` (spring) |
 | Posisi | `top: 68px; right: 16px;` (480px: `top:62px; right:12px; width:250px`) |
 
-**Link items:** `padding: 12px 16px`, `border-radius: 12px`, divider antar item via `::before` (0.5px). Semua item — termasuk "Bergabung" — menggunakan style yang sama, tidak ada tombol hijau khusus di dalam drawer.
+**Link items:** `padding: 12px 16px`, `border-radius: 12px`, divider antar item via `::before` (0.5px). Semua item — termasuk "Bergabung" (sekarang jadi satu-satunya tempat link Bergabung muncul di mobile) — menggunakan style yang sama, tidak ada tombol hijau khusus di dalam drawer.
 
-**Hamburger button saat terbuka:** background hijau transparan + border hijau (`rgba(126,200,126,0.15/0.25)`).
+**Hamburger button saat terbuka:** teks berubah jadi "Tutup" (lihat di atas), warna isian `::after`-nya ikut naik sedikit terang (`linear-gradient(160deg, #aef0ae, #7ec87e)`, sama seperti state hover/`.active` tombol Bergabung).
 
 ---
 
@@ -657,18 +705,19 @@ Satu file untuk semua CSS Astro. Tidak ada Tailwind utility classes.
 | `.cards` | Horizontal scroll container highlight kegiatan (`display:flex; overflow-x:auto; scroll-snap-type:x mandatory`) |
 | `.card` | Item highlight (`flex: 0 0 260px; scroll-snap-align:start`) |
 | `.cards-see-all` / `.cards-see-all-btn` | Tombol bulat "→" di akhir scroll kegiatan |
-| `.sosmed-grid` | Horizontal scroll container kartu Instagram (`display:flex; overflow-x:auto`) |
-| `.sosmed-card` | Item kartu Instagram (`flex: 0 0 240px`) |
-| `.sosmed-overlay-logo` | Logo INLA di overlay hover kartu Instagram |
 | `.input-error` | Border merah field form invalid |
 | `.error-msg` | Pesan error validasi form |
+| `.filter-fab` / `.filter-panel` / `.filter-item` | Pola FAB — tombol bulat mengambang pojok kanan-bawah + panel yang cuma muncul setelah bar aslinya (`.filter-bar` di activities, `.page-nav` di about) discroll lewat. `.filter-panel` dapat efek cincin cahaya hijau berputar (`::before`/`::after` + `navCtaSpin`, sama teknik dengan `.nav-cta`). Dipakai di `activities/index.astro` (filter kategori) dan `about.astro` (page-nav) — lihat bagian masing-masing halaman. |
+| `.section-card` | Container rounded besar (`border-radius:28px`, border + shadow lembut) buat bungkus blok konten — pola dari redesain About Us terinspirasi wealthclub.id, lihat bagian "Halaman About". |
+| `.nav-cta` / `.nav-hamburger` | Tombol pill dengan cincin cahaya hijau berputar (`navCtaSpin`) — `.nav-cta` = Bergabung, `.nav-hamburger` = tombol "Menu"/"Tutup" mobile (sama style, lihat "Komponen Navbar"). |
 
 ### Animasi:
 - `@keyframes kenburns` — zoom perlahan hero slide (`scale 1→1.06`)
 - `@keyframes fadeIn` — fade in umum
 - `[data-reveal]` + `IntersectionObserver` — scroll reveal (bukan AOS)
+- `@keyframes navCtaSpin` — conic-gradient raksasa (220%) diputar 3.5s linear infinite di belakang tombol pill (`.nav-cta`, `.nav-hamburger`, `.filter-panel`) buat efek cincin cahaya berputar di border-nya. Pola: `::before` = conic-gradient yang spin, `::after` = lapisan solid isi (inset 1.5px) yang nyisain cuma garis tipis dari `::before` sebagai cincin cahaya. Elemen pemakai wajib `position:relative; isolation:isolate; overflow:hidden;` supaya conic-gradient raksasa ke-clip rapi ke bentuk rounded-nya.
 
-**⚠️ Blok CSS `[data-reveal]`/`.revealed`/`[data-reveal-delay]` WAJIB tetap di paling atas `global.css`** (tepat setelah blok `body{}`, sebelum semua style komponen) — **jangan pindah ke bawah lagi.** Alasan: banyak kartu (`.card`, `.act-card`, `.sosmed-card`, `.tl-card`, `.pillar`, dll) punya `:hover { transform: translateY(...) }` sendiri. Selector `.foo:hover` dan `[data-reveal].revealed` sama-sama specificity (0,2,0) — kalau seri, CSS menang berdasarkan urutan sumber, BUKAN spesifisitas. Kalau blok reveal ada DI BAWAH (setelah) rule hover komponen, `[data-reveal].revealed { transform: translateY(0); }` diam-diam MENIMPA transform hover begitu elemen sudah revealed — hover jadi kelihatan "mati" (box-shadow tetap jalan, tapi efek naik/lift hilang). Taruh di atas supaya rule hover komponen (yang datang belakangan) selalu menang di cascade.
+**⚠️ Blok CSS `[data-reveal]`/`.revealed`/`[data-reveal-delay]` WAJIB tetap di paling atas `global.css`** (tepat setelah blok `body{}`, sebelum semua style komponen) — **jangan pindah ke bawah lagi.** Alasan: banyak kartu (`.card`, `.act-card`, `.tl-card`, `.pillar`, dll) punya `:hover { transform: translateY(...) }` sendiri. Selector `.foo:hover` dan `[data-reveal].revealed` sama-sama specificity (0,2,0) — kalau seri, CSS menang berdasarkan urutan sumber, BUKAN spesifisitas. Kalau blok reveal ada DI BAWAH (setelah) rule hover komponen, `[data-reveal].revealed { transform: translateY(0); }` diam-diam MENIMPA transform hover begitu elemen sudah revealed — hover jadi kelihatan "mati" (box-shadow tetap jalan, tapi efek naik/lift hilang). Taruh di atas supaya rule hover komponen (yang datang belakangan) selalu menang di cascade.
 
 ---
 
@@ -678,15 +727,15 @@ Semua gambar ini diproses Astro → WebP otomatis. Gunakan `<Image src={import} 
 
 | File | Digunakan di |
 |---|---|
-| `logo.png` | Overlay kartu sosmed (home + about), navbar (opsional) |
+| `logo.png` | Navbar (opsional) — **sudah tidak dipakai di index.astro/about.astro** sejak fitur Instagram dihapus permanen (2026-08-13, lihat bagian "Halaman Home") |
 | `Landingpage(main).png` | Hero home slide 1, OG default Layout |
 | `Landinpage (Event).jpg` | Hero home slide 2 |
-| `children-sunset.jpg` | Kartu sosmed home + about |
-| `dance-bali.jpg` | Kartu sosmed, ContentGrid "Penampilan" |
-| `dance-kimono.jpg` | Kartu sosmed, ContentGrid "MV & Music", OG image mv-music.astro (default, tiap album/video sekarang OG pakai thumbnail YouTube masing-masing) |
-| `festival-stage.jpg` | Kartu sosmed, ContentGrid "Kegiatan & Acara" |
-| `hero-mountain.jpg` | Kartu sosmed, OG image about.astro, ContentGrid "Artikel" |
-| `wheat-field.jpg` | Kartu sosmed |
+| `children-sunset.jpg` | **Sudah tidak dipakai** sejak section sosmed dihapus (2026-08-13) — dibiarkan untuk referensi masa depan |
+| `dance-bali.jpg` | ContentGrid "Penampilan" |
+| `dance-kimono.jpg` | ContentGrid "MV & Music", OG image mv-music.astro (default, tiap album/video sekarang OG pakai thumbnail YouTube masing-masing) |
+| `festival-stage.jpg` | ContentGrid "Kegiatan & Acara" |
+| `hero-mountain.jpg` | OG image about.astro, ContentGrid "Artikel" |
+| `wheat-field.jpg` | **Sudah tidak dipakai** sejak section sosmed dihapus (2026-08-13) — dibiarkan untuk referensi masa depan |
 
 > Album grid di mv-music.astro **tidak lagi pakai gambar lokal ini** — cover-nya sekarang thumbnail asli playlist YouTube (lihat bagian "Halaman MV & Music").
 
